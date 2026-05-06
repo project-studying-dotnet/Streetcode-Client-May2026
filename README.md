@@ -9,7 +9,7 @@
 # Streetcode
 
 This is a front-end part of our Streetcode project.
-Back-end part: https://github.com/ita-social-projects/StreetCode.git.
+Back-end part: https://github.com/project-studying-dotnet/Streetcode-Server-May2026
 
 [![Coverage Status](https://img.shields.io/gitlab/coverage/ita-social-projects/StreetCode/master?style=flat-square)](https://coveralls.io) [![Github Issues](https://img.shields.io/github/issues/ita-social-projects/StreetCode?style=flat-square)](https://github.com/ita-social-projects/StreetCode/issues) [![Pending Pull-Requests](https://img.shields.io/github/issues-pr/ita-social-projects/StreetCode?style=flat-square)](https://github.com/ita-social-projects/StreetCode/pulls) [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
 
