@@ -1,11 +1,16 @@
 {
   "compilerOptions": {
+    "target": "ES2022",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2022"
+    ],
     "jsx": "react-jsx",
-    "target": "es2017",
-    "module": "esnext",
-    "baseUrl": ".",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "paths": {
-      "*": ["node_modules/*"],
+      " * ": ["./node_modules/*"],
       "@/*": ["./src/*"],
       "@app/*": ["./src/app/*"],
       "@assets/*": ["./src/assets/*"],
@@ -21,30 +26,26 @@
       "@components/*": ["./src/app/common/components/*"],
       "@hooks/*": ["./src/app/common/hooks/*"],
       "@constants/*": ["./src/app/common/constants/*"],
-      "@utils/*": ["./src/app/common/utils/*"],
+      "@utils/*": ["./src/app/common/utils/*"]
     },
-    "outDir": "dist",
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "sourceMap": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": false,
+    "allowJs": true,
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
     "noEmit": false,
-    "lib": [
-      "ES2021.String",
-      "DOM"
-    ]
+    "outDir": "dist",
+    "sourceMap": true
   },
   "files": [
     "./src/index.d.ts"
   ],
   "include": [
-    "src", ".eslintrc.js"
+    "src",
+    ".eslintrc.js"
   ]
 }
