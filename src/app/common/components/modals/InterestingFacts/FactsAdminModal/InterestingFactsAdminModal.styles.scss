@@ -1,0 +1,40 @@
+@use "@assets/sass/_utils.functions.scss" as f;
+@use "@assets/sass/variables/_variables.colors.scss" as c;
+
+.interestingFactsAdminModal {
+    .factForm {
+        display: flex;
+        flex-direction: column;
+        gap: f.pxToRem(12px);
+
+        h2 {
+            margin: 0;
+            font-size: f.pxToRem(24px);
+            font-weight: 500;
+        }
+
+        .fieldLabel {
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .symbolsLeft {
+            margin: f.pxToRem(4px) 0 0;
+            font-size: f.pxToRem(12px);
+            color: c.$lighter-gray-color;
+            text-align: right;
+        }
+
+        .saveButton {
+            align-self: center;
+            margin-top: f.pxToRem(8px);
+        }
+
+        .upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: f.pxToRem(8px);
+        }
+    }
+}

@@ -5,7 +5,7 @@ import StreetcodeCatalogComponent from '../StreetcodeCatalogPage/StreetcodeCatal
 const AdminPage = () => (
     <div className="adminPageContainer" >
         <AdminBar />
-        <StreetcodeCatalogComponent />
+        <StreetcodeCatalogComponent showAdminActions />
     </div>
 );
 

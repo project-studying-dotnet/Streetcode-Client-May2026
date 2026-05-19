@@ -1,0 +1,11 @@
+@use "@assets/sass/_utils.functions.scss" as f;
+
+.editStreetcodePage {
+    width: 100%;
+    margin-top: f.pxToRem(100px);
+    padding-bottom: f.pxToRem(40px);
+
+    .editStreetcodeError {
+        padding: f.pxToRem(24px) f.pxToRem(40px);
+    }
+}
