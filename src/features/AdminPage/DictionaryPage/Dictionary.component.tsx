@@ -1,29 +1,30 @@
-import "./DictionaryMainPage.styles.scss";
+import "./Dictionary.styles.scss";
 
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import {
   DeleteOutlined,
   EditOutlined,
-} from "@ant-design/icons/lib/icons";
+  SearchOutlined,
+} from "@ant-design/icons";
 import AdminBar from "@features/AdminPage/AdminBar.component";
 import DictionaryModal from "@features/AdminPage/DictionaryPage/DictionaryModal/DictionaryModal.component";
 import useMobx, { useModalContext } from "@stores/root-store";
 
 import Button from "antd/es/button";
+import Input from "antd/es/input";
 import Table, { ColumnsType } from "antd/es/table";
 
 import TermApi from "@/app/api/streetcode/text-content/terms.api";
 import { Term } from "@/models/streetcode/text-contents.model";
-/* eslint-disable indent */
-export const DictionaryMainPage: React.FC = observer(() => {
+
+export const Dictionary: React.FC = observer(() => {
   const { termsStore } = useMobx();
   const { modalStore } = useModalContext();
   const [modalAddOpened, setModalAddOpened] = useState<boolean>(false);
 
   const updatedTerms = () => {
-    Promise.all([termsStore?.fetchTerms()])
-      .then(() => termsStore.setInternalMap(termsStore.getTermArray));
+    Promise.all([termsStore?.fetchTerms()]).then(() => termsStore.setInternalMap(termsStore.getTermArray));
   };
 
   useEffect(() => {
@@ -62,8 +63,15 @@ export const DictionaryMainPage: React.FC = observer(() => {
       width: "10%",
       render: (value, term, index) => (
         <div key={`${term.id}${index}`} className="dictionary-page-actions">
+          <EditOutlined
+            key={`${term.id}${index}edit`}
+            className="actionButton"
+            onClick={() => {
+              // Додати логіку для setTermToEdit та setModalEditOpened
+            }}
+          />
           <DeleteOutlined
-            key={`${term.id}${index}111`}
+            key={`${term.id}${index}delete`}
             className="actionButton"
             onClick={() => {
               modalStore.setConfirmationModal(
@@ -80,14 +88,6 @@ export const DictionaryMainPage: React.FC = observer(() => {
               );
             }}
           />
-          {/* <EditOutlined
-            key={`${term.id}${index}222`}
-            className="actionButton"
-            onClick={() => {
-              setTermToEdit(term);
-              setModalEditOpened(true);
-            }}
-          /> */}
         </div>
       ),
     },
@@ -97,7 +97,13 @@ export const DictionaryMainPage: React.FC = observer(() => {
     <div className="dictionary-page">
       <AdminBar />
       <div className="dictionary-page-container">
-        <div className="container-justify-end">
+        <div className="dictionary-header-container">
+          <Input
+            placeholder="Назва"
+            prefix={<SearchOutlined style={{ color: "#bfbfbf" }} />}
+            className="dictionary-search-input"
+            allowClear
+          />
           <Button
             className="streetcode-custom-button dictionary-page-add-button"
             onClick={() => setModalAddOpened(true)}
@@ -121,4 +127,4 @@ export const DictionaryMainPage: React.FC = observer(() => {
   );
 });
 
-export default DictionaryMainPage;
+export default Dictionary;

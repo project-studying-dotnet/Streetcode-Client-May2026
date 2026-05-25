@@ -10,7 +10,7 @@ import NotFound from '@/features/AdditionalPages/NotFoundPage/NotFound.component
 import PartnersPage from '@/features/AdditionalPages/PartnersPage/Partners.component';
 import SupportPage from '@/features/AdditionalPages/SupportUsPage/SupportUs.component';
 import AdminPage from '@/features/AdminPage/AdminPage.component';
-import DictionaryMainPage from '@/features/AdminPage/DictionaryPage/DictionaryMainPage.component';
+import Dictionary from '@/features/AdminPage/DictionaryPage/Dictionary.component';
 import Partners from '@/features/AdminPage/PartnersPage/Partners.component';
 import TeamPage from '@/features/AdminPage/TeamPage/TeamPage.component';
 import StreetcodeCatalog from '@/features/StreetcodeCatalogPage/StreetcodeCatalog.component';
@@ -43,7 +43,7 @@ const router = createBrowserRouter(createRoutesFromElements(
         />
         <Route
             path={FRONTEND_ROUTES.ADMIN.DICTIONARY}
-            element={<DictionaryMainPage />}
+            element={<Dictionary />}
         />
         <Route path="*" element={<NotFound />} />
         <Route path={FRONTEND_ROUTES.OTHER_PAGES.PARTNERS} element={<PartnersPage />} />

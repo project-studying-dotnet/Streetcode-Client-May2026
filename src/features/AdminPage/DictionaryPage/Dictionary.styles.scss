@@ -1,0 +1,209 @@
+// DictionaryMainPage.styles.scss
+@use "sass:color"; // Додано імпорт модуля кольорів
+@use "@sass/mixins/_utils.mixins.scss" as mut;
+@use "@sass/variables/_variables.fonts.scss" as ft;
+@use "@sass/variables/_variables.colors.scss" as c;
+@use "@sass/_utils.functions.scss" as f;
+
+$newAccentColor: #891f16;
+
+.ant-modal-root {
+  .ant-modal-content {
+    border-radius: f.pxToRem(16px);
+    padding: f.pxToRem(32px) f.pxToRem(24px);
+    max-width: f.pxToRem(400px);
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .ant-modal-close {
+    display: none;
+  }
+
+  .ant-modal-header {
+    display: none;
+  }
+
+  .ant-modal-body {
+    color: #232323;
+    font-size: f.pxToRem(18px);
+    font-weight: 600;
+    line-height: 1.5;
+    text-align: center;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .ant-modal-footer {
+    margin-top: f.pxToRem(32px);
+    border-top: none;
+    display: flex;
+    justify-content: center;
+    gap: f.pxToRem(16px);
+
+    .ant-btn {
+      margin: 0;
+      min-height: f.pxToRem(44px);
+      min-width: f.pxToRem(130px);
+      border-radius: f.pxToRem(8px);
+      font-weight: 600;
+      font-size: f.pxToRem(16px);
+      box-shadow: none;
+    }
+
+    .ant-btn-default {
+      background-color: #ffffff;
+      border: 1px solid #d9d9d9;
+      color: #4a4a4a;
+
+      &:hover {
+        background-color: #f5f5f5;
+        color: #232323;
+      }
+    }
+
+    .ant-btn-primary {
+      background-color: c.$accented-red-color;
+      border: none;
+      color: #ffffff;
+
+      &:hover {
+        background-color: #c23022;
+      }
+    }
+  }
+}
+
+.dictionary-page {
+  padding-top: f.pxToRem(100px);
+  display: flex;
+  gap: f.pxToRem(10px);
+  width: 100%;
+
+  .dictionary-page-container {
+    @include mut.sized(80%);
+    margin: 0 auto;
+    margin-top: f.pxToRem(40px);
+
+    .dictionary-header-container {
+      @include mut.flexed(row, center, space-between);
+      padding: f.pxToRem(15px) f.pxToRem(20px);
+      margin-bottom: f.pxToRem(20px);
+
+      .dictionary-search-input {
+        width: f.pxToRem(300px);
+        border-radius: f.pxToRem(4px);
+      }
+
+      .dictionary-page-add-button {
+        min-height: f.pxToRem(40px);
+        min-width: f.pxToRem(120px);
+        border: none;
+        border-radius: f.pxToRem(4px);
+        font-weight: 500;
+        transition: background-color 0.3s;
+      }
+    }
+
+    .ant-table-pagination.ant-pagination {
+      margin-top: f.pxToRem(30px) !important;
+      justify-content: left !important;
+
+      .ant-pagination-item {
+        border: none;
+        border-radius: 5px;
+        background-color: transparent;
+
+        a {
+          color: $newAccentColor;
+          font-weight: 500;
+        }
+      }
+
+      // Активна сторінка
+      .ant-pagination-item-active {
+        background-color: transparent;
+        border: 1px solid $newAccentColor !important;
+        transition: background-color 0.2s;
+
+        a {
+          color: $newAccentColor !important;
+        }
+
+        &:hover {
+          background-color: $newAccentColor !important;
+          border-color: $newAccentColor !important;
+
+          a {
+            color: #fff !important;
+          }
+        }
+      }
+
+      .ant-pagination-prev,
+      .ant-pagination-next {
+        .ant-pagination-item-link {
+          border: none;
+          background-color: transparent;
+          color: $newAccentColor;
+        }
+
+        &.ant-pagination-disabled .ant-pagination-item-link {
+          color: #bfbfbf;
+          background-color: transparent;
+        }
+      }
+
+      .ant-pagination-jump-prev,
+      .ant-pagination-jump-next {
+        .ant-pagination-item-container {
+          .ant-pagination-item-ellipsis {
+            color: $newAccentColor;
+          }
+
+          .ant-pagination-item-link-icon {
+            color: $newAccentColor;
+          }
+        }
+      }
+    }
+
+    .dictionaries-table {
+      margin-top: f.pxToRem(20px);
+
+      .ant-table-thead > tr > th {
+        font-weight: 600;
+        background-color: transparent;
+      }
+
+      .dictionary-table-item-name {
+        @include mut.flexed(row, center, flex-start, wrap, 4px);
+        p {
+          margin: 0;
+        }
+      }
+
+      .dictionary-table-item-description {
+        margin: 0;
+      }
+
+      .dictionary-page-actions {
+        @include mut.flexed(row, center, flex-start);
+        gap: f.pxToRem(15px);
+
+        .actionButton {
+          color: #e33939;
+          font-size: f.pxToRem(18px);
+          cursor: pointer;
+          transition: color 0.3s;
+
+          &:hover {
+            color: color.adjust(#e33939, $lightness: -15%);
+          }
+        }
+      }
+    }
+  }
+}
