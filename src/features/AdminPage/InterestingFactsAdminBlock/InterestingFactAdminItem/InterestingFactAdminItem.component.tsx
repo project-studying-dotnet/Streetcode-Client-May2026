@@ -33,15 +33,14 @@ const InterestingFactAdminItem = ({
                 ref={draggableProvided.innerRef}
                 {...draggableProvided.draggableProps}
             >
-                <span
+                <button
+                    type="button"
                     className="dragHandle"
                     {...draggableProvided.dragHandleProps}
                     aria-label={INTERESTING_FACTS_ADMIN_MESSAGES.DRAG_HANDLE}
-                    role="button"
-                    tabIndex={0}
                 >
                     <HolderOutlined />
-                </span>
+                </button>
                 <p className="factTitle">
                     {fact.title?.trim() || INTERESTING_FACTS_ADMIN_MESSAGES.UNTITLED_FACT}
                 </p>

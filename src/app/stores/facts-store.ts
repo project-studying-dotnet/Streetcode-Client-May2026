@@ -71,7 +71,7 @@ export default class FactsStore {
         return id;
     };
 
-    private syncImageDetailsFromFact = (fact: FactUpdate) => {
+    private readonly syncImageDetailsFromFact = (fact: FactUpdate) => {
         if (!fact.imageId || !fact.imageDescription) {
             return;
         }
@@ -84,13 +84,13 @@ export default class FactsStore {
         });
     };
 
-    private applyIndexes = (facts: FactUpdate[]) => {
+    private readonly applyIndexes = (facts: FactUpdate[]) => {
         facts.forEach((fact, index) => {
             this.setItem({ ...fact, index });
         });
     };
 
-    private removeStaleAdminFacts = (activeFactIds: number[]) => {
+    private readonly removeStaleAdminFacts = (activeFactIds: number[]) => {
         const streetcodeId = this.adminStreetcodeId;
         if (!streetcodeId) {
             return;

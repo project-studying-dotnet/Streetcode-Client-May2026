@@ -63,6 +63,9 @@
         }
 
         .dragHandle {
+            border: none;
+            background: transparent;
+            padding: 0;
             color: c.$normal-gray-color;
             font-size: f.pxToRem(18px);
             cursor: grab;
