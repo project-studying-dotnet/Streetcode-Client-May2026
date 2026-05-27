@@ -1,0 +1,91 @@
+@import '../../../assets/sass/variables/_variables.colors.scss';
+@import '../../../assets/sass/variables/_variables.fonts.scss';
+
+.text-video-form {
+  padding: 32px;
+  background: $pure-white-color;
+  display: flex;
+  flex-direction: column;
+  width: 100% !important;
+  max-width: 100%;
+
+  .mb-24 { margin-top: 24px; }
+  .mb-17 { margin-top: 17px; }
+  .mb-35 { margin-top: 35px; }
+  .mb-48 { margin-bottom: 48px; }
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+  }
+
+  &__label {
+    font-size: 20px;
+    color: $lighter-black-color;
+    margin-bottom: 8px;
+
+    &--medium {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+  }
+
+  &__input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__term-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__input,
+  &__textarea {
+    border: 1px solid $slider-base-dot-color;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 18px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+    &:focus {
+      border-color: $accented-red-color;
+      outline: none;
+    }
+  }
+
+  &__input {
+    width: 769px;
+    height: 47px;
+  }
+
+  &__textarea {
+    width: 100%;
+    min-height: 160px;
+    resize: none;
+  }
+
+  &__counter {
+    color: $darkish-gray-color;
+    font-size: 18px;
+  }
+
+  &__meta {
+    width: 100%;
+    text-align: right;
+  }
+
+  &__error {
+    color: $accented-red-color;
+    font-size: 12px;
+  }
+}
+
+@import './TextVideoBlockForm.editor.scss';
+@import './TextVideoBlockForm.modal.scss';

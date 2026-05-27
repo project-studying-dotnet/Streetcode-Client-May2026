@@ -1,0 +1,45 @@
+@import '../../../assets/sass/variables/_variables.colors.scss';
+
+.text-video-form {
+
+  &__editor {
+    min-height: 269px;
+    width: 100%;
+    border: 1px solid #d9d9d9;
+    padding: 16px;
+    border-radius: 8px;
+    outline: none;
+    resize: vertical;
+  }
+
+  &__toolbar {
+    position: absolute;
+    display: flex;
+    gap: 8px;
+    padding: 8px;
+    background: white;
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    z-index: 100;
+  }
+
+  .toolbar-btn {
+    padding: 5px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    background: white;
+
+    &:hover {
+      border-color: $accented-red-color;
+    }
+
+    &.active {
+      border: 1px solid $accented-red-color;
+    }
+
+    &--bold { font-weight: 700; }
+    &--italic { font-style: italic; }
+  }
+}
