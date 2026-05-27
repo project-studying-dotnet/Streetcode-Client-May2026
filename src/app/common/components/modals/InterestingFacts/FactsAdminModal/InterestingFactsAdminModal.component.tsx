@@ -8,7 +8,7 @@ import CancelBtn from '@assets/images/utils/Cancel_btn.svg';
 import useMobx, { useModalContext } from '@stores/root-store';
 
 import {
-    Button, Form, Input, Modal,
+    Button, Form, Input, Modal, message,
 } from 'antd';
 import FormItem from 'antd/es/form/FormItem';
 import TextArea from 'antd/es/input/TextArea';
@@ -107,13 +107,17 @@ const InterestingFactsAdminModal = () => {
         };
 
         const existingFactId = isEditMode ? editingFactId : undefined;
-        await factsStore.saveAdminFact(
-            payload,
-            streetcodeId,
-            existingFactId,
-        );
 
-        closeModal();
+        try {
+            await factsStore.saveAdminFact(
+                payload,
+                streetcodeId,
+                existingFactId,
+            );
+            closeModal();
+        } catch {
+            message.error(factsStore.lastError ?? 'Не вдалося зберегти факт');
+        }
     };
 
     return (

@@ -24,24 +24,39 @@
     }
 
     .factsAdminList {
-        display: flex;
-        flex-direction: column;
-        gap: f.pxToRem(12px);
+        position: relative;
+        display: block;
         min-height: f.pxToRem(80px);
         list-style: none;
         margin: 0;
         padding: 0;
+
+        // react-beautiful-dnd placeholder must not reserve a flex gap slot
+        [data-rbd-droppable-placeholder] {
+            position: absolute;
+            left: 0;
+            right: 0;
+            margin: 0 !important;
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
     }
 
     .factAdminItem {
         display: flex;
         align-items: center;
         gap: f.pxToRem(12px);
+        margin-bottom: f.pxToRem(12px);
         padding: f.pxToRem(16px) f.pxToRem(20px);
         background: c.$pure-white-color;
         border: 1px solid c.$lighter-gray-color;
         border-radius: f.pxToRem(16px);
         cursor: grab;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
 
         &.isDragging {
             box-shadow: 0 f.pxToRem(8px) f.pxToRem(24px) rgba(0, 0, 0, 0.12);
@@ -79,8 +94,16 @@
         }
     }
 
-    .factsAdminEmpty {
+    .factsAdminEmpty,
+    .factsAdminLoading {
         color: c.$normal-gray-color;
         font-style: italic;
+    }
+
+    .factsAdminLoading {
+        display: flex;
+        align-items: center;
+        gap: f.pxToRem(8px);
+        font-style: normal;
     }
 }

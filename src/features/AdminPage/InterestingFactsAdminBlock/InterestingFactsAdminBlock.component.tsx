@@ -1,185 +1,74 @@
 import './InterestingFactsAdminBlock.styles.scss';
 
 import { observer } from 'mobx-react-lite';
-import { useEffect, MouseEvent } from 'react';
-import {
-    DeleteOutlined, EditOutlined, HolderOutlined, PlusOutlined,
-} from '@ant-design/icons';
-import {
-    DragDropContext, Draggable, DropResult, DroppableProvided,
-} from 'react-beautiful-dnd';
-import useMobx, { useModalContext } from '@stores/root-store';
+import { PlusOutlined } from '@ant-design/icons';
+import { Button, Spin, Tooltip } from 'antd';
 
-import { Button, message } from 'antd';
-
-import ImagesApi from '@/app/api/media/images.api';
-import StrictModeDroppable from '@/app/common/components/StrictModeDroppable';
-import { useAsync } from '@/app/common/hooks/stateful/useAsync.hook';
-import { FactUpdate } from '@/models/streetcode/text-contents.model';
+import InterestingFactsAdminList from './InterestingFactsAdminList/InterestingFactsAdminList.component';
+import INTERESTING_FACTS_ADMIN_MESSAGES from './interesting-facts-admin-block.constants';
+import useAdminFactsBlock from './useAdminFactsBlock.hook';
 
 interface Props {
     streetcodeId: number;
 }
 
 const InterestingFactsAdminBlock = ({ streetcodeId }: Props) => {
-    const { factsStore } = useMobx();
-    const { modalStore } = useModalContext();
+    const {
+        facts,
+        isLoading,
+        isSaving,
+        openCreateModal,
+        openEditModal,
+        confirmDeleteFact,
+        handleDragEnd,
+    } = useAdminFactsBlock(streetcodeId);
 
-    useEffect(() => {
-        factsStore.setAdminStreetcodeId(streetcodeId);
-        return () => factsStore.setAdminStreetcodeId(null);
-    }, [streetcodeId, factsStore]);
-
-    useAsync(async () => {
-        if (streetcodeId > 0) {
-            const facts = await factsStore.fetchFactsByStreetcodeId(streetcodeId);
-            await Promise.all(
-                facts.map(async (fact) => {
-                    if (fact.imageId && !fact.image) {
-                        const image = await ImagesApi.getById(fact.imageId);
-                        factsStore.updateFactInMap({ ...fact, image } as FactUpdate);
-                    }
-                }),
+    const renderContent = () => {
+        if (isLoading && facts.length === 0) {
+            return (
+                <p className="factsAdminLoading">
+                    <Spin size="small" />
+                    {' '}
+                    {INTERESTING_FACTS_ADMIN_MESSAGES.LOADING}
+                </p>
             );
         }
-    }, [streetcodeId]);
 
-    const openCreateModal = () => {
-        modalStore.setModal('adminFacts', undefined, true);
-    };
+        if (facts.length === 0) {
+            return (
+                <p className="factsAdminEmpty">
+                    {INTERESTING_FACTS_ADMIN_MESSAGES.EMPTY}
+                </p>
+            );
+        }
 
-    const openEditModal = (factId: number) => {
-        modalStore.setModal('adminFacts', factId, true);
-    };
-
-    const handleDeleteClick = (factId: number, event: MouseEvent) => {
-        event.stopPropagation();
-        event.preventDefault();
-
-        modalStore.setConfirmationModal(
-            'confirmation',
-            async () => {
-                try {
-                    await factsStore.deleteAdminFact(factId);
-                    message.success('Факт видалено');
-                } catch {
-                    message.error('Не вдалося видалити факт');
-                } finally {
-                    modalStore.setConfirmationModal('confirmation', undefined, undefined, false);
-                }
-            },
-            'Ви впевнені, що хочете видалити цей факт?',
-            true,
-            () => modalStore.setConfirmationModal('confirmation', undefined, undefined, false),
+        return (
+            <InterestingFactsAdminList
+                facts={facts}
+                onDragEnd={handleDragEnd}
+                onEdit={openEditModal}
+                onDelete={confirmDeleteFact}
+            />
         );
     };
-
-    const handleEditClick = (factId: number, event: MouseEvent) => {
-        event.stopPropagation();
-        event.preventDefault();
-        openEditModal(factId);
-    };
-
-    const onDragEnd = async (result: DropResult) => {
-        if (!result.destination) {
-            return;
-        }
-        const { source, destination } = result;
-        if (source.index === destination.index) {
-            return;
-        }
-        factsStore.reorderFacts(source.index, destination.index);
-        const saved = await factsStore.persistFactsOrder();
-        if (!saved) {
-            message.error('Не вдалося зберегти порядок фактів');
-        }
-    };
-
-    const facts = factsStore.getFactArray;
-
-    const stopMouseDown = (event: MouseEvent) => {
-        event.stopPropagation();
-    };
-
-    const renderFactItem = (
-        fact: FactUpdate,
-        index: number,
-    ) => (
-        <Draggable
-            key={fact.id}
-            draggableId={String(fact.id)}
-            index={index}
-        >
-            {(draggableProvided, snapshot) => (
-                <li
-                    className={`factAdminItem ${snapshot.isDragging ? 'isDragging' : ''}`}
-                    ref={draggableProvided.innerRef}
-                    {...draggableProvided.draggableProps}
-                >
-                    <span
-                        className="dragHandle"
-                        {...draggableProvided.dragHandleProps}
-                        aria-hidden
-                    >
-                        <HolderOutlined />
-                    </span>
-                    <p className="factTitle">{fact.title}</p>
-                    <span className="factActions">
-                        <button
-                            type="button"
-                            aria-label="Редагувати"
-                            onMouseDown={stopMouseDown}
-                            onClick={(e) => handleEditClick(fact.id, e)}
-                        >
-                            <EditOutlined />
-                        </button>
-                        <button
-                            type="button"
-                            aria-label="Видалити"
-                            onMouseDown={stopMouseDown}
-                            onClick={(e) => handleDeleteClick(fact.id, e)}
-                        >
-                            <DeleteOutlined />
-                        </button>
-                    </span>
-                </li>
-            )}
-        </Draggable>
-    );
-
-    const renderFactsList = (provided: DroppableProvided) => (
-        <ul
-            className="factsAdminList"
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-        >
-            {facts.map(renderFactItem)}
-            {provided.placeholder}
-        </ul>
-    );
 
     return (
         <section className="factsAdminBlock">
             <header className="factsAdminHeader">
                 <h2>Wow-факти</h2>
-                <Button
-                    type="primary"
-                    icon={<PlusOutlined />}
-                    className="streetcode-custom-button"
-                    onClick={openCreateModal}
-                    aria-label="Додати факт"
-                />
+                <Tooltip title={INTERESTING_FACTS_ADMIN_MESSAGES.ADD_FACT}>
+                    <Button
+                        type="primary"
+                        icon={<PlusOutlined />}
+                        className="streetcode-custom-button"
+                        onClick={openCreateModal}
+                        aria-label={INTERESTING_FACTS_ADMIN_MESSAGES.ADD_FACT}
+                        loading={isSaving}
+                    />
+                </Tooltip>
             </header>
 
-            {facts.length === 0 ? (
-                <p className="factsAdminEmpty">Фактів ще немає. Натисніть «+», щоб додати перший.</p>
-            ) : (
-            <DragDropContext onDragEnd={onDragEnd}>
-                <StrictModeDroppable droppableId="facts-admin-list">
-                    {(provided) => renderFactsList(provided)}
-                </StrictModeDroppable>
-            </DragDropContext>
-            )}
+            {renderContent()}
         </section>
     );
 };

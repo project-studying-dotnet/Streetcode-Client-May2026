@@ -1,29 +1,25 @@
-import './EditStreetcodePage.styles.scss';
-
-import { observer } from 'mobx-react-lite';
+import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import AdminBar from '@features/AdminPage/AdminBar.component';
-import InterestingFactsAdminBlock from '@features/AdminPage/InterestingFactsAdminBlock/InterestingFactsAdminBlock.component';
+
+import EditStreetcodePageView from './EditStreetcodePageView.component';
+import { parseStreetcodeId } from './edit-streetcode-page.utils';
 
 const EditStreetcodePage = () => {
-    const { streetcodeId } = useParams<{ streetcodeId: string }>();
-    const parsedId = Number(streetcodeId);
+    const { streetcodeId: rawStreetcodeId } = useParams<{ streetcodeId: string }>();
+    const streetcodeId = useMemo(
+        () => parseStreetcodeId(rawStreetcodeId),
+        [rawStreetcodeId],
+    );
 
-    if (!streetcodeId || Number.isNaN(parsedId) || parsedId <= 0) {
-        return (
-            <main className="editStreetcodePage">
-                <AdminBar />
-                <p className="editStreetcodeError">Невірний ідентифікатор стріткоду.</p>
-            </main>
-        );
+    if (rawStreetcodeId === undefined) {
+        return <EditStreetcodePageView viewState="loading" />;
     }
 
-    return (
-        <main className="editStreetcodePage">
-            <AdminBar />
-            <InterestingFactsAdminBlock streetcodeId={parsedId} />
-        </main>
-    );
+    if (streetcodeId === null) {
+        return <EditStreetcodePageView viewState="invalid" />;
+    }
+
+    return <EditStreetcodePageView viewState="ready" streetcodeId={streetcodeId} />;
 };
 
-export default observer(EditStreetcodePage);
+export default EditStreetcodePage;
