@@ -4,6 +4,7 @@
     "target": "es2017",
     "module": "esnext",
     "baseUrl": ".",
+    "ignoreDeprecations" : "6.0",
     "paths": {
       "*": ["node_modules/*"],
       "@/*": ["./src/*"],

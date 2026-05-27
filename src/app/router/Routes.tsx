@@ -13,8 +13,8 @@ import StreetcodeCatalog from '@/features/StreetcodeCatalogPage/StreetcodeCatalo
 import NewsPage from '@/features/AdditionalPages/NewsPage/News.component';
 import ContactUs from '@/features/AdditionalPages/ContactUsPage/ContanctUs.component';
 import SupportPage from '@/features/AdditionalPages/SupportUsPage/SupportUs.component';
-
-
+import Streetcodes from '@/features/AdminPage/StreetcodesPage/Streetcodes.component';
+import StreetcodeCreate from '@/features/AdminPage/StreetcodesPage/StreetcodeCreate/StreetcodeCreate.component';
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<App />}>
@@ -25,7 +25,19 @@ const router = createBrowserRouter(createRoutesFromElements(
         <Route
             path={`${FRONTEND_ROUTES.ADMIN.BASE}/:id`}
             element={<StreetcodeContent />}
-        />       
+        />
+        <Route
+            path={`${FRONTEND_ROUTES.ADMIN.STREETCODES}`}
+            element={<Streetcodes />}
+        />
+        <Route
+            path={`${FRONTEND_ROUTES.ADMIN.NEW_STREETCODE}`}
+            element={<StreetcodeCreate />}
+        />
+        <Route
+            path={`${FRONTEND_ROUTES.ADMIN.EDIT_STREETCODE}/:id`}
+            element={<StreetcodeCreate />}
+        />
         <Route
             path={FRONTEND_ROUTES.ADMIN.FOR_FANS}
             element={<ForFansMainPage />}
@@ -37,14 +49,12 @@ const router = createBrowserRouter(createRoutesFromElements(
         <Route path={FRONTEND_ROUTES.OTHER_PAGES.CATALOG} element={<StreetcodeCatalog />} />
         <Route
             path={FRONTEND_ROUTES.ADMIN.TEAM}
-            element={(
-                    <TeamPage />
-            )}
+            element={(<TeamPage />)}
         />
         <Route path="*" element={<NotFound />} />
         <Route path={FRONTEND_ROUTES.OTHER_PAGES.PARTNERS} element={<PartnersPage />} />
         <Route path={FRONTEND_ROUTES.OTHER_PAGES.CONTACT_US} element={<ContactUs />} />
-        <Route path={FRONTEND_ROUTES.OTHER_PAGES.SUPPORT_US} element={<SupportPage />} /> 
+        <Route path={FRONTEND_ROUTES.OTHER_PAGES.SUPPORT_US} element={<SupportPage />} />
         <Route index path="/:id" element={<StreetcodeContent />} />
         <Route index path={`${FRONTEND_ROUTES.OTHER_PAGES.NEWS}/:id`} element={<NewsPage />} />
     </Route>,

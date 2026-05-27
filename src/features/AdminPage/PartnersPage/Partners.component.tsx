@@ -181,7 +181,6 @@ const Partners:React.FC = observer(() => {
                 partnerItem={partnerToEdit}
                 isStreetcodeVisible
             />
-            
         </div>
 
     );

@@ -1,0 +1,10 @@
+@use "@sass/mixins/_utils.mixins.scss" as mut;
+@use "@sass/variables/_variables.fonts.scss" as ft;
+@use "@sass/variables/_variables.colors.scss" as c;
+@use "@sass/_utils.functions.scss" as f;
+
+.streetcode-create-page {
+    padding-top: f.pxToRem(100px);
+    padding-left: f.pxToRem(50px);
+    padding-right: f.pxToRem(50px);
+}

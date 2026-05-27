@@ -1,16 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\.github",
-    "\\config",
-    "\\public",
     "\\src",
     "\\src\\app",
+    "\\src\\app\\router",
     "\\src\\features",
     "\\src\\features\\AdminPage",
-    "\\src\\features\\AdminPage\\NewStreetcode",
-    "\\src\\features\\StreetcodePage"
+    "\\src\\features\\AdminPage\\PartnersPage",
+    "\\src\\features\\AdminPage\\PartnersPage\\PartnerModal",
+    "\\src\\features\\AdminPage\\TeamPage",
+    "\\src\\features\\AdminPage\\TeamPage\\TeamModal"
   ],
-  "SelectedNode": "\\src\\features\\AdminPage\\NewStreetcode\\MainNewStreetcode.component.tsx",
+  "SelectedNode": "\\package.json",
   "PreviewInSolutionExplorer": false
 }
