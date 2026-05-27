@@ -106,10 +106,11 @@ const InterestingFactsAdminModal = () => {
             imageDescription: values.imageDescription?.trim() || undefined,
         };
 
+        const existingFactId = isEditMode ? editingFactId : undefined;
         await factsStore.saveAdminFact(
             payload,
             streetcodeId,
-            isEditMode && editingFactId! > 0 ? editingFactId : undefined,
+            existingFactId,
         );
 
         closeModal();

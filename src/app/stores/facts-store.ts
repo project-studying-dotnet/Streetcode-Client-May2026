@@ -117,11 +117,12 @@ export default class FactsStore {
         try {
             for (let index = 0; index < facts.length; index += 1) {
                 const fact = facts[index];
-                await factsApi.update({
+                const factToUpdate: Fact = {
                     ...fact,
                     index,
                     streetcodeId,
-                } as Fact);
+                };
+                await factsApi.update(factToUpdate);
                 runInAction(() => {
                     this.setItem({ ...fact, index });
                 });
@@ -151,8 +152,11 @@ export default class FactsStore {
         streetcodeId: number,
         existingFactId?: number,
     ): Promise<Fact | undefined> => {
-        const index = existingFactId !== undefined
-            ? getFactIndex(this.factMap.get(existingFactId) as Fact)
+        const existingFact = typeof existingFactId === 'number'
+            ? this.factMap.get(existingFactId)
+            : undefined;
+        const index = existingFact
+            ? getFactIndex(existingFact)
             : this.getFactArray.length;
 
         if (existingFactId !== undefined && existingFactId > 0) {
@@ -177,7 +181,7 @@ export default class FactsStore {
             imageDescription: payload.imageDescription,
             index,
             streetcodeId,
-        } as Fact;
+        };
 
         try {
             const created = await factsApi.create(factToCreate);
@@ -234,7 +238,7 @@ export default class FactsStore {
         });
     };
 
-    private reindexFactsAfterDelete = async () => {
+    private readonly reindexFactsAfterDelete = async () => {
         const streetcodeId = this.adminStreetcodeId;
         if (!streetcodeId) {
             return;

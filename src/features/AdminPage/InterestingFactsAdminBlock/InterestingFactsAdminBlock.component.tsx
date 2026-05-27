@@ -5,7 +5,9 @@ import { useEffect, MouseEvent } from 'react';
 import {
     DeleteOutlined, EditOutlined, HolderOutlined, PlusOutlined,
 } from '@ant-design/icons';
-import { DragDropContext, Draggable, DropResult } from 'react-beautiful-dnd';
+import {
+    DragDropContext, Draggable, DropResult, DroppableProvided,
+} from 'react-beautiful-dnd';
 import useMobx, { useModalContext } from '@stores/root-store';
 
 import { Button, message } from 'antd';
@@ -95,6 +97,67 @@ const InterestingFactsAdminBlock = ({ streetcodeId }: Props) => {
 
     const facts = factsStore.getFactArray;
 
+    const stopMouseDown = (event: MouseEvent) => {
+        event.stopPropagation();
+    };
+
+    const renderFactItem = (
+        fact: FactUpdate,
+        index: number,
+    ) => (
+        <Draggable
+            key={fact.id}
+            draggableId={String(fact.id)}
+            index={index}
+        >
+            {(draggableProvided, snapshot) => (
+                <li
+                    className={`factAdminItem ${snapshot.isDragging ? 'isDragging' : ''}`}
+                    ref={draggableProvided.innerRef}
+                    {...draggableProvided.draggableProps}
+                >
+                    <span
+                        className="dragHandle"
+                        {...draggableProvided.dragHandleProps}
+                        aria-hidden
+                    >
+                        <HolderOutlined />
+                    </span>
+                    <p className="factTitle">{fact.title}</p>
+                    <span className="factActions">
+                        <button
+                            type="button"
+                            aria-label="Редагувати"
+                            onMouseDown={stopMouseDown}
+                            onClick={(e) => handleEditClick(fact.id, e)}
+                        >
+                            <EditOutlined />
+                        </button>
+                        <button
+                            type="button"
+                            aria-label="Видалити"
+                            onMouseDown={stopMouseDown}
+                            onClick={(e) => handleDeleteClick(fact.id, e)}
+                        >
+                            <DeleteOutlined />
+                        </button>
+                    </span>
+                </li>
+            )}
+        </Draggable>
+    );
+
+    const renderFactsList = (provided: DroppableProvided) => (
+        <ul
+            className="factsAdminList"
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+        >
+            {facts.map(renderFactItem)}
+            {provided.placeholder}
+        </ul>
+    );
+
     return (
         <section className="factsAdminBlock">
             <header className="factsAdminHeader">
@@ -113,57 +176,7 @@ const InterestingFactsAdminBlock = ({ streetcodeId }: Props) => {
             ) : (
             <DragDropContext onDragEnd={onDragEnd}>
                 <StrictModeDroppable droppableId="facts-admin-list">
-                    {(provided) => (
-                        <ul
-                            className="factsAdminList"
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                        >
-                            {facts.map((fact, index) => (
-                                <Draggable
-                                    key={fact.id}
-                                    draggableId={String(fact.id)}
-                                    index={index}
-                                >
-                                    {(draggableProvided, snapshot) => (
-                                        <li
-                                            className={`factAdminItem ${snapshot.isDragging ? 'isDragging' : ''}`}
-                                            ref={draggableProvided.innerRef}
-                                            {...draggableProvided.draggableProps}
-                                        >
-                                            <span
-                                                className="dragHandle"
-                                                {...draggableProvided.dragHandleProps}
-                                                aria-hidden
-                                            >
-                                                <HolderOutlined />
-                                            </span>
-                                            <p className="factTitle">{fact.title}</p>
-                                            <span className="factActions">
-                                                <button
-                                                    type="button"
-                                                    aria-label="Редагувати"
-                                                    onMouseDown={(e) => e.stopPropagation()}
-                                                    onClick={(e) => handleEditClick(fact.id, e)}
-                                                >
-                                                    <EditOutlined />
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    aria-label="Видалити"
-                                                    onMouseDown={(e) => e.stopPropagation()}
-                                                    onClick={(e) => handleDeleteClick(fact.id, e)}
-                                                >
-                                                    <DeleteOutlined />
-                                                </button>
-                                            </span>
-                                        </li>
-                                    )}
-                                </Draggable>
-                            ))}
-                            {provided.placeholder}
-                        </ul>
-                    )}
+                    {(provided) => renderFactsList(provided)}
                 </StrictModeDroppable>
             </DragDropContext>
             )}
