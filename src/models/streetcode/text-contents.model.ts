@@ -17,6 +17,14 @@ export interface Fact {
 export interface FactCreate extends Fact {
   imageDescription?: string
 }
+
+export interface FactAdminSavePayload {
+  title: string;
+  factContent: string;
+  imageId: number;
+  imageDescription?: string;
+}
+
 export interface FactUpdate extends FactCreate, IModelState, IPersisted {
     streetcodeId?: number;
 }

@@ -2,7 +2,9 @@ import { makeAutoObservable, runInAction } from 'mobx';
 import factsApi from '@api/streetcode/text-content/facts.api';
 import ImagesApi from '@api/media/images.api';
 import { ModelState } from '@models/enums/model-state';
-import { Fact, FactCreate, FactUpdate } from '@models/streetcode/text-contents.model';
+import {
+    Fact, FactAdminSavePayload, FactCreate, FactUpdate,
+} from '@models/streetcode/text-contents.model';
 
 import { ImageDetails } from '@/models/media/image.model';
 
@@ -258,7 +260,7 @@ export default class FactsStore {
     };
 
     public saveAdminFact = async (
-        payload: FactCreate,
+        payload: FactAdminSavePayload,
         streetcodeId: number,
         existingFactId?: number,
     ): Promise<Fact> => {

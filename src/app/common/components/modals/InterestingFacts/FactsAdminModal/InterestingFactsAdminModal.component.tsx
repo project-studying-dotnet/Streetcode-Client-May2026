@@ -2,7 +2,6 @@ import './InterestingFactsAdminModal.styles.scss';
 import '@features/AdminPage/AdminModal.styles.scss';
 
 import { observer } from 'mobx-react-lite';
-import { useEffect, useRef, useState } from 'react';
 import { InboxOutlined } from '@ant-design/icons';
 import CancelBtn from '@assets/images/utils/Cancel_btn.svg';
 import useMobx, { useModalContext } from '@stores/root-store';
@@ -14,19 +13,15 @@ import FormItem from 'antd/es/form/FormItem';
 import TextArea from 'antd/es/input/TextArea';
 import { UploadFile } from 'antd/lib/upload/interface';
 
-import ImagesApi from '@/app/api/media/images.api';
 import FileUploader from '@/app/common/components/FileUploader/FileUploader.component';
-import base64ToUrl from '@/app/common/utils/base64ToUrl.utility';
-import Image from '@/models/media/image.model';
-import { FactCreate } from '@/models/streetcode/text-contents.model';
+import { FactAdminSavePayload } from '@/models/streetcode/text-contents.model';
 
-const TITLE_MAX = 68;
-const CONTENT_MAX = 600;
-const IMAGE_DESCRIPTION_MAX = 200;
+import INTERESTING_FACTS_ADMIN_MODAL_MESSAGES from './interesting-facts-admin-modal.constants';
+import useFactsAdminModalForm from './useFactsAdminModalForm.hook';
 
 const SymbolsLeft = ({ current, max }: { current: number; max: number }) => (
     <p className="symbolsLeft">
-        Залишилось символів:
+        {INTERESTING_FACTS_ADMIN_MODAL_MESSAGES.SYMBOLS_LEFT}
         {' '}
         {Math.max(0, max - current)}
     </p>
@@ -35,49 +30,28 @@ const SymbolsLeft = ({ current, max }: { current: number; max: number }) => (
 const InterestingFactsAdminModal = () => {
     const { factsStore } = useMobx();
     const { modalStore: { setModal, modalsState: { adminFacts } } } = useModalContext();
-    const [form] = Form.useForm();
-    const imageId = useRef<number>(0);
-    const [titleLength, setTitleLength] = useState(0);
-    const [contentLength, setContentLength] = useState(0);
-    const [descriptionLength, setDescriptionLength] = useState(0);
 
     const editingFactId = adminFacts.fromCardId;
     const isEditMode = typeof editingFactId === 'number' && editingFactId > 0;
-    const editingFact = isEditMode ? factsStore.factMap.get(editingFactId) : undefined;
+
+    const {
+        form,
+        imageId,
+        titleLength,
+        contentLength,
+        descriptionLength,
+        setTitleLength,
+        setContentLength,
+        setDescriptionLength,
+        onSuccessUpload,
+        onRemove,
+        validateImageSelected,
+        titleMax,
+        contentMax,
+        descriptionMax,
+    } = useFactsAdminModalForm(adminFacts.isOpen, editingFactId, factsStore);
 
     const closeModal = () => setModal('adminFacts', undefined, false);
-
-    useEffect(() => {
-        if (!adminFacts.isOpen) {
-            form.resetFields();
-            imageId.current = 0;
-            setTitleLength(0);
-            setContentLength(0);
-            setDescriptionLength(0);
-            return;
-        }
-
-        if (editingFact) {
-            imageId.current = editingFact.imageId;
-            const description = (editingFact as FactCreate).imageDescription
-                ?? editingFact.image?.imageDetails?.alt
-                ?? '';
-            form.setFieldsValue({
-                title: editingFact.title,
-                factContent: editingFact.factContent,
-                imageDescription: description,
-                picture: editingFact.image ? [{
-                    uid: String(editingFact.imageId),
-                    name: editingFact.image.blobName ?? 'image',
-                    status: 'done',
-                    thumbUrl: base64ToUrl(editingFact.image.base64, editingFact.image.mimeType),
-                }] : [],
-            });
-            setTitleLength(editingFact.title.length);
-            setContentLength(editingFact.factContent.length);
-            setDescriptionLength(description.length);
-        }
-    }, [adminFacts.isOpen, editingFact, editingFactId, form]);
 
     const onFinish = async (values: {
         title: string;
@@ -87,22 +61,18 @@ const InterestingFactsAdminModal = () => {
     }) => {
         const streetcodeId = factsStore.adminStreetcodeId;
         if (!streetcodeId) {
+            message.error(INTERESTING_FACTS_ADMIN_MODAL_MESSAGES.MISSING_STREETCODE);
             return;
         }
 
-        if (!imageId.current) {
-            form.setFields([{
-                name: 'picture',
-                errors: ['Додайте зображення'],
-            }]);
+        if (!validateImageSelected() || !imageId) {
             return;
         }
 
-        const payload: FactCreate = {
-            id: editingFact?.id ?? 0,
+        const payload: FactAdminSavePayload = {
             title: values.title.trim(),
             factContent: values.factContent.trim(),
-            imageId: imageId.current,
+            imageId,
             imageDescription: values.imageDescription?.trim() || undefined,
         };
 
@@ -114,9 +84,10 @@ const InterestingFactsAdminModal = () => {
                 streetcodeId,
                 existingFactId,
             );
+            message.success(INTERESTING_FACTS_ADMIN_MODAL_MESSAGES.SAVE_SUCCESS);
             closeModal();
         } catch {
-            message.error(factsStore.lastError ?? 'Не вдалося зберегти факт');
+            message.error(factsStore.lastError ?? INTERESTING_FACTS_ADMIN_MODAL_MESSAGES.SAVE_FAILED);
         }
     };
 
@@ -132,43 +103,57 @@ const InterestingFactsAdminModal = () => {
             destroyOnClose
         >
             <Form className="factForm" form={form} layout="vertical" onFinish={onFinish}>
-                <h2>{isEditMode ? 'Редагувати Wow-факт' : 'Додати Wow-факт'}</h2>
+                <h2>
+                    {isEditMode
+                        ? INTERESTING_FACTS_ADMIN_MODAL_MESSAGES.EDIT_TITLE
+                        : INTERESTING_FACTS_ADMIN_MODAL_MESSAGES.CREATE_TITLE}
+                </h2>
 
                 <p className="fieldLabel">Заголовок *</p>
-                <FormItem
-                    name="title"
-                    rules={[
-                        { required: true, message: 'Введіть заголовок' },
-                        { max: TITLE_MAX, message: `Максимум ${TITLE_MAX} символів` },
-                    ]}
-                >
-                    <Input
-                        maxLength={TITLE_MAX}
-                        onChange={(e) => setTitleLength(e.target.value.length)}
-                    />
-                </FormItem>
-                <SymbolsLeft current={titleLength} max={TITLE_MAX} />
+                <div className="factFieldGroup">
+                    <FormItem
+                        name="title"
+                        rules={[
+                            { required: true, message: INTERESTING_FACTS_ADMIN_MODAL_MESSAGES.TITLE_REQUIRED },
+                            { max: titleMax, message: `Максимум ${titleMax} символів` },
+                        ]}
+                    >
+                        <Input
+                            maxLength={titleMax}
+                            onChange={(e) => setTitleLength(e.target.value.length)}
+                        />
+                    </FormItem>
+                    <SymbolsLeft current={titleLength} max={titleMax} />
+                </div>
 
                 <p className="fieldLabel">Основний текст *</p>
-                <FormItem
-                    name="factContent"
-                    rules={[
-                        { required: true, message: 'Введіть текст' },
-                        { max: CONTENT_MAX, message: `Максимум ${CONTENT_MAX} символів` },
-                    ]}
-                >
-                    <TextArea
-                        rows={5}
-                        maxLength={CONTENT_MAX}
-                        onChange={(e) => setContentLength(e.target.value.length)}
-                    />
-                </FormItem>
-                <SymbolsLeft current={contentLength} max={CONTENT_MAX} />
+                <div className="factFieldGroup">
+                    <FormItem
+                        name="factContent"
+                        rules={[
+                            { required: true, message: INTERESTING_FACTS_ADMIN_MODAL_MESSAGES.CONTENT_REQUIRED },
+                            { max: contentMax, message: `Максимум ${contentMax} символів` },
+                        ]}
+                    >
+                        <TextArea
+                            rows={5}
+                            maxLength={contentMax}
+                            onChange={(e) => setContentLength(e.target.value.length)}
+                        />
+                    </FormItem>
+                    <SymbolsLeft current={contentLength} max={contentMax} />
+                </div>
 
                 <p className="fieldLabel">Зображення *</p>
                 <FormItem
                     name="picture"
-                    rules={[{ required: !imageId.current, message: 'Додайте зображення' }]}
+                    rules={[{
+                        validator: async () => {
+                            if (!imageId) {
+                                throw new Error(INTERESTING_FACTS_ADMIN_MODAL_MESSAGES.IMAGE_REQUIRED);
+                            }
+                        },
+                    }]}
                 >
                     <FileUploader
                         uploadTo="image"
@@ -176,38 +161,41 @@ const InterestingFactsAdminModal = () => {
                         accept=".jpeg,.png,.jpg,.webp"
                         listType="picture-card"
                         maxCount={1}
-                        onSuccessUpload={(img: Image) => {
-                            imageId.current = img.id;
-                        }}
-                        onRemove={() => {
-                            if (imageId.current > 0) {
-                                ImagesApi.delete(imageId.current);
-                            }
-                            imageId.current = 0;
-                        }}
+                        onSuccessUpload={onSuccessUpload}
+                        onRemove={onRemove}
                     >
                         <div className="upload">
                             <InboxOutlined />
-                            <p>Виберіть чи перетягніть файл</p>
+                            <p>{INTERESTING_FACTS_ADMIN_MODAL_MESSAGES.UPLOAD_HINT}</p>
                         </div>
                     </FileUploader>
                 </FormItem>
 
                 <p className="fieldLabel">Опис зображення</p>
-                <FormItem
-                    name="imageDescription"
-                    rules={[{ max: IMAGE_DESCRIPTION_MAX, message: `Максимум ${IMAGE_DESCRIPTION_MAX} символів` }]}
-                >
-                    <TextArea
-                        rows={2}
-                        maxLength={IMAGE_DESCRIPTION_MAX}
-                        onChange={(e) => setDescriptionLength(e.target.value.length)}
-                    />
-                </FormItem>
-                <SymbolsLeft current={descriptionLength} max={IMAGE_DESCRIPTION_MAX} />
+                <div className="factFieldGroup">
+                    <FormItem
+                        name="imageDescription"
+                        rules={[{
+                            max: descriptionMax,
+                            message: `Максимум ${descriptionMax} символів`,
+                        }]}
+                    >
+                        <TextArea
+                            rows={2}
+                            maxLength={descriptionMax}
+                            onChange={(e) => setDescriptionLength(e.target.value.length)}
+                        />
+                    </FormItem>
+                    <SymbolsLeft current={descriptionLength} max={descriptionMax} />
+                </div>
 
-                <Button className="saveButton streetcode-custom-button" htmlType="submit">
-                    Зберегти
+                <Button
+                    className="saveButton streetcode-custom-button"
+                    htmlType="submit"
+                    loading={factsStore.isSaving}
+                    disabled={factsStore.isSaving}
+                >
+                    {INTERESTING_FACTS_ADMIN_MODAL_MESSAGES.SAVE}
                 </Button>
             </Form>
         </Modal>

@@ -18,8 +18,18 @@
             font-weight: 500;
         }
 
+        .factFieldGroup {
+            display: flex;
+            flex-direction: column;
+            gap: f.pxToRem(4px);
+
+            .ant-form-item {
+                margin-bottom: 0;
+            }
+        }
+
         .symbolsLeft {
-            margin: f.pxToRem(4px) 0 0;
+            margin: 0;
             font-size: f.pxToRem(12px);
             color: c.$lighter-gray-color;
             text-align: right;
