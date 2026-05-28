@@ -70,7 +70,7 @@ const Streetcodes:React.FC = observer(() => {
             <div className="streetcodes-page-container">
                 <div className="container-justify-end">
                     <Button
-                        className="streetcode-custome-button streetcodes-page-add-button"
+                        className="streetcode-custome-button add-button"
                         onClick={() => navigate(`${FRONTEND_ROUTES.ADMIN.NEW_STREETCODE}`)}
                     >
                         Додати стріткод

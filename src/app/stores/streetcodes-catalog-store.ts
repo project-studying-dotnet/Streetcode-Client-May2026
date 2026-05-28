@@ -9,6 +9,8 @@ export default class StreetcodesCatalogStore {
 
     public streetcodesMap = new Map<number, Streetcode>();
 
+    public streetcode: Streetcode = null;
+
     constructor() {
         makeAutoObservable(this);
     }

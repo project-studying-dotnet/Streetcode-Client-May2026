@@ -4,14 +4,20 @@
 import './StreetcodeCreate.styles.scss';
 
 import {
-    Button, DatePicker, Form, Input, InputNumber, Divider, Select, Switch, Space,
+    Button, DatePicker, Form, Input, InputNumber, Divider, Select, Switch, Space, Tooltip,
 } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import Radio from 'antd/es/radio/radio';
 import { observer } from 'mobx-react-lite';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import useMobx from '../../../../app/stores/root-store';
 import { BulbOutlined } from '@ant-design/icons';
+import { useParams } from 'react-router-dom';
+import Streetcode from '../../../../models/streetcode/streetcode-types.model';
+import StreetcodesApi from '../../../../app/api/streetcode/streetcodes.api';
+import dayjs from 'dayjs';
+import TagItem from '../../../../app/common/components/Tag/TagItem.component';
+import Tag, { StreetcodeTag } from '../../../../models/additional-content/tag.model';
 
 const StreetcodeCreate: React.FC = observer(() => {
     const [form] = Form.useForm();
@@ -23,13 +29,67 @@ const StreetcodeCreate: React.FC = observer(() => {
     const [typeStartDateFormat, setStartTypeDateFormat] = useState('DD/MM/YYYY');
     const [typeEndDateFormat, setEndTypeDateFormat] = useState('DD/MM/YYYY');
     const [displayResolution, setDisplayResolution] = useState();
+    const { id } = useParams();
+    const [currentStreetcode, setCurrentStreetcode] = useState<Streetcode>();
+    const [selectedTags, setSelectedTags] = useState<StreetcodeTag[]>([]);
+
+    const onTagSelect = (value: string) => {
+        const selectedTag = tagsStore?.Tags.find((tag) => tag.title === value);
+        setSelectedTags((prev) => [...prev, selectedTag]);
+    };
+
+    const onTagDeselect = (value: string) => {
+        setSelectedTags((prev) => prev.filter((tag: Tag) => tag.title !== value));
+    };
+
+    useEffect(() => {
+        if (id) {
+            setSelectedTags(currentStreetcode?.tags || []);
+            form.setFieldsValue({
+                index: currentStreetcode?.index,
+                firstName: currentStreetcode?.firstName,
+                lastName: currentStreetcode?.lastName,
+                title: currentStreetcode?.title,
+                transliterationUrl: currentStreetcode?.transliterationUrl,
+                eventStartOrPersonBirthDate: dayjs(currentStreetcode?.eventStartOrPersonBirthDate),
+                eventEndOrPersonDeathDate: dayjs(currentStreetcode?.eventEndOrPersonDeathDate),
+                dateString: currentStreetcode?.dateString,
+                tags: currentStreetcode?.tags?.map((t) => t.title),
+                teaser: currentStreetcode?.teaser,
+            });
+        }
+    }, [currentStreetcode]);
+
+    useEffect(() => async () => {
+        const streetcode = await StreetcodesApi.getById(Number(id)).then((res) => res).catch((err) => err);
+        setCurrentStreetcode(streetcode);
+    }, []);
 
     useEffect(() => {
         tagsStore?.fetchAllTags();
     }, []);
 
     const onSuccesfulSubmitStreetcode = (values: any) => {
-        Promise.all([streetcodeCatalogStore?.createStreetcode(values).then((res) => res).catch((err) => err)]);
+        const streetcode: Streetcode = {
+            id: 0,
+            index: values.index,
+            firstName: values.firstName,
+            lastName: values.lastName,
+            title: values.title,
+            transliterationUrl: values.transliterationUrl,
+            eventStartOrPersonBirthDate: dayjs(values.eventStartOrPersonBirthDate),
+            eventEndOrPersonDeathDate: dayjs(values.eventEndOrPersonDeathDate),
+            dateString: values.dateString,
+            tags: selectedTags,
+            teaser: values.teaser,
+        };
+
+        if (currentStreetcode?.id) {
+            Promise.all([
+                StreetcodesApi.update({ ...currentStreetcode, ...values }).then((res) => res).catch((err) => err)]);
+        } else {
+            Promise.all([streetcodeCatalogStore?.createStreetcode(streetcode).then((res) => res).catch((err) => err)]);
+        }
     };
 
     const typeDiapason = [{
@@ -60,11 +120,15 @@ const StreetcodeCreate: React.FC = observer(() => {
                     <h2>Стріткод</h2>
                     <Divider />
 
-                    <Space>
+                    <div className="streetcode-create-page__mainblock__head">
                         <Form.Item
                             name="index"
                         >
-                            <InputNumber min={1} max={9999} placeholder="Введіть номер стріткоду" />
+                            <InputNumber
+                                className="inputNamber"
+                                min={1}
+                                max={9999}
+                                placeholder="Введіть номер стріткоду" />
                         </Form.Item>
 
                         <Form.Item
@@ -76,26 +140,26 @@ const StreetcodeCreate: React.FC = observer(() => {
                                 <div>Подія</div>
                             </Space>
                         </Form.Item>
-                    </Space>
+                    </div>
 
                     <div className="streetcode-create-page__mainblock__person" hidden={!isVisible}>
-                        <Space>
-                            <Form.Item
-                                name="firstName"
-                                label="Ім'я"
-                                rules={[{ message: "Введіть ім'я:" }]}
-                            >
-                                <Input maxLength={50} showCount />
-                            </Form.Item>
+                        <Form.Item
+                            className="person__item"
+                            name="firstName"
+                            label="Ім'я"
+                            rules={[{ message: "Введіть ім'я:" }]}
+                        >
+                            <Input maxLength={50} showCount />
+                        </Form.Item>
 
-                            <Form.Item
-                                name="lastName"
-                                label="Прізвище"
-                                rules={[{ message: 'Введіть прізвище:' }]}
-                            >
-                                <Input maxLength={50} showCount />
-                            </Form.Item>
-                        </Space>
+                        <Form.Item
+                            className="person__item"
+                            name="lastName"
+                            label="Прізвище"
+                            rules={[{ message: 'Введіть прізвище:' }]}
+                        >
+                            <Input maxLength={50} showCount />
+                        </Form.Item>
                     </div>
 
                     <Form.Item
@@ -133,6 +197,7 @@ const StreetcodeCreate: React.FC = observer(() => {
                     <Space>
                         <Form.Item>
                             <Select
+                                className="years__item"
                                 defaultValue={startDateType}
                                 onChange={(value) => {
                                     setStartDateType(value);
@@ -144,6 +209,7 @@ const StreetcodeCreate: React.FC = observer(() => {
 
                         <Form.Item>
                             <Select
+                                className="years__item"
                                 defaultValue={endDateType}
                                 onChange={(value) => {
                                     setEndDateType(value);
@@ -154,32 +220,39 @@ const StreetcodeCreate: React.FC = observer(() => {
                         </Form.Item>
                     </Space>
 
-                    <Form.Item
-                        name="eventStartOrPersonBirthDate"
-                        label="Від"
-                        rules={[{ required: true }]}
-                    >
-                        <DatePicker
-                            picker={
-                                startDateType === 'date' ? 'date' : startDateType === 'month' ? 'month' : 'year'
-                            }
-                            format={typeStartDateFormat}
-                            onChange={(date, dateString) => setYears(dateString.toString())}
-                        />
-                    </Form.Item>
+                    <div>
+                        <Space>
+                            <Form.Item
+                                name="eventStartOrPersonBirthDate"
+                                label="Від"
+                                rules={[{ required: true }]}
+                            >
+                                <DatePicker
+                                    className="years__item"
+                                    picker={
+                                        startDateType === 'date' ? 'date' : startDateType === 'month' ? 'month' : 'year'
+                                    }
+                                    format={typeStartDateFormat}
+                                    onChange={(date, dateString) => setYears(dateString.toString())}
+                                />
+                            </Form.Item>
 
-                    <Form.Item
-                        name="eventEndOrPersonDeathDate"
-                        label="До"
-                    >
-                        <DatePicker
-                            picker={
-                                endDateType === 'date' ? 'date' : endDateType === 'month' ? 'month' : 'year'
-                            }
-                            format={typeEndDateFormat}
-                            onChange={(date, dateString) => setYears((prev) => `${prev} - ${dateString.toString()}`)}
-                        />
-                    </Form.Item>
+                            <Form.Item
+                                name="eventEndOrPersonDeathDate"
+                                label="До"
+                            >
+                                <DatePicker
+                                    className="years__item"
+                                    picker={
+                                        endDateType === 'date' ? 'date' : endDateType === 'month' ? 'month' : 'year'
+                                    }
+                                    format={typeEndDateFormat}
+                                    onChange={(date, dateString) =>
+                                        setYears((prev) => `${prev} - ${dateString.toString()}`)}
+                                />
+                            </Form.Item>
+                        </Space>
+                    </div>
 
                     <Form.Item
                         name="dateString"
@@ -192,8 +265,10 @@ const StreetcodeCreate: React.FC = observer(() => {
 
                 <div className="streetcode-create-page__tags">
                     <h2>
-Теги
-                        <BulbOutlined />
+                        Теги
+                        <Tooltip title="Підказка">
+                            <BulbOutlined />
+                        </Tooltip>
                     </h2>
                     <Divider />
 
@@ -211,11 +286,19 @@ const StreetcodeCreate: React.FC = observer(() => {
                         />
                     </div>
 
+                    <Space>
+                        {selectedTags.map((tag) => (
+                            <TagItem tag={tag} />
+                        ))}
+                    </Space>
+
                     <Form.Item
                         name="tags"
                     >
                         <Select
                             mode="tags"
+                            onSelect={onTagSelect}
+                            onDeselect={onTagDeselect}
                         >
                             {tagsStore?.Tags.map((tag) => (
                                 <Select.Option key={tag.id} value={tag.title}>
@@ -235,8 +318,14 @@ const StreetcodeCreate: React.FC = observer(() => {
                 </div>
                 <Divider />
 
-                <Button>Зберегти як чернетку</Button>
-                <Button className="streetcode-custom-button save" onClick={() => form.submit()}>Опублікувати</Button>
+                <div className="streetcode-create-page__button">
+                    <Button className="">
+                        Зберегти як чернетку
+                    </Button>
+                    <Button className="streetcode-custom-button save" onClick={() => form.submit()}>
+                        Опублікувати
+                    </Button>
+                </div>
             </Form>
         </div>
     );

@@ -7,4 +7,38 @@
     padding-top: f.pxToRem(100px);
     padding-left: f.pxToRem(50px);
     padding-right: f.pxToRem(50px);
+
+    .streetcode-create-page__mainblock {
+
+        .streetcode-create-page__mainblock__head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .inputNamber {
+                width: f.pxToRem(200px);
+            }
+        }
+
+        .streetcode-create-page__mainblock__person {
+            display: flex;
+            gap: f.pxToRem(200px);
+
+            .person__item {
+                width: f.pxToRem(300px);
+            }
+        }
+    }
+
+    .streetcode-create-page__years {
+        .years__item {
+            width: f.pxToRem(300px);
+        }
+    }
+
+    .streetcode-create-page__button {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 }
