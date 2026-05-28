@@ -3,8 +3,11 @@ import './StreetcodeCatalogItem.styles.scss';
 
 import { observer } from 'mobx-react-lite';
 import { useEffect, useRef } from 'react';
+import { EditOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import useMobx from '@stores/root-store';
+
+import FRONTEND_ROUTES from '@/app/common/constants/frontend-routes.constants';
 
 import useOnScreen from '@/app/common/hooks/scrolling/useOnScreen.hook';
 import { useAsync } from '@/app/common/hooks/stateful/useAsync.hook';
@@ -17,9 +20,12 @@ interface Props {
     streetcode: StreetcodeCatalogRecord;
     isLast: boolean;
     handleNextScreen: () => void;
+    showAdminActions?: boolean;
 }
 
-const StreetcodeCatalogItem = ({ streetcode, isLast, handleNextScreen }: Props) => {
+const StreetcodeCatalogItem = ({
+    streetcode, isLast, handleNextScreen, showAdminActions = false,
+}: Props) => {
     const { imagesStore: { getImage, fetchImage } } = useMobx();
     const elementRef = useRef<HTMLDivElement>(null);
     const classSelector = 'catalogItem';
@@ -37,11 +43,24 @@ const StreetcodeCatalogItem = ({ streetcode, isLast, handleNextScreen }: Props) 
         to: `../${streetcode.url}`,
     }
     const windowsize = useWindowSize();
+    const adminEditLink = `${FRONTEND_ROUTES.ADMIN.EDIT_STREETCODE}/${streetcode.id}`;
+
+    const adminEditButton = showAdminActions ? (
+        <Link
+            className="catalogItemEditBtn"
+            to={adminEditLink}
+            onClick={(e) => e.stopPropagation()}
+            aria-label="Редагувати стріткод"
+        >
+            <EditOutlined />
+        </Link>
+    ) : null;
 
     return (
         <>
             {windowsize.width > 1024 && (
                 <Link {...LinkProps} onClick={() => toStreetcodeRedirectClickEvent(streetcode.url, 'catalog')}>
+                    {adminEditButton}
                     <div ref={elementRef} className="catalogItemText">
                         <div className="heading">
                             <p>{streetcode.title}</p>
@@ -58,6 +77,7 @@ const StreetcodeCatalogItem = ({ streetcode, isLast, handleNextScreen }: Props) 
             )}
             {windowsize.width <= 1024 && (
                 <div>
+                    {adminEditButton}
                     <Link {...LinkProps} />
                     <div ref={elementRef} className="catalogItemText mobile">
                         <div className="heading">

@@ -1,0 +1,112 @@
+@use "@assets/sass/_utils.functions.scss" as f;
+@use "@assets/sass/variables/_variables.colors.scss" as c;
+@use "@assets/sass/mixins/_utils.mixins.scss" as mut;
+
+.factsAdminBlock {
+    width: 100%;
+    padding: f.pxToRem(24px) f.pxToRem(40px) f.pxToRem(80px);
+
+    .factsAdminHeader {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: f.pxToRem(24px);
+
+        h2 {
+            margin: 0;
+            font-size: f.pxToRem(28px);
+            font-weight: 500;
+        }
+
+        .ant-btn {
+            min-width: f.pxToRem(48px);
+        }
+    }
+
+    .factsAdminList {
+        position: relative;
+        display: block;
+        min-height: f.pxToRem(80px);
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        // react-beautiful-dnd placeholder must not reserve a flex gap slot
+        [data-rbd-droppable-placeholder] {
+            position: absolute;
+            left: 0;
+            right: 0;
+            margin: 0 !important;
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+    }
+
+    .factAdminItem {
+        display: flex;
+        align-items: center;
+        gap: f.pxToRem(12px);
+        margin-bottom: f.pxToRem(12px);
+        padding: f.pxToRem(16px) f.pxToRem(20px);
+        background: c.$pure-white-color;
+        border: 1px solid c.$lighter-gray-color;
+        border-radius: f.pxToRem(16px);
+        cursor: grab;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        &.isDragging {
+            box-shadow: 0 f.pxToRem(8px) f.pxToRem(24px) rgba(0, 0, 0, 0.12);
+        }
+
+        .dragHandle {
+            border: none;
+            background: transparent;
+            padding: 0;
+            color: c.$normal-gray-color;
+            font-size: f.pxToRem(18px);
+            cursor: grab;
+        }
+
+        .factTitle {
+            flex: 1;
+            margin: 0;
+            font-size: f.pxToRem(16px);
+            font-weight: 500;
+            @include mut.truncated(1);
+        }
+
+        .factActions {
+            display: flex;
+            gap: f.pxToRem(8px);
+
+            button {
+                border: none;
+                background: transparent;
+                cursor: pointer;
+                font-size: f.pxToRem(18px);
+                color: c.$dark-gray-color;
+
+                &:hover {
+                    color: c.$accented-red-color;
+                }
+            }
+        }
+    }
+
+    .factsAdminEmpty,
+    .factsAdminLoading {
+        color: c.$normal-gray-color;
+        font-style: italic;
+    }
+
+    .factsAdminLoading {
+        display: flex;
+        align-items: center;
+        gap: f.pxToRem(8px);
+        font-style: normal;
+    }
+}

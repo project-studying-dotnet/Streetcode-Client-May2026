@@ -10,16 +10,19 @@ const ConfirmationModal = () => {
         <Modal
             title="Підтведження"
             open={confirmation.isOpen}
-            onOk={() => {
-                if (confirmation.confirmationProps?.onSubmit) {
-                    confirmation.confirmationProps.onSubmit();
+            onOk={async () => {
+                try {
+                    await confirmation.confirmationProps?.onSubmit?.();
+                } finally {
+                    setConfirmationModal('confirmation', undefined, undefined, false);
                 }
             }}
             onCancel={() => {
                 if (confirmation.confirmationProps?.onCancel) {
-                    confirmation.confirmationProps?.onCancel();
+                    confirmation.confirmationProps.onCancel();
+                } else {
+                    setConfirmationModal('confirmation', undefined, undefined, false);
                 }
-                setConfirmationModal('confirmation');
             }}
         >
             {(confirmation.confirmationProps?.text)
