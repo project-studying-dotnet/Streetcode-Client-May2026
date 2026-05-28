@@ -4,6 +4,11 @@ import Streetcode from '@models/streetcode/streetcode-types.model';
 
 import { StreetcodeCatalogRecord } from '@/models/streetcode/streetcode-types.model';
 
+interface StreetcodesResponse {
+    pages: number;
+    streetcodes: Streetcode[];
+}
+
 export default class StreetcodesCatalogStore {
     public catalog = new Array<StreetcodeCatalogRecord>();
 
@@ -57,5 +62,27 @@ export default class StreetcodesCatalogStore {
         } catch (error: unknown) {
             return null;
         }
+    };
+
+    public fetchStreetcodesAll = async () => {
+        try {
+            const response: StreetcodesResponse = await StreetcodesApi.getAll();
+            this.setInternalMap(response.streetcodes);
+        } catch (error: unknown) {
+            return undefined;
+        }
+    };
+
+    get getStreetcodesArray() {
+        return Array.from(this.streetcodesMap.values());
+    }
+
+    public setInternalMap(streetcodes: Streetcode[]) {
+        this.streetcodesMap.clear();
+        streetcodes.forEach(this.setItem);
+    }
+
+    public setItem = (streetcode: Streetcode) => {
+        this.streetcodesMap.set(streetcode.id, streetcode);
     };
 }

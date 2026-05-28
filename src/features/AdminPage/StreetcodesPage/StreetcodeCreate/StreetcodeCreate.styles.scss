@@ -36,6 +36,12 @@
         }
     }
 
+    .streetcode-create-page__tags {
+        .radio {
+            margin-left: f.pxToRem(20px);
+        }
+    }
+
     .streetcode-create-page__button {
         display: flex;
         justify-content: space-between;

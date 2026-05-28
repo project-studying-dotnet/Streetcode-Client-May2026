@@ -71,7 +71,7 @@ const StreetcodeCreate: React.FC = observer(() => {
 
     const onSuccesfulSubmitStreetcode = (values: any) => {
         const streetcode: Streetcode = {
-            id: 0,
+            id: currentStreetcode?.id || 0,
             index: values.index,
             firstName: values.firstName,
             lastName: values.lastName,
@@ -86,7 +86,7 @@ const StreetcodeCreate: React.FC = observer(() => {
 
         if (currentStreetcode?.id) {
             Promise.all([
-                StreetcodesApi.update({ ...currentStreetcode, ...values }).then((res) => res).catch((err) => err)]);
+                StreetcodesApi.update(streetcode).then((res) => res).catch((err) => err)]);
         } else {
             Promise.all([streetcodeCatalogStore?.createStreetcode(streetcode).then((res) => res).catch((err) => err)]);
         }
@@ -274,7 +274,8 @@ const StreetcodeCreate: React.FC = observer(() => {
 
                     <div>
                         Розширення
-                        <Radio.Group
+                        <Radio.Group 
+                            className="radio"
                             name="radiogroup"
                             onChange={(e) => setDisplayResolution(e.target.value)}
                             defaultValue={360}

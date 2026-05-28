@@ -3,7 +3,7 @@ import './Streetcodes.styles.scss';
 import { observer } from 'mobx-react-lite';
 import { Button, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import Streetcode from "@/models/streetcode/streetcode-types.model";
+import Streetcode, { StreetcodeCatalogRecord } from "@/models/streetcode/streetcode-types.model";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import useMobx, { useModalContext } from '@/app/stores/root-store';
 import StreetcodesApi from '@api/streetcode/streetcodes.api';
@@ -11,11 +11,16 @@ import StreetcodesApi from '@api/streetcode/streetcodes.api';
 import AdminBar from '../AdminBar.component';
 import { useNavigate } from 'react-router/dist';
 import FRONTEND_ROUTES from '@/app/common/constants/frontend-routes.constants';
+import { useEffect } from 'react';
 
 const Streetcodes:React.FC = observer(() => {
     const { streetcodeCatalogStore } = useMobx();
     const navigate = useNavigate();
     const { modalStore } = useModalContext();
+
+    useEffect(() => {
+        streetcodeCatalogStore.fetchStreetcodesAll();
+    }, []);
 
     const columns: ColumnsType<Streetcode> = [
         {
@@ -80,7 +85,7 @@ const Streetcodes:React.FC = observer(() => {
                     pagination={{ pageSize: 10 }}
                     className="streetcodes-table"
                     columns={columns}
-                    dataSource={streetcodeCatalogStore?.getCatalogStreetcodesArray}
+                    dataSource={streetcodeCatalogStore?.getStreetcodesArray}
                     rowKey="id"
                 />
             </div>
