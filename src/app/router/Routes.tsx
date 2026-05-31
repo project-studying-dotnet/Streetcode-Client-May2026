@@ -28,13 +28,13 @@ const router = createBrowserRouter(createRoutesFromElements(
             element={<EditStreetcodePage />}
         />
         <Route
-            path={`${FRONTEND_ROUTES.ADMIN.BASE}/:id`}
-            element={<StreetcodeContent />}
-        />       
-        <Route
             path={FRONTEND_ROUTES.ADMIN.FOR_FANS}
             element={<ForFansMainPage />}
         />
+        <Route
+            path={`${FRONTEND_ROUTES.ADMIN.BASE}/:id`}
+            element={<StreetcodeContent />}
+        />       
         <Route
             path={FRONTEND_ROUTES.ADMIN.PARTNERS}
             element={<Partners />}

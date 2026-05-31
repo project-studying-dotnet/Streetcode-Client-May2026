@@ -34,6 +34,7 @@ interface ModalList {
     deleteStreetcode: ModalState;
     confirmation: ModalState;
     adminFacts: ModalState;
+    adminChronology: ModalState;
     statistics: ModalState;
 }
 
@@ -55,6 +56,7 @@ export default class ModalStore {
         deleteStreetcode: DefaultModalState,
         confirmation: DefaultModalState,
         adminFacts: DefaultModalState,
+        adminChronology: DefaultModalState,
         statistics: DefaultModalState,
     };
 
