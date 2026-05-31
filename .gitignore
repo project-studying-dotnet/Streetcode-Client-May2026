@@ -28,3 +28,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 package-lock.json
+/.vs/slnx.sqlite
+/.vs/Streetcode-Client-May2026.slnx/FileContentIndex/1eb9a7db-edf7-41c4-b5c0-17c9eecba41c.vsidx
+*.vsidx
+/.vs/Streetcode-Client-May2026.slnx/FileContentIndex/60ca6d2e-fec7-4729-b3d4-e506485770bb.vsidx
+/.vs/Streetcode-Client-May2026.slnx/FileContentIndex/d40abb7b-2503-445b-a612-736e7904a509.vsidx
+/.vs/Streetcode-Client-May2026.slnx/FileContentIndex/e1e3f833-35eb-4da0-a352-f9f4a6ef23c3.vsidx
+*.sqlite-journal
