@@ -20,13 +20,11 @@ export default class StreetcodeStore {
 
     public setCurrentStreetcodeId = async (url: string): Promise<Streetcode | undefined> => {
         try {
-            if (await StreetcodesApi.existWithUrl(url)) {
-                const streetcode = await StreetcodesApi.getByUrl(url);
+            const streetcode = await StreetcodesApi.getByUrl(url);
                 if (streetcode !== null) {
                     this.setStreetCode = streetcode;
                     return streetcode;
                 }
-            }
         } catch (error) { }
     };
 

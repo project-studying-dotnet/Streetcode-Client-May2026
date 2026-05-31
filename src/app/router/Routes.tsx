@@ -2,6 +2,7 @@ import { createBrowserRouter, createRoutesFromElements, Route } from 'react-rout
 import FRONTEND_ROUTES from '@constants/frontend-routes.constants';
 import ForFansMainPage from '@features/AdminPage/ForFansPage/ForFansMainPage.component';
 import App from '@layout/app/App.component';
+import EditStreetcodePage from '@features/AdminPage/EditStreetcodePage/EditStreetcodePage.component';
 import StreetcodeContent from '@streetcode/Streetcode.component';
 
 import NotFound from '@/features/AdditionalPages/NotFoundPage/NotFound.component';
@@ -21,6 +22,10 @@ const router = createBrowserRouter(createRoutesFromElements(
         <Route
             path={`${FRONTEND_ROUTES.ADMIN.BASE}`}
             element={<AdminPage />}
+        />
+        <Route
+            path={`${FRONTEND_ROUTES.ADMIN.EDIT_STREETCODE}/:streetcodeId`}
+            element={<EditStreetcodePage />}
         />
         <Route
             path={`${FRONTEND_ROUTES.ADMIN.BASE}/:id`}
