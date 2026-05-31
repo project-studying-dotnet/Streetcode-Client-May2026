@@ -35,3 +35,4 @@ package-lock.json
 /.vs/Streetcode-Client-May2026.slnx/FileContentIndex/d40abb7b-2503-445b-a612-736e7904a509.vsidx
 /.vs/Streetcode-Client-May2026.slnx/FileContentIndex/e1e3f833-35eb-4da0-a352-f9f4a6ef23c3.vsidx
 *.sqlite-journal
+/.vs
