@@ -3,7 +3,7 @@ import './Streetcodes.styles.scss';
 import { observer } from 'mobx-react-lite';
 import { Button, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import Streetcode, { StreetcodeCatalogRecord } from "@/models/streetcode/streetcode-types.model";
+import Streetcode from "@/models/streetcode/streetcode-types.model";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import useMobx, { useModalContext } from '@/app/stores/root-store';
 import StreetcodesApi from '@api/streetcode/streetcodes.api';
@@ -21,6 +21,20 @@ const Streetcodes:React.FC = observer(() => {
     useEffect(() => {
         streetcodeCatalogStore.fetchStreetcodesAll();
     }, []);
+
+    const modalHandler = (streetcode: Streetcode) => {
+        modalStore.setConfirmationModal(
+            'confirmation',
+            () => {
+                StreetcodesApi.delete(streetcode.id)
+                    .then(() => {
+                        streetcodeCatalogStore.streetcodesMap.delete(streetcode.id);
+                    }).catch((e) => { });
+                modalStore.setConfirmationModal('confirmation');
+            },
+            'Ви впевнені, що хочете видалити цей стріткод?',
+        );
+    };
 
     const columns: ColumnsType<Streetcode> = [
         {
@@ -50,19 +64,7 @@ const Streetcodes:React.FC = observer(() => {
                     <DeleteOutlined
                         key={`${streetcode.id}${index}222`}
                         className="actionButton"
-                        onClick={() => {
-                            modalStore.setConfirmationModal(
-                                'confirmation',
-                                () => {
-                                    StreetcodesApi.delete(streetcode.id)
-                                        .then(() => {
-                                            streetcodeCatalogStore.streetcodesMap.delete(streetcode.id);
-                                        }).catch((e) => { });
-                                    modalStore.setConfirmationModal('confirmation');
-                                },
-                                'Ви впевнені, що хочете видалити цей стріткод?',
-                            );
-                        }}
+                        onClick={() => modalHandler(streetcode)}
                     />
                 </div>
             ),

@@ -40,9 +40,7 @@ export default class StreetcodesCatalogStore {
                 this.streetcodesMap.set(created.id, created);
                 return created;
             });
-        } catch (error: unknown) {
-            return undefined;
-        }
+        } catch (error: unknown) {}
     };
 
     public updateStreetcode = async (streetcode: Streetcode) => {
@@ -51,26 +49,20 @@ export default class StreetcodesCatalogStore {
                 this.streetcodesMap.set(updated.id, updated);
                 return updated;
             });
-        } catch (error: unknown) {
-            return undefined;
-        }
+        } catch (error: unknown) {}
     };
 
     public static deleteStreetcode = async (id: number) => {
         try {
             await StreetcodesApi.delete(id);
-        } catch (error: unknown) {
-            return null;
-        }
+        } catch (error: unknown) {}
     };
 
     public fetchStreetcodesAll = async () => {
         try {
             const response: StreetcodesResponse = await StreetcodesApi.getAll();
             this.setInternalMap(response.streetcodes);
-        } catch (error: unknown) {
-            return undefined;
-        }
+        } catch (error: unknown) {}
     };
 
     get getStreetcodesArray() {

@@ -26,47 +26,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 7,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "StreetcodeCreate.styles.scss",
-              "DocumentMoniker": "D:\\ITshka\\SoftServe\\StreetCode\\Streetcode-Client-May2026\\src\\features\\AdminPage\\StreetcodesPage\\StreetcodeCreate\\StreetcodeCreate.styles.scss",
-              "RelativeDocumentMoniker": "src\\features\\AdminPage\\StreetcodesPage\\StreetcodeCreate\\StreetcodeCreate.styles.scss",
-              "ToolTip": "D:\\ITshka\\SoftServe\\StreetCode\\Streetcode-Client-May2026\\src\\features\\AdminPage\\StreetcodesPage\\StreetcodeCreate\\StreetcodeCreate.styles.scss",
-              "RelativeToolTip": "src\\features\\AdminPage\\StreetcodesPage\\StreetcodeCreate\\StreetcodeCreate.styles.scss",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAACgAAAApAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002663|",
-              "WhenOpened": "2026-05-28T14:03:23.888Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "StreetcodeCreate.component.tsx",
-              "DocumentMoniker": "D:\\ITshka\\SoftServe\\StreetCode\\Streetcode-Client-May2026\\src\\features\\AdminPage\\StreetcodesPage\\StreetcodeCreate\\StreetcodeCreate.component.tsx",
-              "RelativeDocumentMoniker": "src\\features\\AdminPage\\StreetcodesPage\\StreetcodeCreate\\StreetcodeCreate.component.tsx",
-              "ToolTip": "D:\\ITshka\\SoftServe\\StreetCode\\Streetcode-Client-May2026\\src\\features\\AdminPage\\StreetcodesPage\\StreetcodeCreate\\StreetcodeCreate.component.tsx",
-              "RelativeToolTip": "src\\features\\AdminPage\\StreetcodesPage\\StreetcodeCreate\\StreetcodeCreate.component.tsx",
-              "ViewState": "AgIAAGcAAAAAAAAAAAAAAHAAAAAwAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2026-05-28T08:51:13.359Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Partners.component.tsx",
-              "DocumentMoniker": "D:\\ITshka\\SoftServe\\StreetCode\\Streetcode-Client-May2026\\src\\features\\AdminPage\\PartnersPage\\Partners.component.tsx",
-              "RelativeDocumentMoniker": "src\\features\\AdminPage\\PartnersPage\\Partners.component.tsx",
-              "ToolTip": "D:\\ITshka\\SoftServe\\StreetCode\\Streetcode-Client-May2026\\src\\features\\AdminPage\\PartnersPage\\Partners.component.tsx",
-              "RelativeToolTip": "src\\features\\AdminPage\\PartnersPage\\Partners.component.tsx",
-              "ViewState": "AgIAAEgAAAAAAAAAAAAAADEAAAALAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2026-05-28T08:35:09.021Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
@@ -93,6 +54,43 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "StreetcodeCreate.styles.scss",
+              "DocumentMoniker": "D:\\ITshka\\SoftServe\\StreetCode\\Streetcode-Client-May2026\\src\\features\\AdminPage\\StreetcodesPage\\StreetcodeCreate\\StreetcodeCreate.styles.scss",
+              "RelativeDocumentMoniker": "src\\features\\AdminPage\\StreetcodesPage\\StreetcodeCreate\\StreetcodeCreate.styles.scss",
+              "ToolTip": "D:\\ITshka\\SoftServe\\StreetCode\\Streetcode-Client-May2026\\src\\features\\AdminPage\\StreetcodesPage\\StreetcodeCreate\\StreetcodeCreate.styles.scss",
+              "RelativeToolTip": "src\\features\\AdminPage\\StreetcodesPage\\StreetcodeCreate\\StreetcodeCreate.styles.scss",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAACgAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002663|",
+              "WhenOpened": "2026-05-28T14:03:23.888Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "StreetcodeCreate.component.tsx",
+              "DocumentMoniker": "D:\\ITshka\\SoftServe\\StreetCode\\Streetcode-Client-May2026\\src\\features\\AdminPage\\StreetcodesPage\\StreetcodeCreate\\StreetcodeCreate.component.tsx",
+              "RelativeDocumentMoniker": "src\\features\\AdminPage\\StreetcodesPage\\StreetcodeCreate\\StreetcodeCreate.component.tsx",
+              "ToolTip": "D:\\ITshka\\SoftServe\\StreetCode\\Streetcode-Client-May2026\\src\\features\\AdminPage\\StreetcodesPage\\StreetcodeCreate\\StreetcodeCreate.component.tsx",
+              "RelativeToolTip": "src\\features\\AdminPage\\StreetcodesPage\\StreetcodeCreate\\StreetcodeCreate.component.tsx",
+              "ViewState": "AgIAAFgAAAAAAAAAAAAAAJoAAABCAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-05-28T08:51:13.359Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Partners.component.tsx",
+              "DocumentMoniker": "D:\\ITshka\\SoftServe\\StreetCode\\Streetcode-Client-May2026\\src\\features\\AdminPage\\PartnersPage\\Partners.component.tsx",
+              "RelativeDocumentMoniker": "src\\features\\AdminPage\\PartnersPage\\Partners.component.tsx",
+              "ToolTip": "D:\\ITshka\\SoftServe\\StreetCode\\Streetcode-Client-May2026\\src\\features\\AdminPage\\PartnersPage\\Partners.component.tsx",
+              "RelativeToolTip": "src\\features\\AdminPage\\PartnersPage\\Partners.component.tsx",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAAADEAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-05-28T08:35:09.021Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
               "Title": "Streetcodes.component.tsx",
               "DocumentMoniker": "D:\\ITshka\\SoftServe\\StreetCode\\Streetcode-Client-May2026\\src\\features\\AdminPage\\StreetcodesPage\\Streetcodes.component.tsx",
@@ -101,8 +99,7 @@
               "RelativeToolTip": "src\\features\\AdminPage\\StreetcodesPage\\Streetcodes.component.tsx",
               "ViewState": "AgIAAD8AAAAAAAAAAAAAAEkAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2026-05-27T07:57:45.177Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-27T07:57:45.177Z"
             }
           ]
         }

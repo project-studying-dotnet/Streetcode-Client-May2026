@@ -1,6 +1,3 @@
-/* eslint-disable no-restricted-imports */
-/* eslint-disable import/order */
-/* eslint-disable simple-import-sort/imports */
 import './StreetcodeCreate.styles.scss';
 
 import {
@@ -9,15 +6,16 @@ import {
 import TextArea from 'antd/es/input/TextArea';
 import Radio from 'antd/es/radio/radio';
 import { observer } from 'mobx-react-lite';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import useMobx from '../../../../app/stores/root-store';
 import { BulbOutlined } from '@ant-design/icons';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Streetcode from '../../../../models/streetcode/streetcode-types.model';
 import StreetcodesApi from '../../../../app/api/streetcode/streetcodes.api';
 import dayjs from 'dayjs';
 import TagItem from '../../../../app/common/components/Tag/TagItem.component';
 import Tag, { StreetcodeTag } from '../../../../models/additional-content/tag.model';
+import FRONTEND_ROUTES from '@/app/common/constants/frontend-routes.constants';
 
 const StreetcodeCreate: React.FC = observer(() => {
     const [form] = Form.useForm();
@@ -28,10 +26,11 @@ const StreetcodeCreate: React.FC = observer(() => {
     const [years, setYears] = useState('');
     const [typeStartDateFormat, setStartTypeDateFormat] = useState('DD/MM/YYYY');
     const [typeEndDateFormat, setEndTypeDateFormat] = useState('DD/MM/YYYY');
-    const [displayResolution, setDisplayResolution] = useState();
+    const [, setDisplayResolution] = useState();
     const { id } = useParams();
     const [currentStreetcode, setCurrentStreetcode] = useState<Streetcode>();
     const [selectedTags, setSelectedTags] = useState<StreetcodeTag[]>([]);
+    const navigate = useNavigate();
 
     const onTagSelect = (value: string) => {
         const selectedTag = tagsStore?.Tags.find((tag) => tag.title === value);
@@ -85,10 +84,11 @@ const StreetcodeCreate: React.FC = observer(() => {
         };
 
         if (currentStreetcode?.id) {
-            Promise.all([
-                StreetcodesApi.update(streetcode).then((res) => res).catch((err) => err)]);
+            StreetcodesApi.update(streetcode).then((res) => res).catch((err) => err);
+            navigate(`${FRONTEND_ROUTES.ADMIN.STREETCODES}`);
         } else {
-            Promise.all([streetcodeCatalogStore?.createStreetcode(streetcode).then((res) => res).catch((err) => err)]);
+            streetcodeCatalogStore?.createStreetcode(streetcode).then((res) => res).catch((err) => err);
+            navigate(`${FRONTEND_ROUTES.ADMIN.STREETCODES}`);
         }
     };
 
@@ -107,6 +107,11 @@ const StreetcodeCreate: React.FC = observer(() => {
         date: 'DD/MM/YYYY',
         month: 'MM/YYYY',
         year: 'YYYY',
+    };
+
+    const pickerMap = {
+        date: 'date',
+        month: 'month',
     };
 
     return (
@@ -229,9 +234,7 @@ const StreetcodeCreate: React.FC = observer(() => {
                             >
                                 <DatePicker
                                     className="years__item"
-                                    picker={
-                                        startDateType === 'date' ? 'date' : startDateType === 'month' ? 'month' : 'year'
-                                    }
+                                    picker={pickerMap[startDateType] || 'year'}
                                     format={typeStartDateFormat}
                                     onChange={(date, dateString) => setYears(dateString.toString())}
                                 />
@@ -243,9 +246,7 @@ const StreetcodeCreate: React.FC = observer(() => {
                             >
                                 <DatePicker
                                     className="years__item"
-                                    picker={
-                                        endDateType === 'date' ? 'date' : endDateType === 'month' ? 'month' : 'year'
-                                    }
+                                    picker={pickerMap[endDateType] || 'year'}
                                     format={typeEndDateFormat}
                                     onChange={(date, dateString) =>
                                         setYears((prev) => `${prev} - ${dateString.toString()}`)}
@@ -289,7 +290,7 @@ const StreetcodeCreate: React.FC = observer(() => {
 
                     <Space>
                         {selectedTags.map((tag) => (
-                            <TagItem tag={tag} />
+                            <TagItem key={tag.id} tag={tag} />
                         ))}
                     </Space>
 
