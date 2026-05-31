@@ -24,9 +24,9 @@ const StreetcodeCreate: React.FC = observer(() => {
     const [startDateType, setStartDateType] = useState('date');
     const [endDateType, setEndDateType] = useState('date');
     const [years, setYears] = useState('');
-    const [typeStartDateFormat, setStartTypeDateFormat] = useState('DD/MM/YYYY');
-    const [typeEndDateFormat, setEndTypeDateFormat] = useState('DD/MM/YYYY');
-    const [, setDisplayResolution] = useState();
+    const [typeStartDateFormat, setTypeStartDateFormat] = useState('DD/MM/YYYY');
+    const [typeEndDateFormat, setTypeEndDateFormat] = useState('DD/MM/YYYY');
+    const [displayResolution, setDisplayResolution] = useState(360);
     const { id } = useParams();
     const [currentStreetcode, setCurrentStreetcode] = useState<Streetcode>();
     const [selectedTags, setSelectedTags] = useState<StreetcodeTag[]>([]);
@@ -206,7 +206,7 @@ const StreetcodeCreate: React.FC = observer(() => {
                                 defaultValue={startDateType}
                                 onChange={(value) => {
                                     setStartDateType(value);
-                                    setStartTypeDateFormat(listTypeDateFormat[value]);
+                                    setTypeStartDateFormat(listTypeDateFormat[value]);
                                 }}
                                 options={typeDiapason}
                             />
@@ -218,7 +218,7 @@ const StreetcodeCreate: React.FC = observer(() => {
                                 defaultValue={endDateType}
                                 onChange={(value) => {
                                     setEndDateType(value);
-                                    setEndTypeDateFormat(listTypeDateFormat[value]);
+                                    setTypeEndDateFormat(listTypeDateFormat[value]);
                                 }}
                                 options={typeDiapason}
                             />
@@ -275,11 +275,11 @@ const StreetcodeCreate: React.FC = observer(() => {
 
                     <div>
                         Розширення
-                        <Radio.Group 
+                        <Radio.Group
                             className="radio"
                             name="radiogroup"
                             onChange={(e) => setDisplayResolution(e.target.value)}
-                            defaultValue={360}
+                            defaultValue={displayResolution}
                             options={[
                                 { value: 360, label: '360' },
                                 { value: 768, label: '768' },
