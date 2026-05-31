@@ -34,35 +34,23 @@ export default class StreetcodesCatalogStore {
         return this.catalog;
     }
 
-    public createStreetcode = async (streetcode: Streetcode) => {
-        try {
-            return await StreetcodesApi.create(streetcode).then((created) => {
-                this.streetcodesMap.set(created.id, created);
-                return created;
-            });
-        } catch (error) { }
-    };
+    public createStreetcode = async (streetcode: Streetcode) => StreetcodesApi.create(streetcode).then((created) => {
+        this.streetcodesMap.set(created.id, created);
+        return created;
+    });
 
-    public updateStreetcode = async (streetcode: Streetcode) => {
-        try {
-            return await StreetcodesApi.update(streetcode).then((updated) => {
-                this.streetcodesMap.set(updated.id, updated);
-                return updated;
-            });
-        } catch (error) { }
-    };
+    public updateStreetcode = async (streetcode: Streetcode) => StreetcodesApi.update(streetcode).then((updated) => {
+        this.streetcodesMap.set(updated.id, updated);
+        return updated;
+    });
 
-    public static deleteStreetcode = async (id: number) => {
-        try {
-            await StreetcodesApi.delete(id);
-        } catch (error) { }
+    public static readonly deleteStreetcode = async (id: number) => {
+        await StreetcodesApi.delete(id);
     };
 
     public fetchStreetcodesAll = async () => {
-        try {
-            const response: StreetcodesResponse = await StreetcodesApi.getAll();
-            this.setInternalMap(response.streetcodes);
-        } catch (error) { }
+        const response: StreetcodesResponse = await StreetcodesApi.getAll();
+        this.setInternalMap(response.streetcodes);
     };
 
     get getStreetcodesArray() {
