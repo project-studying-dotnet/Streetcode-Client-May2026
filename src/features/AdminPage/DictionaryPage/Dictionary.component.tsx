@@ -22,14 +22,18 @@ export const Dictionary: React.FC = observer(() => {
   const { termsStore } = useMobx();
   const { modalStore } = useModalContext();
   const [modalAddOpened, setModalAddOpened] = useState<boolean>(false);
+  const [searchText, setSearchText] = useState("");
 
-  const updatedTerms = () => {
-    Promise.all([termsStore?.fetchTerms()]).then(() => termsStore.setInternalMap(termsStore.getTermArray));
-  };
+  const filteredTerms = termsStore.getTermArray.filter((term) => {
+    if (!searchText) return true;
+    return term.title?.toLowerCase().includes(searchText.toLowerCase());
+  });
 
   useEffect(() => {
-    updatedTerms();
-  }, []);
+    Promise.all([termsStore?.fetchTerms()]).then(() =>
+      termsStore.setInternalMap(termsStore.getTermArray),
+    );
+  }, [termsStore]);
 
   const columns: ColumnsType<Term> = [
     {
@@ -37,6 +41,41 @@ export const Dictionary: React.FC = observer(() => {
       dataIndex: "title",
       key: "title",
       width: "30%",
+      sorter: (a, b) => a.title.localeCompare(b.title),
+      sortIcon: ({ sortOrder }) => {
+        const color = "#1D1F23";
+
+        return (
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              marginLeft: "4px",
+            }}
+          >
+            <svg
+              width="13"
+              height="18"
+              viewBox="0 0 13 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M0.5 7.25L12.5 7.25L6.5 0.5L0.5 7.25Z"
+                fill={sortOrder === "descend" ? "none" : color}
+                stroke={color}
+                strokeLinejoin="round"
+              />
+              <path
+                d="M0.5 10.75L12.5 10.75L6.5 17.5L0.5 10.75Z"
+                fill={sortOrder === "descend" ? color : "none"}
+                stroke={color}
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+        );
+      },
       render(value, record) {
         return (
           <div
@@ -81,8 +120,12 @@ export const Dictionary: React.FC = observer(() => {
                     .then(() => {
                       termsStore.TermMap.delete(term.id);
                     })
-                    .catch((e) => {});
-                  modalStore.setConfirmationModal("confirmation");
+                    .catch((e) => {
+                      console.error(e);
+                    })
+                    .finally(() => {
+                      modalStore.setConfirmationModal("confirmation");
+                    });
                 },
                 "Ви впевнені, що хочете видалити цей термін?",
               );
@@ -103,6 +146,8 @@ export const Dictionary: React.FC = observer(() => {
             prefix={<SearchOutlined style={{ color: "#bfbfbf" }} />}
             className="dictionary-search-input"
             allowClear
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
           />
           <Button
             className="streetcode-custom-button dictionary-page-add-button"
@@ -112,10 +157,11 @@ export const Dictionary: React.FC = observer(() => {
           </Button>
         </div>
         <Table
+          showSorterTooltip={false}
           pagination={{ pageSize: 10 }}
           className="dictionaries-table"
           columns={columns}
-          dataSource={termsStore?.getTermArray}
+          dataSource={filteredTerms}
           rowKey="id"
         />
       </div>
