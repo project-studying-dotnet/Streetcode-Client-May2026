@@ -86,9 +86,11 @@ const LoginPage = () => {
                     </div>
 
                     <div className="loginDivider">
-                        <span />
-                        або продовжити через
-                        <span />
+                        <span></span>
+                            <span className="dividerText">
+                                або продовжити через
+                            </span>
+                        <span></span>
                     </div>
 
                     <Button className="googleLoginBtn" disabled>

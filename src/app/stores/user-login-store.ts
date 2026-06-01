@@ -10,7 +10,7 @@ export default class UserLoginStore {
 
     private static dateStorageName = 'expireAt';
 
-    private static refreshTokenStorageName = 'refreshToken';
+    private static readonly refreshTokenStorageName = 'refreshToken';
 
     public userLoginResponce?: UserLoginResponce;
 

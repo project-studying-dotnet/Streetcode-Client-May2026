@@ -21,7 +21,7 @@ const getErrorMessage = (data: unknown): string | undefined => {
         && data !== null
         && 'message' in data
     ) {
-        return String((data as { message: unknown }).message);
+        return String(data['message']);
     }
 
     return undefined;
@@ -41,7 +41,7 @@ axios.interceptors.response.use(
         case StatusCodes.UNAUTHORIZED:
             errorMessage = ReasonPhrases.UNAUTHORIZED;
             UserLoginStore.clearUserData();
-            window.location.href = FRONTEND_ROUTES.ADMIN.LOGIN;
+            globalThis.location.href = FRONTEND_ROUTES.ADMIN.LOGIN;
             break;
         case StatusCodes.NOT_FOUND:
             errorMessage = ReasonPhrases.NOT_FOUND;
