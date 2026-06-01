@@ -1,3 +1,4 @@
+import './ChronologyAdminModal.styles.scss';
 import dayjs from 'dayjs';
 import { useEffect } from 'react';
 import { Button, DatePicker, Form, Input, Modal, Select, message } from 'antd';
@@ -102,6 +103,9 @@ const ChronologyAdminModal = ({ streetcodeId }: Props) => {
                     dateViewPattern: DateViewPattern.DateMonthYear,
                 }}
             >
+                <h2 className="chronologyAdminModalTitle">
+                    Хронологія
+                </h2>
                 <Form.Item
                     label="Назва"
                     name="title"
@@ -111,14 +115,6 @@ const ChronologyAdminModal = ({ streetcodeId }: Props) => {
                     ]}
                 >
                     <Input showCount maxLength={28} />
-                </Form.Item>
-
-                <Form.Item
-                    label="Дата"
-                    name="date"
-                    rules={[{ required: true, message: 'Оберіть дату' }]}
-                >
-                    <DatePicker style={{ width: '100%' }} />
                 </Form.Item>
 
                 <Form.Item
@@ -135,6 +131,15 @@ const ChronologyAdminModal = ({ streetcodeId }: Props) => {
                         ]}
                     />
                 </Form.Item>
+
+                <Form.Item
+                    label="Дата"
+                    name="date"
+                    rules={[{ required: true, message: 'Оберіть дату' }]}
+                >
+                    <DatePicker style={{ width: '100%' }} />
+                </Form.Item>
+
 
                 <Form.Item label="Контекст" name="contextId">
                     <Select
@@ -157,7 +162,7 @@ const ChronologyAdminModal = ({ streetcodeId }: Props) => {
                     <Input.TextArea showCount maxLength={400} rows={4} />
                 </Form.Item>
 
-                <Button type="primary" htmlType="submit">
+                <Button className="chronologyAdminModalSaveBtn" htmlType="submit">
                     Зберегти
                 </Button>
             </Form>
