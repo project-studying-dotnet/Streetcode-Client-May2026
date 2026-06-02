@@ -9,9 +9,9 @@ export const replaceFirstTermOccurrence = (
     return null;
   }
 
-  const escapedWord = normalizedWord.replace(
+ const escapedWord = normalizedWord.replace(
     /[.*+?^${}()|[\]\\]/g,
-    '\\$&'
+    String.raw`\$&` 
   );
 
   const regex = new RegExp(escapedWord, 'i');
@@ -41,7 +41,7 @@ doc.querySelectorAll('term').forEach((node) => {
   
   if (element.textContent?.trim().toLowerCase() === word.trim().toLowerCase()) {
     const idAttr = element.dataset.id;
-    foundId = idAttr ? parseInt(idAttr, 10) : null;
+    foundId = idAttr ? Number.parseInt(idAttr, 10) : null;
     
     element.replaceWith(document.createTextNode(element.textContent || ''));
   }

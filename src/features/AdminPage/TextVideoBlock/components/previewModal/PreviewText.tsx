@@ -25,6 +25,7 @@ export const PreviewText: React.FC<Props> = ({
         <div
             className="text-video-form__preview-wrapper"
             onClick={(e) => e.stopPropagation()}
+            role="presentation"
         >
             <div className="text-video-form__preview">
                 <h1 className="text-video-form__preview-title">

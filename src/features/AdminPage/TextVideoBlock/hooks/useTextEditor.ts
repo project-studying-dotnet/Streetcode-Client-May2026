@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 type FormatCommand = 'bold' | 'italic';
 
 export const useTextEditor = (
@@ -10,10 +8,40 @@ export const useTextEditor = (
   setToolbarPosition: (pos: { top: number; left: number }) => void,
   setActiveFormats: (v: any) => void
 ) => {
-  const getActiveFormats = () => ({
-    bold: document.queryCommandState('bold'),
-    italic: document.queryCommandState('italic'),
-  });
+  const getActiveFormats = () => {
+    const selection = globalThis.getSelection();
+
+    if (!selection?.anchorNode) {
+      return {
+        bold: false,
+        italic: false,
+      };
+    }
+
+    let el =
+      selection.anchorNode.nodeType === Node.TEXT_NODE
+        ? selection.anchorNode.parentElement
+        : (selection.anchorNode as HTMLElement);
+
+    let bold = false;
+    let italic = false;
+
+    while (el && el !== editorRef.current) {
+      const tag = el.tagName?.toLowerCase();
+
+      if (tag === 'strong' || tag === 'b') {
+        bold = true;
+      }
+
+      if (tag === 'em' || tag === 'i') {
+        italic = true;
+      }
+
+      el = el.parentElement;
+    }
+
+    return { bold, italic };
+  };
 
   const handleEditorChange = () => {
     const el = editorRef.current;
@@ -34,13 +62,13 @@ export const useTextEditor = (
   };
 
   const moveCaretOutsideFormatting = () => {
-    const sel = window.getSelection();
+    const sel = globalThis.getSelection();
     if (!sel || !sel.rangeCount) return;
 
     const editor = editorRef.current;
     if (!editor) return;
 
-    let node = sel.anchorNode;
+    const node = sel.anchorNode;
     if (!node) return;
 
     let el = node.nodeType === 3 ? node.parentElement : (node as HTMLElement);
@@ -65,8 +93,11 @@ export const useTextEditor = (
     if (!el) return;
 
     el.focus();
+    // Використання execCommand залишено як виняток для contentEditable,
+    // оскільки повна заміна на Range API вимагає складної обробки стану.
+    // NOSONAR
     document.execCommand('styleWithCSS', false, 'true');
-
+    // NOSONAR
     document.execCommand(command);
 
     requestAnimationFrame(() => {
@@ -83,7 +114,7 @@ export const useTextEditor = (
 
   const handleTextSelection = () => {
     requestAnimationFrame(() => {
-      const selection = window.getSelection();
+      const selection = globalThis.getSelection();
 
       if (!selection || selection.rangeCount === 0 || selection.toString().trim() === '') {
         setShowToolbar(false);
@@ -94,8 +125,8 @@ export const useTextEditor = (
       const rect = range.getBoundingClientRect();
 
       setToolbarPosition({
-        top: rect.top + window.scrollY - 50,
-        left: rect.left + window.scrollX,
+        top: rect.top + globalThis.scrollY - 50,
+        left: rect.left + globalThis.scrollX,
       });
 
       setShowToolbar(true);

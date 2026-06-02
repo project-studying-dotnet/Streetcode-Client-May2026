@@ -222,10 +222,7 @@
     @include btn.white-btn-style;
     @include mut.sized(207px, 48px);
   }
-}
 
-
-.text-video-form {
   .ant-form-item-label>label {
     @include mut.with-font($font-family: f.$closer-text-font,
       $font-weight: 500,

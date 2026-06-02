@@ -28,7 +28,6 @@ export const useTextVideoSubmit = ({
     setVideoError(null);
 
     const validation = validateForm(formData);
-
     if (!validation.isValid) {
       if (validation.error === 'Тільки посилання на youtube.com') {
         setVideoError(validation.error);
@@ -58,31 +57,27 @@ export const useTextVideoSubmit = ({
         VideosApi.create(videoPayload),
       ]);
 
-      const errorMessages: string[] = [];
+      const errorMessages: string[] = results
+        .map((result, index) => {
+          if (result.status === 'fulfilled') return null;
+          
+          const type = index === 0 ? 'Текст' : 'Відео';
+          const errorText = extractApiError(result.reason);
+          return `${type}: ${errorText}`;
+        })
+        .filter((msg): msg is string => msg !== null);
 
-      for (const [index, result] of results.entries()) {
-        const type = index === 0 ? 'Текст' : 'Відео';
-
-        if (result.status === 'rejected') {
-          const error = result.reason;
-          const errorText = extractApiError(error);
-
-          errorMessages.push(`${type}: ${errorText}`);
-        }
-      }
-
-      if (errorMessages.length) {
+      if (errorMessages.length > 0) {
         const finalError = errorMessages.join('\n');
-
         setSubmitError(finalError);
-
         alert(`Помилки:\n\n${finalError}`);
       } else {
         alert('Дані успішно збережені!');
       }
-    } catch (e) {
-      setSubmitError('Критична помилка');
-      alert('Критична помилка');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Невідома помилка';
+      setSubmitError(message);
+      console.error('Submit critical error:', error);
     } finally {
       setLoading(false);
     }

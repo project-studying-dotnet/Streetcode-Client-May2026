@@ -35,22 +35,21 @@ export const sanitizeEditorHtml = (html: string): string => {
         return; 
       }
     }
-    const parent = span.parentNode;
+    
     while (span.firstChild) {
-      parent?.insertBefore(span.firstChild, span);
+      span.parentNode?.insertBefore(span.firstChild, span);
     }
-    parent?.removeChild(span);
+    span.remove(); 
   });
 
   doc.querySelectorAll('*').forEach((el) => {
     if (el.tagName !== 'TERM') {
-        el.removeAttribute('style');
+      el.removeAttribute('style');
     }
   });
 
   return doc.body.innerHTML;
 };
-
 
 export const getCleanTextLength = (html: string): number => {
   if (!html) return 0;
@@ -67,8 +66,13 @@ export const getCleanTextLength = (html: string): number => {
 
   let cleanText = doc.body.textContent || '';
 
-  cleanText = cleanText.replace(/[\u200B-\u200D\uFEFF]/g, '');
-  cleanText = cleanText.replace(/\u00A0/g, ' ');
+  cleanText = cleanText.replaceAll('\u200B', '')
+                       .replaceAll('\u200C', '')
+                       .replaceAll('\u200D', '')
+                       .replaceAll('\uFEFF', '');
+                       
+  // Заміна нерозривного пробілу на звичайний
+  cleanText = cleanText.replaceAll('\u00A0', ' ');
 
   return cleanText.length;
 };

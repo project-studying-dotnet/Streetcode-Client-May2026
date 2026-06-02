@@ -105,13 +105,7 @@ const TextVideoBlockForm: React.FC<Props> = ({
         return;
       }
 
-      if (!isYoutubeLink(value)) {
-        setVideoError(
-          'Тільки посилання на youtube.com'
-        );
-      } else {
-        setVideoError(null);
-      }
+      setVideoError(isYoutubeLink(value) ? null : 'Тільки посилання на youtube.com');
     }
   };
 
@@ -254,8 +248,9 @@ const TextVideoBlockForm: React.FC<Props> = ({
       layout="vertical"
       className="text-video-form"
     >
-      <Form.Item label="Заголовок">
+      <Form.Item label="Заголовок" name="title">
         <Input
+          id="title-input"
           ref={titleInputRef}
           value={formData.title}
           maxLength={50}
@@ -291,9 +286,9 @@ const TextVideoBlockForm: React.FC<Props> = ({
 
       <div className="text-video-form__group mb-35">
         <div className="text-video-form__term-wrapper">
-          <label className="text-video-form__label text-video-form__label--medium">
+          <div className="text-video-form__label text-video-form__label--medium">
             Термін
-          </label>
+          </div>
 
           <Button
             type="primary"
@@ -305,12 +300,14 @@ const TextVideoBlockForm: React.FC<Props> = ({
       </div>
 
       <div className="text-video-form__group mb-48">
-        <label className="text-video-form__label">
+        <label className="text-video-form__label"
+          htmlFor="related-term-input">
           Оберіть пов’язаний термін
         </label>
 
         <div className="text-video-form__input-wrapper">
           <Input
+            id="related-term-input"
             placeholder=""
             value={termInputValue}
             onChange={(e) => setTermInputValue(e.target.value)}
@@ -329,16 +326,15 @@ const TextVideoBlockForm: React.FC<Props> = ({
             className="delete-button"
             icon={<TrashIcon />}
             onClick={() => {
-              // setSelectedTerm(null);
               setShowDeleteTermModal(true)
-              // setTermInputValue('');
             }}
           />
         </div>
       </div>
 
-      <Form.Item label="Авторство">
+      <Form.Item label="Авторство" htmlFor="authorship-textarea">
         <TextArea
+          id="authorship-textarea"
           value={formData.additionalText}
           maxLength={200}
           autoSize={{
@@ -360,8 +356,10 @@ const TextVideoBlockForm: React.FC<Props> = ({
         </div>
       </Form.Item>
 
-      <Form.Item label="Відео">
+      <Form.Item label="Відео"
+        htmlFor="video-url-input">
         <Input
+          id="video-url-input"
           value={formData.videoUrl}
           placeholder="Приклад: https://www.youtube.com/watch?v="
           className="text-video-form__input text-video-form__input--link"

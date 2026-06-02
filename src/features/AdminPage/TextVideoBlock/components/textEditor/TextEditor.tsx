@@ -22,10 +22,13 @@ const TextEditor: React.FC<Props> = ({
   onTextSelection,
   onApplyFormatting,
 }) => {
-  
+
   return (
     <div className="text-video-form__group mb-17">
-      <label className="text-video-form__label">Основний текст</label>
+      <label className="text-video-form__label"
+        id="main-text-label">
+        Основний текст
+      </label>
 
       <div
         ref={editorRef}
@@ -34,6 +37,8 @@ const TextEditor: React.FC<Props> = ({
         className="text-video-form__editor"
         onInput={onEditorChange}
         onMouseUp={onTextSelection}
+        aria-labelledby="main-text-label"
+        role="textbox"
       />
 
       {showToolbar && (
@@ -45,9 +50,8 @@ const TextEditor: React.FC<Props> = ({
           }}
         >
           <button
-            className={`toolbar-btn toolbar-btn--bold ${
-              activeFormats.bold ? 'active' : ''
-            }`}
+            className={`toolbar-btn toolbar-btn--bold ${activeFormats.bold ? 'active' : ''
+              }`}
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => onApplyFormatting('bold')}
           >
@@ -55,9 +59,8 @@ const TextEditor: React.FC<Props> = ({
           </button>
 
           <button
-            className={`toolbar-btn toolbar-btn--italic ${
-              activeFormats.italic ? 'active' : ''
-            }`}
+            className={`toolbar-btn toolbar-btn--italic ${activeFormats.italic ? 'active' : ''
+              }`}
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => onApplyFormatting('italic')}
           >
