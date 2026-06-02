@@ -95,8 +95,8 @@ export const useTextEditor = (
     el.focus();
    
     document.execCommand('styleWithCSS', false, 'true'); // NOSONAR
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
-    document.execCommand(command);
+  
+    document.execCommand(command); // NOSONAR
 
     requestAnimationFrame(() => {
       moveCaretOutsideFormatting();
