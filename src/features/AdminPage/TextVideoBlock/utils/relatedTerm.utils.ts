@@ -35,18 +35,17 @@ export const removeTermTag = (
   const doc = parser.parseFromString(html, 'text/html');
   let foundId: number | null = null;
 
-  doc.querySelectorAll('term').forEach((node) => {
-    // Сравниваем текст внутри тега с введенным словом
-    if (node.textContent?.trim().toLowerCase() === word.trim().toLowerCase()) {
-      // Запоминаем ID для API
-      const idAttr = node.getAttribute('data-id');
-      foundId = idAttr ? parseInt(idAttr, 10) : null;
-      
-      // Заменяем тег <term> на обычный текстовый узел (unwrap)
-      node.replaceWith(document.createTextNode(node.textContent || ''));
-    }
-  });
+doc.querySelectorAll('term').forEach((node) => {
 
+  const element = node as HTMLElement;
+  
+  if (element.textContent?.trim().toLowerCase() === word.trim().toLowerCase()) {
+    const idAttr = element.dataset.id;
+    foundId = idAttr ? parseInt(idAttr, 10) : null;
+    
+    element.replaceWith(document.createTextNode(element.textContent || ''));
+  }
+});
   return {
     updatedHtml: doc.body.innerHTML,
     termId: foundId,
