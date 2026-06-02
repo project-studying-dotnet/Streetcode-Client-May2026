@@ -1,4 +1,4 @@
-import { TextVideoBlock } from '../../../models/streetcode/TextVideoBlock/TextVideoBlock';
+import { TextVideoBlock } from '../../../../models/streetcode/TextVideoBlock/TextVideoBlock';
 
   export const isYoutubeLink = (url: string) => {
     const value = url.trim();
@@ -18,22 +18,6 @@ import { TextVideoBlock } from '../../../models/streetcode/TextVideoBlock/TextVi
     }
     return true;
   };
-
-//   export const validateForm = (
-//   formData: TextVideoBlock,
-//   setVideoError: (value: string | null) => void
-// ) => {
-//   if (!formData.title.trim()) return false;
-
-//   if (!formData.textContent.trim()) return false;
-
-//   if (formData.videoUrl.trim() && !isYoutubeLink(formData.videoUrl)) {
-//     setVideoError('Тільки посилання на youtube.com');
-//     return false;
-//   }
-
-//   return true;
-// };
 
 export const validateForm = (formData: TextVideoBlock): { isValid: boolean; error: string | null } => {
   if (!formData.title.trim()) return { isValid: false, error: 'Заголовок обов’язковий' };

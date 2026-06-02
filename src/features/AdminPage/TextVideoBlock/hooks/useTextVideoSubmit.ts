@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import TextsApi from '@api/streetcode/text-content/texts.api';
 import VideosApi from '@api/media/videos.api';
-import { validateForm } from './validation';
-import { TextCreateDTO, VideoCreateDTO } from './types';
-import { extractApiError } from './utils/extractApiError';
+import { validateForm } from '../utils/validation';
+import { TextCreateDTO, VideoCreateDTO } from '../types/types';
+import { extractApiError } from '../utils/extractApiError';
+import { sanitizeEditorHtml } from '../utils/htmlUtils';
 
 type Params = {
   formData: any;
@@ -38,7 +39,7 @@ export const useTextVideoSubmit = ({
 
     const textPayload: TextCreateDTO = {
       title: formData.title,
-      textContent: formData.textContent,
+      textContent: sanitizeEditorHtml(formData.textContent),
       streetcodeId,
       additionalText: isAuthorChanged
         ? formData.additionalText ?? null
@@ -93,3 +94,4 @@ export const useTextVideoSubmit = ({
     submitError,
   };
 };
+

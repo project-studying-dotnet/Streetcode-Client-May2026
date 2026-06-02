@@ -1,0 +1,55 @@
+@use "@assets/sass/variables/_variables.colors.scss" as c;
+
+.text-video-form {
+    &__preview-wrapper {
+        margin-top: 24px;
+        width: 100%;
+        width: content;
+        border: 1px solid c.$slider-base-dot-color;
+    }
+
+    &__preview {
+        position: relative;
+        background: c.$white-color;
+        padding: 24px;
+        border-radius: 8px;
+        font-size: 16px;
+        line-height: 1.7;
+
+        b,
+        strong {
+            font-weight: 600;
+        }
+
+    }
+
+    &__preview-author {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+        font-size: 14px;
+        color: c.$text-light-gray-color;
+
+        a {
+            color: c.$dark-red-color !important;
+            text-decoration: underline;
+            margin-left: 4px;
+
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+
+    &__video-preview {
+        margin-top: 20px;
+
+        iframe {
+            width: 100%;
+            max-width: 1200px;
+            height: 600px;
+            border: none;
+            border-radius: 12px;
+        }
+    }
+}

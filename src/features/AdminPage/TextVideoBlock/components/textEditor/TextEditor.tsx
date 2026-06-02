@@ -22,6 +22,7 @@ const TextEditor: React.FC<Props> = ({
   onTextSelection,
   onApplyFormatting,
 }) => {
+  
   return (
     <div className="text-video-form__group mb-17">
       <label className="text-video-form__label">Основний текст</label>

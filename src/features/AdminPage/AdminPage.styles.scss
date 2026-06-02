@@ -6,6 +6,7 @@
 .adminPageContainer {
     margin-top: f.pxToRem(100px);
     display: flex;
+    flex-direction: column;
     float: left;
     width: 100%;
     @include mut.with-font();

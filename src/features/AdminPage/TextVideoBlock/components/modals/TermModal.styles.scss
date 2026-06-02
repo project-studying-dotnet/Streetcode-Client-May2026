@@ -1,0 +1,49 @@
+@use "@sass/mixins/_buttons.mixins.scss" as btn;
+@use "@assets/sass/variables/_variables.colors.scss" as c;
+
+.term-modal {
+  .ant-input,
+  .ant-input:hover,
+  .ant-input:focus,
+  .ant-input-focused {
+    border-color: c.$pure-black-color !important;
+    box-shadow: none !important;
+  }
+
+  .ant-select,
+  .ant-select:focus,
+  .ant-select-focused {
+    border-color: c.$pure-black-color !important;
+    box-shadow: none !important;
+  }
+
+  .ant-select-selector {
+    border-color: c.$slider-base-dot-color !important;
+
+    &:hover,
+    &:focus {
+      border-color: c.$pure-black-color !important;
+      box-shadow: none !important;
+    }
+  }
+
+  .ant-select:focus .ant-select-selector,
+  .ant-select-focused .ant-select-selector {
+    border-color: c.$pure-black-color !important;
+    box-shadow: none !important;
+  }
+  .modal-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 24px;
+
+    .cancel-button {
+      @include btn.white-btn-style;
+    }
+
+    .confirm-button {
+      @include btn.red-btn-style;
+    }
+  }
+}

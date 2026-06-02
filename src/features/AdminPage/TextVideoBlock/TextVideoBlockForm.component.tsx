@@ -1,41 +1,80 @@
-import React, { useState, useRef, useMemo } from 'react';
-import { Props } from './types';
-import { isYoutubeLink } from './validation';
-import { Button } from '../../../app/common/components/Button/Button';
+import React, { useMemo, useRef, useState } from 'react';
+import { Form, Input, Button } from 'antd';
+import type { InputRef } from 'antd';
+
+import { Props } from './types/types';
+import { isYoutubeLink } from './utils/validation';
+
+import RelatedTermApi from '@api/streetcode/text-content/related-terms.api';
+import { useTextEditor } from './hooks/useTextEditor';
+import { useTextVideoSubmit } from './hooks/useTextVideoSubmit';
+
 import { TrashIcon } from '../../../assets/images/icons/TrashIcon';
 import { TextVideoBlock } from '../../../models/streetcode/TextVideoBlock/TextVideoBlock';
-import { PreviewModal } from './PreviewModal';
-import TextEditor from './TextEditor';
-import { useTextEditor } from './useTextEditor';
-import { useTextVideoSubmit } from './useTextVideoSubmit';
+
+import { PreviewText } from './components/previewModal/PreviewText';
+import TextEditor from './components/textEditor/TextEditor';
+import TermModal from './components/modals/TermModal.component';
+import DeleteTermModal from './components/modals/DeleteTermModal.component';
+
+import { replaceFirstTermOccurrence, removeTermTag } from './utils/relatedTerm.utils';
+import { getCleanTextLength } from './utils/htmlUtils';
 
 import './TextVideoBlockForm.styles.scss';
 
+import { Term } from '@/models/streetcode/text-contents.model';
 
-const TextVideoBlockForm: React.FC<Props> = ({ streetcodeId = 3 }) => {
-  const DEFAULT_AUTHORSHIP = 'Текст підготовлений спільно з';
+const { TextArea } = Input;
+
+const TextVideoBlockForm: React.FC<Props> = ({
+  streetcodeId = 4,
+}) => {
+  const DEFAULT_AUTHORSHIP =
+    'Текст підготовлений спільно з';
 
   const editorRef = useRef<HTMLDivElement>(null);
-  const titleInputRef = useRef<HTMLInputElement>(null);
 
-  const [formData, setFormData] = useState<TextVideoBlock>({
-    title: '',
-    textContent: '',
-    additionalText: '',
-    videoUrl: ''
-  });
+  const titleInputRef = useRef<InputRef>(null);
+
+  const [formData, setFormData] =
+    useState<TextVideoBlock>({
+      title: '',
+      textContent: '',
+      additionalText: '',
+      videoUrl: '',
+    });
+
+  const [termInputValue, setTermInputValue] =
+    useState('');
+
+  const [showTermModal, setShowTermModal] =
+    useState(false);
+
+  const [showDeleteTermModal, setShowDeleteTermModal] =
+    useState(false);
+
+
   const MAX_TEXT_LENGTH = 25000;
-  const [showTextPreview, setShowTextPreview] = useState(false);
 
-  const [showToolbar, setShowToolbar] = useState(false);
-  const [videoError, setVideoError] = useState<string | null>(null);
+  const [showTextPreview, setShowTextPreview] =
+    useState(false);
 
-  const [toolbarPosition, setToolbarPosition] = useState({
-    top: 0,
-    left: 0,
-  });
+  const [showToolbar, setShowToolbar] =
+    useState(false);
+
+  const [videoError, setVideoError] =
+    useState<string | null>(null);
+
+  const [toolbarPosition, setToolbarPosition] =
+    useState({
+      top: 0,
+      left: 0,
+    });
+
   const isAuthorChanged =
-    (formData.additionalText ?? '').trim() !== DEFAULT_AUTHORSHIP;
+    formData.additionalText?.trim() !==
+    DEFAULT_AUTHORSHIP;
+
 
   const youtubeEmbedUrl = useMemo(() => {
     if (!formData.videoUrl) return '';
@@ -51,16 +90,15 @@ const TextVideoBlockForm: React.FC<Props> = ({ streetcodeId = 3 }) => {
   }, [formData.videoUrl]);
 
 
-
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    name: keyof TextVideoBlock,
+    value: string
   ) => {
-    const { name, value } = e.target;
-
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
+
     if (name === 'videoUrl') {
       if (!value) {
         setVideoError(null);
@@ -68,17 +106,20 @@ const TextVideoBlockForm: React.FC<Props> = ({ streetcodeId = 3 }) => {
       }
 
       if (!isYoutubeLink(value)) {
-        setVideoError('Тільки посилання на youtube.com');
+        setVideoError(
+          'Тільки посилання на youtube.com'
+        );
       } else {
         setVideoError(null);
       }
     }
   };
 
-  const [activeFormats, setActiveFormats] = useState({
-    bold: false,
-    italic: false,
-  });
+  const [activeFormats, setActiveFormats] =
+    useState({
+      bold: false,
+      italic: false,
+    });
 
   const {
     handleEditorChange,
@@ -93,46 +134,143 @@ const TextVideoBlockForm: React.FC<Props> = ({ streetcodeId = 3 }) => {
     setActiveFormats
   );
 
-  const {
-    submit,
-    loading,
-    submitError,
-  } = useTextVideoSubmit({
-    formData,
-    streetcodeId,
-    isAuthorChanged,
-    setVideoError,
-  });
+  const { submit, loading } =
+    useTextVideoSubmit({
+      formData,
+      streetcodeId,
+      isAuthorChanged,
+      setVideoError,
+    });
 
-  const handleOpenPreview = () => {
-    if (!formData.title?.trim()) {
-      titleInputRef.current?.focus();
-      titleInputRef.current?.classList.add('error-highlight');
-      setTimeout(() => titleInputRef.current?.classList.remove('error-highlight'), 1000);
+  const focusTitleInput = () => {
+    titleInputRef.current?.focus();
+
+    const inputElement =
+      titleInputRef.current?.input;
+
+    if (!inputElement) return;
+
+    inputElement.classList.add('error-highlight');
+
+    setTimeout(() => {
+      inputElement.classList.remove('error-highlight');
+    }, 1000);
+  };
+
+  const handleTogglePreview = () => {
+    if (!formData.title.trim()) {
+      focusTitleInput();
       return;
     }
-    setShowTextPreview(true);
+
+    setShowTextPreview((prev) => !prev);
+  };
+
+  const handleVideoFocus = (
+    e: React.FocusEvent<HTMLInputElement>
+  ) => {
+    if (!formData.title.trim()) {
+      e.target.blur();
+      focusTitleInput();
+    }
+  };
+
+
+
+  const handleTermModalConfirm = async (
+    word: string,
+    term: Term | null
+  ) => {
+    if (!term || !editorRef.current) {
+      return;
+    }
+
+    const currentHtml = editorRef.current.innerHTML;
+
+    const updatedHtml = replaceFirstTermOccurrence(
+      currentHtml,
+      word,
+      term.id
+    );
+
+    if (!updatedHtml) {
+      alert(`Термін "${word}" відсутній у тексті`);
+      return;
+    }
+
+    try {
+      await RelatedTermApi.create({
+        word,
+        termId: term.id,
+      });
+
+      editorRef.current.innerHTML = updatedHtml;
+
+      handleChange(
+        'textContent',
+        updatedHtml
+      );
+
+      setShowTermModal(false);
+      setTermInputValue('');
+      alert(`Термін "${word}" успішно пов'язано!`);
+    } catch (error) {
+      console.error(error);
+      alert('Не вдалося пов’язати термін');
+    }
+  };
+
+
+  const handleDeleteTermModalConfirm = async () => {
+    if (!editorRef.current) return;
+
+    const currentHtml = editorRef.current.innerHTML;
+
+    const { updatedHtml, termId } = removeTermTag(currentHtml, termInputValue);
+
+    if (!termId) {
+      alert("Це слово не має активного зв'язку з терміном у тексті.");
+      setShowDeleteTermModal(false);
+      return;
+    }
+
+    try {
+      await RelatedTermApi.delete(termInputValue, termId);
+
+      editorRef.current.innerHTML = updatedHtml;
+      handleChange('textContent', updatedHtml);
+
+      alert("Зв'язок успішно видалено!");
+      setShowDeleteTermModal(false);
+      setTermInputValue('');
+    } catch (error) {
+      console.error("Помилка при видаленні:", error);
+      alert("Не вдалося видалити зв'язок на сервері.");
+    }
   };
 
   return (
-    <div className="text-video-form">
-      <div className="text-video-form__group mb-24 ">
-        <label className="text-video-form__label">Заголовок</label>
-        <div className="text-video-form__input-wrapper">
-          <input
-            ref={titleInputRef}
-            type="text"
-            name="title"
-            maxLength={50}
-            value={formData.title}
-            onChange={handleChange}
-            className="text-video-form__input"
-          />
-          <div className="text-video-form__counter">{formData.title.length}/50</div>
-        </div>
-      </div>
+    <Form
+      layout="vertical"
+      className="text-video-form"
+    >
+      <Form.Item label="Заголовок">
+        <Input
+          ref={titleInputRef}
+          value={formData.title}
+          maxLength={50}
+          showCount
+          className="text-video-form__input text-video-form__input--title"
+          onChange={(e) =>
+            handleChange(
+              'title',
+              e.target.value
+            )
+          }
+        />
+      </Form.Item>
 
-      <div className="text-video-form__group  mb-17">
+      <div className="text-video-form__group mb-17">
         <TextEditor
           editorRef={editorRef}
           showToolbar={showToolbar}
@@ -142,9 +280,11 @@ const TextVideoBlockForm: React.FC<Props> = ({ streetcodeId = 3 }) => {
           onTextSelection={handleTextSelection}
           onApplyFormatting={applyFormatting}
         />
+
         <div className="text-video-form__meta">
           <div className="text-video-form__counter">
-            Символи: {formData.textContent.length ?? 0}/25000
+            Символи:{' '}
+            {getCleanTextLength(formData.textContent)} / 25000
           </div>
         </div>
       </div>
@@ -154,112 +294,136 @@ const TextVideoBlockForm: React.FC<Props> = ({ streetcodeId = 3 }) => {
           <label className="text-video-form__label text-video-form__label--medium">
             Термін
           </label>
+
           <Button
-            label="Додати новий термін"
-            variant="red"
-            padding="17"
-            onClick={() => console.log('Додати термін')}
-          />
+            type="primary"
+            className="add-button"
+          >
+            Додати новий термін
+          </Button>
         </div>
       </div>
+
       <div className="text-video-form__group mb-48">
         <label className="text-video-form__label">
           Оберіть пов’язаний термін
         </label>
+
         <div className="text-video-form__input-wrapper">
-          <input
-            type="text"
-            className="text-video-form__input"
+          <Input
             placeholder=""
+            value={termInputValue}
+            onChange={(e) => setTermInputValue(e.target.value)}
+            className="text-video-form__input text-video-form__input--term"
           />
+
           <Button
-            label="Пов’язати"
-            variant="white"
-            padding="17"
-            onClick={() => console.log('Пов’язати')}
-          />
+            type="default"
+            className="connect-button"
+            onClick={() => setShowTermModal(true)}
+          >
+            Пов'язати
+          </Button>
+
           <Button
+            className="delete-button"
             icon={<TrashIcon />}
-            variant="icon-red"
-            padding="17"
-            onClick={() => console.log('Видалити')}
+            onClick={() => {
+              // setSelectedTerm(null);
+              setShowDeleteTermModal(true)
+              // setTermInputValue('');
+            }}
           />
         </div>
-        <Button
-          label="Переглянути текст"
-          variant="white"
-          padding="17"
-          onClick={handleOpenPreview}
-        />
       </div>
 
-
-      <div className="text-video-form__group mb-17">
-        <label className="text-video-form__label">Авторство</label>
-        <textarea
-          name="additionalText"
-          maxLength={200}
+      <Form.Item label="Авторство">
+        <TextArea
           value={formData.additionalText}
-          onChange={handleChange}
+          maxLength={200}
+          autoSize={{
+            minRows: 6,
+            maxRows: 12,
+          }}
           className="text-video-form__textarea"
+          onChange={(e) =>
+            handleChange(
+              'additionalText',
+              e.target.value
+            )
+          }
         />
         <div className="text-video-form__meta">
           <div className="text-video-form__counter">
-            Символи: {formData.additionalText?.length ?? 0}/200
+            {formData.additionalText?.length ?? 0}/200
           </div>
         </div>
-      </div>
+      </Form.Item>
 
-      <div className="text-video-form__group">
-        <label className="text-video-form__label">Відео</label>
-        <input
-          type="text"
-          name="videoUrl"
+      <Form.Item label="Відео">
+        <Input
           value={formData.videoUrl}
-          onChange={handleChange}
-          className="text-video-form__input"
-          onFocus={(e) => {
-            if (!formData.title.trim()) {
-              e.target.blur();
-              titleInputRef.current?.focus();
-              titleInputRef.current?.classList.add('error-highlight');
-              setTimeout(() => titleInputRef.current?.classList.remove('error-highlight'), 1500);
-            }
-          }}
-          placeholder="Приклад: https://www.youtube.com/watch?-827IonKDHI567 "
+          placeholder="Приклад: https://www.youtube.com/watch?v="
+          className="text-video-form__input text-video-form__input--link"
+          onFocus={handleVideoFocus}
+          onChange={(e) =>
+            handleChange(
+              'videoUrl',
+              e.target.value
+            )
+          }
         />
-        <Button
-          label="Переглянути текст"
-          variant="white"
-          padding="17"
-          onClick={handleOpenPreview}
-        />
-        <div className="text-video-form__actions" style={{ marginTop: '20px' }}>
-          <Button
-            label={loading ? 'Збереження...' : 'Зберегти блок'}
-            variant="red"
-            padding="17"
-            disabled={loading}
-            onClick={submit}
-          />
-        </div>
-
-        {showTextPreview && formData.title?.trim() && (
-          <PreviewModal
-            open={showTextPreview}
-            onClose={() => setShowTextPreview(false)}
-            formData={formData}
-            youtubeEmbedUrl={youtubeEmbedUrl}
-          />
-        )}
 
         {videoError && (
           <span className="text-video-form__error">
             {videoError}
           </span>
         )}
+      </Form.Item>
+
+      <div className="text-video-form__actions">
+        <Button
+          type="default"
+          className="show-text-button"
+          onClick={handleTogglePreview}
+        >
+          Переглянути текст
+        </Button>
+
+        <Button
+          type="primary"
+          className="add-button"
+          loading={loading}
+          onClick={submit}
+        >
+          Зберегти блок
+        </Button>
       </div>
-    </div >
+
+      {showTextPreview &&
+        formData.title?.trim() && (
+          <PreviewText
+            open={showTextPreview}
+            onClose={() =>
+              setShowTextPreview((prev) => !prev)
+            }
+            formData={formData}
+            youtubeEmbedUrl={youtubeEmbedUrl}
+          />
+        )}
+
+      <TermModal
+        open={showTermModal}
+        onClose={() => setShowTermModal(false)}
+        onConfirm={handleTermModalConfirm}
+        initialValue={termInputValue}
+      />
+      <DeleteTermModal
+        open={showDeleteTermModal}
+        onClose={() => setShowDeleteTermModal(false)}
+        onConfirm={handleDeleteTermModalConfirm}
+      />
+    </Form>
   );
 };
 
