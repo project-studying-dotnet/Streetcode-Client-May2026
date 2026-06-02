@@ -31,7 +31,6 @@ const TextEditor: React.FC<Props> = ({
       </label>
 
       <div
-      // NOSONAR
         id="main-text-editor"
         ref={editorRef}
         contentEditable
@@ -44,7 +43,7 @@ const TextEditor: React.FC<Props> = ({
         onInput={onEditorChange}
         onMouseUp={onTextSelection}
         onKeyUp={onTextSelection}
-      />
+      /> // NOSONAR
 
       {showToolbar && (
         <div
