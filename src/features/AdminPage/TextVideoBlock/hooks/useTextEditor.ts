@@ -63,7 +63,7 @@ export const useTextEditor = (
 
   const moveCaretOutsideFormatting = () => {
     const sel = globalThis.getSelection();
-    if (!sel || !sel.rangeCount) return;
+    if (!sel?.rangeCount) return;
 
     const editor = editorRef.current;
     if (!editor) return;
@@ -93,8 +93,6 @@ export const useTextEditor = (
     if (!el) return;
 
     el.focus();
-    // Використання execCommand залишено як виняток для contentEditable,
-    // оскільки повна заміна на Range API вимагає складної обробки стану.
     // NOSONAR
     document.execCommand('styleWithCSS', false, 'true');
     // NOSONAR

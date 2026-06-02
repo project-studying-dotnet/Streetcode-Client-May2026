@@ -26,11 +26,12 @@ const TextEditor: React.FC<Props> = ({
   return (
     <div className="text-video-form__group mb-17">
       <label className="text-video-form__label"
-        id="main-text-label">
+        htmlFor="main-text-label">
         Основний текст
       </label>
 
       <div
+        id="main-text-editor"
         ref={editorRef}
         contentEditable
         suppressContentEditableWarning
@@ -39,6 +40,8 @@ const TextEditor: React.FC<Props> = ({
         onMouseUp={onTextSelection}
         aria-labelledby="main-text-label"
         role="textbox"
+        aria-multiline="true"
+        tabIndex={0}
       />
 
       {showToolbar && (
