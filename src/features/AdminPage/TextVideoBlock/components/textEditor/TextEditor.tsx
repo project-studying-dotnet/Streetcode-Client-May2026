@@ -30,6 +30,7 @@ const TextEditor: React.FC<Props> = ({
         Основний текст
       </label>
 
+{/* eslint-disable-next-line jsx-a11y/no-redundant-roles, jsx-a11y/role-has-required-aria-props */}
       <div
         id="main-text-editor"
         ref={editorRef}
@@ -43,7 +44,7 @@ const TextEditor: React.FC<Props> = ({
         onInput={onEditorChange}
         onMouseUp={onTextSelection}
         onKeyUp={onTextSelection}
-      /> // NOSONAR
+      />
 
       {showToolbar && (
         <div
