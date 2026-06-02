@@ -30,14 +30,13 @@ const TextEditor: React.FC<Props> = ({
         Основний текст
       </label>
 
-{/* eslint-disable-next-line jsx-a11y/no-redundant-roles, jsx-a11y/role-has-required-aria-props */}
-      <div
+      <section
         id="main-text-editor"
         ref={editorRef}
         contentEditable
         suppressContentEditableWarning
         className="text-video-form__editor"
-        role="textbox"
+        role="document"
         tabIndex={0}
         aria-multiline="true"
         aria-labelledby="main-text-label"
