@@ -1,24 +1,23 @@
 import { makeAutoObservable } from 'mobx';
 import UserApi from '@api/user/user.api';
 
-import {
+import User, {
     RefreshTokenResponce,
     UserLoginRequest,
     UserLoginResponce,
     UserRole,
 } from '@/models/user/user.model';
-import User from '@/models/user/user.model';
 
 export default class UserLoginStore {
     private timeoutHandler: NodeJS.Timeout = null;
 
-    private static tokenStorageName = 'token';
+    private static readonly tokenStorageName = 'token';
 
-    private static refreshTokenStorageName = 'refreshToken';
+    private static readonly refreshTokenStorageName = 'refreshToken';
 
-    private static dateStorageName = 'expireAt';
+    private static readonly dateStorageName = 'expireAt';
 
-    private static userStorageName = 'user';
+    private static readonly userStorageName = 'user';
 
     public userLoginResponce?: UserLoginResponce;
 
