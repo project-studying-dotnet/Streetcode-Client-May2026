@@ -39,9 +39,6 @@ const TextEditor: React.FC<Props> = ({
         onInput={onEditorChange}
         onMouseUp={onTextSelection}
         aria-labelledby="main-text-label"
-        role="textbox"
-        aria-multiline="true"
-        tabIndex={0}
       />
 
       {showToolbar && (
