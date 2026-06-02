@@ -46,34 +46,26 @@ export const Dictionary: React.FC = observer(() => {
         const color = "#1D1F23";
 
         return (
-          <span
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              marginLeft: "4px",
-            }}
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 13 18"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <svg
-              width="13"
-              height="18"
-              viewBox="0 0 13 18"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M0.5 7.25L12.5 7.25L6.5 0.5L0.5 7.25Z"
-                fill={sortOrder === "descend" ? "none" : color}
-                stroke={color}
-                strokeLinejoin="round"
-              />
-              <path
-                d="M0.5 10.75L12.5 10.75L6.5 17.5L0.5 10.75Z"
-                fill={sortOrder === "descend" ? color : "none"}
-                stroke={color}
-                strokeLinejoin="round"
-              />
-            </svg>
-          </span>
+            <path
+              d="M0.5 7.25L12.5 7.25L6.5 0.5L0.5 7.25Z"
+              fill={sortOrder === "ascend" ? color : "transparent"}
+              stroke={color}
+              strokeLinejoin="round"
+            />
+            <path
+              d="M0.5 10.75L12.5 10.75L6.5 17.5L0.5 10.75Z"
+              fill={sortOrder === "descend" ? color : "transparent"}
+              stroke={color}
+              strokeLinejoin="round"
+            />
+          </svg>
         );
       },
       render(value, record) {
