@@ -1,0 +1,26 @@
+@use "@sass/_utils.functions.scss" as f;
+@use "@sass/variables/_variables.colors.scss" as c;
+@use "@sass/mixins/_utils.mixins.scss" as mut;
+
+.adminLoginPage {
+    @include mut.sized(100%);
+    @include mut.flexed(row, center, center);
+
+    min-height: calc(100vh - #{f.pxToRem(100px)});
+    margin-top: f.pxToRem(100px);
+    padding: f.pxToRem(24px);
+}
+
+.adminLoginCard {
+    width: 100%;
+    max-width: f.pxToRem(420px);
+    padding: f.pxToRem(32px);
+    border: 1px solid c.$lighter-gray-color;
+    border-radius: f.pxToRem(8px);
+    background-color: c.$pure-white-color;
+}
+
+.adminLoginTitle {
+    margin-bottom: f.pxToRem(24px);
+    text-align: center;
+}

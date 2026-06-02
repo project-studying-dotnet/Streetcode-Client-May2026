@@ -6,9 +6,13 @@
 .adminPageContainer {
     margin-top: f.pxToRem(100px);
     display: flex;
-    float: left;
+    flex-direction: column;
     width: 100%;
     @include mut.with-font();
+    @include mut.sized(100%);
+    min-height: 400px;
+    overflow: hidden;
+
     .dimmed {
         @include mut.sized(100%);
     }
@@ -23,10 +27,4 @@
     .person-event-switch {
         margin: 0 5px;
     }
-}
-
-.adminPageContainer {
-    @include mut.sized(100%);
-    min-height: 400px;
-    overflow: hidden;
 }

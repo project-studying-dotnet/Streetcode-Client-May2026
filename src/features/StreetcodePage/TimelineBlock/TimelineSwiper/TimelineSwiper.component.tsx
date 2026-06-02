@@ -1,4 +1,5 @@
 import 'swiper/css';
+import 'swiper/css/pagination';
 import './TimelineSwiper.styles.scss';
 
 import { observer } from 'mobx-react-lite';
@@ -6,8 +7,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import useMobx from '@stores/root-store';
 import TimelineSwiperEdgeBtn
     from '@streetcode/TimelineBlock/TimelineSwiper/TimelineSwiperEdgeBtn/TimelineSwiperEdgeBtn.component';
-import SwiperCore from 'swiper/core';
-import { Pagination } from 'swiper/modules';
+import SwiperCore, { Pagination } from 'swiper';
 import { Swiper, SwiperProps, SwiperRef, SwiperSlide } from 'swiper/react';
 
 type SwiperWithoutChildren = Omit<SwiperProps, 'children'>;

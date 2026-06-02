@@ -1,24 +1,137 @@
-@use "@sass/_utils.functions.scss" as *;
+@use "@sass/_utils.functions.scss" as f;
 @use "@sass/variables/_variables.colors.scss" as c;
 @use "@sass/mixins/_utils.mixins.scss" as mut;
-@use "@sass/_utils.functions.scss" as f;
 
 .adminBar {
-    @include mut.flexed(row, $align-items: flex-start, $gap: 60px);
+    @include mut.flexed($direction: row, $align-items: center, $justify-content: space-between, $wrap: wrap, $gap: 16px);
 
     position: fixed;
-    left: f.pxToRem(30px);
-    font-size: f.pxToRem(28px); 
-    .Link {
-        color: black;
-        margin-bottom: 10px;
-        &:hover {
-            cursor: pointer;
-            color: c.$dark-red-color;
-        }
-        &:focus {
-            outline: none;
-            box-shadow: none;
-        }
+    top: f.pxToRem(100px);
+    left: 0;
+    right: 0;
+    z-index: 20;
+    padding: f.pxToRem(12px) f.pxToRem(30px);
+    background-color: c.$pure-white-color;
+    border-bottom: 1px solid c.$lighter-gray-color;
+    box-shadow: 0 f.pxToRem(4px) f.pxToRem(16px) rgba(0, 0, 0, 0.06);
+}
+
+.adminBarNav {
+    @include mut.flexed($direction: row, $align-items: center, $justify-content: flex-start, $wrap: wrap, $gap: 32px);
+
+    min-width: 0;
+}
+
+.adminBarLink {
+    color: c.$pure-black-color;
+    font-size: f.pxToRem(20px);
+    line-height: 1.2;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+        color: c.$dark-red-color;
+    }
+
+    &:focus {
+        outline: none;
+        box-shadow: none;
+    }
+}
+
+.adminBarUser {
+    @include mut.flexed($direction: row, $align-items: center, $justify-content: flex-end, $wrap: nowrap, $gap: 12px);
+
+    flex-shrink: 0;
+    padding: f.pxToRem(8px) f.pxToRem(12px);
+    border: 1px solid c.$lighter-gray-color;
+    border-radius: f.pxToRem(999px);
+    background-color: c.$accented-gray-color;
+}
+
+.adminBarUserAvatar {
+    @include mut.flexed($direction: row, $align-items: center, $justify-content: center);
+
+    width: f.pxToRem(36px);
+    height: f.pxToRem(36px);
+    border-radius: 50%;
+    background-color: c.$dark-red-color;
+    color: c.$pure-white-color;
+    font-size: f.pxToRem(14px);
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.adminBarUserDetails {
+    @include mut.flexed($direction: column, $align-items: flex-start, $justify-content: center, $wrap: nowrap, $gap: 2px);
+
+    min-width: 0;
+    max-width: f.pxToRem(220px);
+}
+
+.adminBarUserName {
+    color: c.$pure-black-color;
+    font-size: f.pxToRem(14px);
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.adminBarUserRole {
+    color: c.$dark-red-color;
+    font-size: f.pxToRem(12px);
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.adminBarLogoutBtn {
+    @include mut.flexed($direction: row, $align-items: center, $justify-content: center);
+
+    height: f.pxToRem(32px);
+    padding: 0 f.pxToRem(12px);
+    border: none;
+    border-radius: f.pxToRem(999px);
+    background-color: c.$pure-white-color;
+    color: c.$dark-red-color;
+    font-size: f.pxToRem(13px);
+    box-shadow: none;
+
+    &:hover,
+    &:focus {
+        background-color: c.$dark-red-color !important;
+        color: c.$pure-white-color !important;
+    }
+}
+
+.adminBarSpacer {
+    flex-shrink: 0;
+    height: f.pxToRem(68px);
+    width: 100%;
+}
+
+@media (max-width: 1024px) {
+    .adminBar {
+        top: f.pxToRem(72px);
+        padding: f.pxToRem(10px) f.pxToRem(16px);
+    }
+
+    .adminBarNav {
+        gap: f.pxToRem(16px);
+    }
+
+    .adminBarLink {
+        font-size: f.pxToRem(16px);
+    }
+
+    .adminBarUserDetails {
+        display: none;
+    }
+
+    .adminBarSpacer {
+        height: f.pxToRem(60px);
     }
 }
