@@ -93,9 +93,9 @@ export const useTextEditor = (
     if (!el) return;
 
     el.focus();
-    // NOSONAR
-    document.execCommand('styleWithCSS', false, 'true');
-    // NOSONAR
+   
+    document.execCommand('styleWithCSS', false, 'true'); // NOSONAR
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
     document.execCommand(command);
 
     requestAnimationFrame(() => {
