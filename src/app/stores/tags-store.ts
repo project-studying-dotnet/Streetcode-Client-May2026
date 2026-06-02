@@ -9,6 +9,8 @@ export default class TagsStore {
 
     public TagToDeleteArray: StreetcodeTagUpdate[] = [];
 
+    public Tags = new Array<Tag>();
+
     public constructor() {
         makeAutoObservable(this);
     }
@@ -89,5 +91,11 @@ export default class TagsStore {
                 this.TagMap.delete(tagId);
             });
         } catch (error: unknown) { /* empty */ }
+    };
+
+    public fetchAllTags = async () => {
+        tagsApi.getAll().then((value) => {
+            this.Tags = value.map((t) => ({ id: t.id, title: t.title }));
+        }).catch((error) => { });
     };
 }
