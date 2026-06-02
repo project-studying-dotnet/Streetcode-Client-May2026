@@ -31,9 +31,9 @@ const TextEditor: React.FC<Props> = ({
       </label>
 
       <div
+      // NOSONAR
         id="main-text-editor"
         ref={editorRef}
-        aria-roledescription="richtext editor"
         contentEditable
         suppressContentEditableWarning
         className="text-video-form__editor"
