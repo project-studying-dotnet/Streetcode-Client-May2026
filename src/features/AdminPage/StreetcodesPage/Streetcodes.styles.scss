@@ -1,0 +1,34 @@
+@use "@sass/mixins/_utils.mixins.scss" as mut;
+@use "@sass/variables/_variables.fonts.scss" as ft;
+@use "@sass/variables/_variables.colors.scss" as c;
+@use "@sass/_utils.functions.scss" as f;
+
+.streetcodes-page{
+    padding-top: f.pxToRem(100px);
+    display: flex;
+    gap: f.pxToRem(10px);
+    .streetcodes-page-add-button{
+        min-height: f.pxToRem(50px);
+        min-width: f.pxToRem(120px);
+    }
+    .container-justify-end{
+        display: flex;
+        justify-content: end;
+    }
+    .streetcodes-page-container{
+        @include mut.sized(80%);        
+        
+        .streetcodes-page-actions{
+            @include mut.flexed(row, start,space-between);
+        }
+        .streetcodes-table{
+            margin-top: f.pxToRem(20px);
+        }
+        .streetcodes-table-item-name{
+            @include mut.flexed(row, start,flex-start, wrap, 4px);
+        }
+        .site-link{
+            word-break: break-all
+        }
+    }
+}
