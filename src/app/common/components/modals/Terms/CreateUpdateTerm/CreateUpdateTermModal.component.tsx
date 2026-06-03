@@ -1,6 +1,4 @@
-/* eslint-disable operator-linebreak */
-/* eslint-disable import/extensions */
-import "./DictionaryModal.styles.scss";
+import "./CreateUpdateTermModal.styles.scss";
 
 import CancelBtn from "@images/utils/Cancel_btn.svg";
 
@@ -20,7 +18,7 @@ interface Props {
   afterSubmit?: (term: Term) => void;
 }
 
-export const DictionaryModal: React.FC<Props> = ({ afterSubmit }) => {
+export const CreateUpdateTermModal: React.FC<Props> = ({ afterSubmit }) => {
   const [form] = Form.useForm();
   const { termsStore } = useMobx();
   const { modalStore } = useModalContext();
@@ -36,6 +34,9 @@ export const DictionaryModal: React.FC<Props> = ({ afterSubmit }) => {
 
   useEffect(() => {
     if (isOpen) {
+      console.log(`CreateUpdateTermModal opened in ${isEditMode ? "edit" : "add"} mode`, {
+        termItem,
+      });
       if (isEditMode && termItem) {
         form.setFieldsValue({
           title: termItem.title,
@@ -128,4 +129,4 @@ export const DictionaryModal: React.FC<Props> = ({ afterSubmit }) => {
   );
 };
 
-export default observer(DictionaryModal);
+export default observer(CreateUpdateTermModal);

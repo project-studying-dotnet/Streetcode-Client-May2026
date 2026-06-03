@@ -1,5 +1,3 @@
-/* eslint-disable function-paren-newline */
-/* eslint-disable implicit-arrow-linebreak */
 import "./Dictionary.styles.scss";
 
 import { observer } from "mobx-react-lite";
@@ -16,8 +14,8 @@ import Button from "antd/es/button";
 import Input from "antd/es/input";
 import Table, { ColumnsType } from "antd/es/table";
 
-import TermApi from "@/app/api/streetcode/text-content/terms.api";
-import DictionaryModal from "@/app/common/components/modals/Terms/CreateUpdateTerm/DictionaryModal.component";
+import CreateUpdateTermModal from "@/app/common/components/modals/Terms/CreateUpdateTerm/CreateUpdateTermModal.component";
+import DeleteTermModalComponent from "@/app/common/components/modals/Terms/DeleteTerm/DeleteTermModal.component";
 import { Term } from "@/models/streetcode/text-contents.model";
 
 export const Dictionary: React.FC = observer(() => {
@@ -31,9 +29,9 @@ export const Dictionary: React.FC = observer(() => {
   });
 
   useEffect(() => {
-    Promise.all([termsStore?.fetchTerms()]).then(() =>
-      termsStore.setInternalMap(termsStore.getTermArray),
-    );
+    termsStore
+      ?.fetchTerms()
+      .then(() => termsStore.setInternalMap(termsStore.getTermArray));
   }, [termsStore]);
 
   const columns: ColumnsType<Term> = [
@@ -104,19 +102,7 @@ export const Dictionary: React.FC = observer(() => {
             key={`${term.id}${index}delete`}
             className="actionButton"
             onClick={() => {
-              modalStore.setConfirmationModal(
-                "confirmation",
-                () => {
-                  TermApi.delete(term.id)
-                    .then(() => {
-                      termsStore.TermMap.delete(term.id);
-                    })
-                    .catch((e) => {
-                      console.error(e);
-                    });
-                },
-                "Ви впевнені, що хочете видалити цей термін?",
-              );
+              modalStore.setModal("deleteTerm", term.id, true);
             }}
           />
         </div>
@@ -155,7 +141,8 @@ export const Dictionary: React.FC = observer(() => {
           rowKey="id"
         />
       </div>
-      <DictionaryModal />
+      <CreateUpdateTermModal />
+      <DeleteTermModalComponent />
     </div>
   );
 });
