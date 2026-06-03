@@ -1,3 +1,5 @@
+/* eslint-disable function-paren-newline */
+/* eslint-disable implicit-arrow-linebreak */
 import "./Dictionary.styles.scss";
 
 import { observer } from "mobx-react-lite";
@@ -21,7 +23,6 @@ import { Term } from "@/models/streetcode/text-contents.model";
 export const Dictionary: React.FC = observer(() => {
   const { termsStore } = useMobx();
   const { modalStore } = useModalContext();
-  const [modalAddOpened, setModalAddOpened] = useState<boolean>(false);
   const [searchText, setSearchText] = useState("");
 
   const filteredTerms = termsStore.getTermArray.filter((term) => {
@@ -143,7 +144,9 @@ export const Dictionary: React.FC = observer(() => {
           />
           <Button
             className="streetcode-custom-button dictionary-page-add-button"
-            onClick={() => setModalAddOpened(true)}
+            onClick={() => {
+              modalStore.setModal("addTerm", undefined, true);
+            }}
           >
             Додати термін
           </Button>
@@ -157,10 +160,7 @@ export const Dictionary: React.FC = observer(() => {
           rowKey="id"
         />
       </div>
-      <DictionaryModal
-        open={modalAddOpened}
-        setIsModalOpen={setModalAddOpened}
-      />
+      <DictionaryModal />
     </div>
   );
 });
