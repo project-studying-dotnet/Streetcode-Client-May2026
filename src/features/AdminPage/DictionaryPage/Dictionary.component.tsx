@@ -113,9 +113,6 @@ export const Dictionary: React.FC = observer(() => {
                     })
                     .catch((e) => {
                       console.error(e);
-                    })
-                    .finally(() => {
-                      modalStore.setConfirmationModal("confirmation");
                     });
                 },
                 "Ви впевнені, що хочете видалити цей термін?",
