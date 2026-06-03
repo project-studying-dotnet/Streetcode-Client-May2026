@@ -43,20 +43,27 @@ export default class TermStore {
     }
   };
 
-  public updateTerm = async (id: number, term: Term) => {
+  public updateTerm = async (term: Term) => {
     try {
-      if (id !== 0) {
-        await termsApi.update(term);
+      let updatedData = null as unknown as Term;
+
+      await termsApi.update(term).then((response) => {
         runInAction(() => {
-          const updatedTerm = {
-            ...this.TermMap.get(term.id),
-            ...term,
+          const currentTerm = this.TermMap.get(term.id);
+          const mergedTerm = {
+            ...currentTerm,
+            ...response,
           };
-          this.setItem(updatedTerm as Term);
+
+          this.setItem(mergedTerm as Term);
+          updatedData = mergedTerm as Term;
         });
-      }
+      });
+
+      return updatedData;
     } catch (error: unknown) {
-        return null;
+      console.error(error);
+      return null;
     }
   };
 
@@ -69,7 +76,7 @@ export default class TermStore {
         });
       }
     } catch (error: unknown) {
-        return null;
+      return null;
     }
   };
 }

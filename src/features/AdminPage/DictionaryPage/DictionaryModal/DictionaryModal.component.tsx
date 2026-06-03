@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable import/extensions */
 /* eslint-disable react/jsx-wrap-multilines */
 import "./DictionaryModal.styles.scss";
@@ -6,7 +7,7 @@ import "@features/AdminPage/AdminModal.styles.scss";
 import CancelBtn from "@images/utils/Cancel_btn.svg";
 
 import { observer } from "mobx-react-lite";
-import React from "react";
+import React, { useEffect } from "react";
 
 import Button from "antd/es/button";
 import Form from "antd/es/form";
@@ -26,20 +27,53 @@ export const DictionaryModal: React.FC<Props> = ({ afterSubmit }) => {
   const { termsStore } = useMobx();
   const { modalStore } = useModalContext();
 
-  const { isOpen } = modalStore.modalsState.addTerm;
+  const { addTerm, editTerm } = modalStore.modalsState;
+  const isOpen = addTerm.isOpen || editTerm.isOpen;
+  const isEditMode = editTerm.isOpen;
+
+  const termItem =
+    isEditMode && editTerm.fromCardId
+      ? termsStore.getTermArray.find((t) => t.id === editTerm.fromCardId)
+      : undefined;
+
+  useEffect(() => {
+    if (isOpen) {
+      if (isEditMode && termItem) {
+        form.setFieldsValue({
+          title: termItem.title,
+          description: termItem.description,
+        });
+      } else {
+        form.resetFields();
+      }
+    }
+  }, [isOpen, isEditMode, termItem, form]);
 
   const closeAndCleanData = () => {
     form.resetFields();
     modalStore.setModal("addTerm", undefined, false);
+    modalStore.setModal("editTerm", undefined, false);
   };
 
   const onSuccesfulSubmitTerm = async (formValues: TermCreate) => {
-    try {
-      const createdTerm = await termsStore.createTerm(formValues);
-      const result: Term | undefined = createdTerm ?? undefined;
+    const termData = {
+      title: formValues.title,
+      description: formValues.description?.trim() || undefined,
+    };
 
-      if (afterSubmit && result) {
-        afterSubmit(result);
+    try {
+      let result: Term | null = null;
+
+      if (isEditMode && editTerm.fromCardId) {
+        console.log("Updating term with ID:", editTerm.fromCardId, termData);
+        result = await termsStore.updateTerm({ ...termData, id: editTerm.fromCardId });
+      } else {
+        result = await termsStore.createTerm(termData);
+      }
+
+      const termResult: Term | undefined = result ?? undefined;
+      if (afterSubmit && termResult) {
+        afterSubmit(termResult);
       }
     } catch (e) {
       console.error(e);
@@ -59,7 +93,10 @@ export const DictionaryModal: React.FC<Props> = ({ afterSubmit }) => {
       <div className="modalContainer-content">
         <Form form={form} layout="vertical" onFinish={onSuccesfulSubmitTerm}>
           <div className="center">
-            <h2>Додати термін</h2>
+            <h2 className="modal-title">
+              {isEditMode ? "Редагувати " : "Додати "}
+              термін
+            </h2>
           </div>
 
           <Form.Item

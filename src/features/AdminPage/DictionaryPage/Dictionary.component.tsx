@@ -98,9 +98,7 @@ export const Dictionary: React.FC = observer(() => {
           <EditOutlined
             key={`${term.id}${index}edit`}
             className="actionButton"
-            onClick={() => {
-              // Додати логіку для setTermToEdit та setModalEditOpened
-            }}
+            onClick={() => modalStore.setModal("editTerm", term.id, true)}
           />
           <DeleteOutlined
             key={`${term.id}${index}delete`}
