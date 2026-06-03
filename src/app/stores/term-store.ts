@@ -31,52 +31,39 @@ export default class TermStore {
   };
 
   public createTerm = async (term: TermCreate) => {
-    try {
-      let newData = null as unknown as Term;
-      await termsApi.create(term).then((response) => {
-        this.setItem(response);
-        newData = response;
-      });
-      return newData;
-    } catch (error: unknown) {
-      return null;
-    }
+    let newData = null as unknown as Term;
+    await termsApi.create(term).then((response) => {
+      this.setItem(response);
+      newData = response;
+    });
+    return newData;
   };
 
   public updateTerm = async (term: Term) => {
-    try {
-      let updatedData = null as unknown as Term;
+    let updatedData = null as unknown as Term;
 
-      await termsApi.update(term).then((response) => {
-        runInAction(() => {
-          const currentTerm = this.TermMap.get(term.id);
-          const mergedTerm = {
-            ...currentTerm,
-            ...response,
-          };
+    await termsApi.update(term).then((response) => {
+      runInAction(() => {
+        const currentTerm = this.TermMap.get(term.id);
+        const mergedTerm = {
+          ...currentTerm,
+          ...response,
+        };
 
-          this.setItem(mergedTerm as Term);
-          updatedData = mergedTerm as Term;
-        });
+        this.setItem(mergedTerm as Term);
+        updatedData = mergedTerm as Term;
       });
+    });
 
-      return updatedData;
-    } catch (error: unknown) {
-      console.error(error);
-      return null;
-    }
+    return updatedData;
   };
 
   public deleteTerm = async (termId: number) => {
-    try {
-      if (termId !== 0) {
-        await termsApi.delete(termId);
-        runInAction(() => {
-          this.TermMap.delete(termId);
-        });
-      }
-    } catch (error: unknown) {
-      return null;
+    if (termId !== 0) {
+      await termsApi.delete(termId);
+      runInAction(() => {
+        this.TermMap.delete(termId);
+      });
     }
   };
 }

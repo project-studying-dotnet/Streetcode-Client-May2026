@@ -10,7 +10,6 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import AdminBar from "@features/AdminPage/AdminBar.component";
-import DictionaryModal from "@features/AdminPage/DictionaryPage/DictionaryModal/DictionaryModal.component";
 import useMobx, { useModalContext } from "@stores/root-store";
 
 import Button from "antd/es/button";
@@ -18,6 +17,7 @@ import Input from "antd/es/input";
 import Table, { ColumnsType } from "antd/es/table";
 
 import TermApi from "@/app/api/streetcode/text-content/terms.api";
+import DictionaryModal from "@/app/common/components/modals/Terms/CreateUpdateTerm/DictionaryModal.component";
 import { Term } from "@/models/streetcode/text-contents.model";
 
 export const Dictionary: React.FC = observer(() => {

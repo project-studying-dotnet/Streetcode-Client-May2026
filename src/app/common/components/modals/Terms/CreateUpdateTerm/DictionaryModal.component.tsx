@@ -1,8 +1,6 @@
 /* eslint-disable operator-linebreak */
 /* eslint-disable import/extensions */
-/* eslint-disable react/jsx-wrap-multilines */
 import "./DictionaryModal.styles.scss";
-import "@features/AdminPage/AdminModal.styles.scss";
 
 import CancelBtn from "@images/utils/Cancel_btn.svg";
 
@@ -66,7 +64,10 @@ export const DictionaryModal: React.FC<Props> = ({ afterSubmit }) => {
 
       if (isEditMode && editTerm.fromCardId) {
         console.log("Updating term with ID:", editTerm.fromCardId, termData);
-        result = await termsStore.updateTerm({ ...termData, id: editTerm.fromCardId });
+        result = await termsStore.updateTerm({
+          ...termData,
+          id: editTerm.fromCardId,
+        });
       } else {
         result = await termsStore.createTerm(termData);
       }
@@ -112,7 +113,7 @@ export const DictionaryModal: React.FC<Props> = ({ afterSubmit }) => {
             label="Опис"
             rules={[{ required: true, message: "Введіть опис" }]}
           >
-            <TextArea showCount maxLength={500} />
+            <TextArea showCount maxLength={500} className="description-input" />
           </Form.Item>
 
           <Button
