@@ -16,9 +16,10 @@ import Table, { ColumnsType } from "antd/es/table";
 
 import CreateUpdateTermModal from "@/app/common/components/modals/Terms/CreateUpdateTerm/CreateUpdateTermModal.component";
 import DeleteTermModalComponent from "@/app/common/components/modals/Terms/DeleteTerm/DeleteTermModal.component";
+import CustomSortIcon from "@/app/common/components/SortIcon.component";
 import { Term } from "@/models/streetcode/text-contents.model";
 
-export const Dictionary: React.FC = observer(() => {
+export const Dictionary = () => {
   const { termsStore } = useMobx();
   const { modalStore } = useModalContext();
   const [searchText, setSearchText] = useState("");
@@ -41,32 +42,7 @@ export const Dictionary: React.FC = observer(() => {
       key: "title",
       width: "30%",
       sorter: (a, b) => a.title.localeCompare(b.title),
-      sortIcon: ({ sortOrder }) => {
-        const color = "#1D1F23";
-
-        return (
-          <svg
-            width="13"
-            height="13"
-            viewBox="0 0 13 18"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M0.5 7.25L12.5 7.25L6.5 0.5L0.5 7.25Z"
-              fill={sortOrder === "ascend" ? color : "transparent"}
-              stroke={color}
-              strokeLinejoin="round"
-            />
-            <path
-              d="M0.5 10.75L12.5 10.75L6.5 17.5L0.5 10.75Z"
-              fill={sortOrder === "descend" ? color : "transparent"}
-              stroke={color}
-              strokeLinejoin="round"
-            />
-          </svg>
-        );
-      },
+      sortIcon: CustomSortIcon,
       render(value, record) {
         return (
           <div
@@ -145,6 +121,6 @@ export const Dictionary: React.FC = observer(() => {
       <DeleteTermModalComponent />
     </div>
   );
-});
+};
 
-export default Dictionary;
+export default observer(Dictionary);
