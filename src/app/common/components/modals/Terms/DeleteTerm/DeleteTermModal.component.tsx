@@ -39,7 +39,7 @@ const DeleteTermModal = () => {
       onCancel={() => setModal("deleteTerm")}
       onOk={handleDelete}
     >
-      <h2>Ви впевнені, що бажаєте видалити визначення?</h2>
+      <h2>Ви впевнені, що хочете видалити це визначення?</h2>
       {term && (
         <p>
           {term.title}
