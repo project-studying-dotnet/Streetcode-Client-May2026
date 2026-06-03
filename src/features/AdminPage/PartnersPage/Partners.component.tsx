@@ -31,162 +31,158 @@ const Partners: React.FC = observer(() => {
   const [modalEditOpened, setModalEditOpened] = useState<boolean>(false);
   const [partnerToEdit, setPartnerToedit] = useState<Partner>();
 
-  const updatedPartners = () => {
-    Promise.all([partnersStore?.fetchPartnersAll()])
-      .then(() => {
-        partnersStore?.PartnerMap.forEach((val, key) => {
-          ImageStore.getImageById(val.logoId).then((logo) => {
-            partnersStore.PartnerMap.set(val.id, { ...val, logo });
-          });
-        });
-      })
-      .then(() => partnersStore.setInternalMap(partnersStore.getPartnerArray));
-  };
-  useEffect(() => {
-    updatedPartners();
-  }, []);
-  const columns: ColumnsType<Partner> = [
-    {
-      title: "Назва",
-      dataIndex: "title",
-      key: "title",
-      render(value, record) {
-        return (
-          <div key={`${value}${record.id}`} className="partner-table-item-name">
-            <p>{value}</p>
-            {record.isKeyPartner ? <StarOutlined /> : ""}
-          </div>
-        );
-      },
-    },
-    {
-      title: "Посилання на сайт",
-      dataIndex: "targetUrl",
-      key: "url",
-      width: "28%",
-      render: (targeteurl) => (
-        <a
-          className="site-link"
-          key={`${targeteurl.href}`}
-          href={targeteurl.href}
-        >
-          {targeteurl.title ?? targeteurl.href}
-        </a>
-      ),
-    },
-    {
-      title: "Лого",
-      dataIndex: "logo",
-      key: "logo",
-      onCell: () => ({
-        style: { padding: "0", margin: "0" },
-      }),
-      render: (logo: Image, record) => (
-        <img
-          key={`${record.id}${record.logo?.id}}`}
-          className="partners-table-logo"
-          src={base64ToUrl(logo?.base64, logo?.mimeType ?? "")}
-          alt={logo?.alt}
-        />
-      ),
-    },
-    {
-      title: "Соц. мережі",
-      dataIndex: "partnerSourceLinks",
-      key: "partnerSourceLinks",
-      width: "12%",
-      render: (links: PartnerSourceLink[], partner) => (
-        <div
-          key={`${links.length}${partner.id}${partner.logoId}`}
-          className="partner-links"
-        >
-          {links.map((link) => (
-            <a
-              key={`${link.id}${link.targetUrl}`}
-              rel="noreferrer"
-              target="_blank"
-              className="sourceLink"
-              href={link.targetUrl.href}
-            >
-              <img
-                key={link.id * link.logoType}
-                src={LogoType[link.logoType]}
-                alt={link.targetUrl.title}
-              />
-            </a>
-          ))}
+    const updatedPartners = () => {
+        Promise.all([
+            partnersStore?.fetchPartnersAll(),
+        ]).then(() => {
+            partnersStore?.PartnerMap.forEach((val, key) => {
+                ImageStore.getImageById(val.logoId).then((logo) => {
+                    partnersStore.PartnerMap.set(
+                        val.id,
+                        { ...val, logo },
+                    );
+                });
+            });
+        }).then(() => partnersStore.setInternalMap(partnersStore.getPartnerArray));
+    };
+    useEffect(() => {
+        updatedPartners();
+    }, []);
+    const columns: ColumnsType<Partner> = [
+        {
+            title: 'Назва',
+            dataIndex: 'title',
+            key: 'title',
+            render(value, record) {
+                return (
+                    <div key={`${value}${record.id}`} className="partner-table-item-name">
+                        <p>{value}</p>
+                        {record.isKeyPartner ? <StarOutlined /> : ''}
+                    </div>
+                );
+            },
+        },
+        {
+            title: 'Посилання на сайт',
+            dataIndex: 'targetUrl',
+            key: 'url',
+            width: '28%',
+            render: (targeteurl) => (
+                <a
+                    className="site-link"
+                    key={`${targeteurl.href}`}
+                    href={targeteurl.href}
+                >
+                    {targeteurl.title ?? targeteurl.href}
+                </a>
+            ),
+        },
+        {
+            title: 'Лого',
+            dataIndex: 'logo',
+            key: 'logo',
+            onCell: () => ({
+                style: { padding: '0', margin: '0' },
+            }),
+            render: (logo:Image, record) => (
+                <img
+                    key={`${record.id}${record.logo?.id}}`}
+                    className="partners-table-logo"
+                    src={base64ToUrl(logo?.base64, logo?.mimeType ?? '')}
+                    alt={logo?.alt}
+                />
+            ),
+
+        },
+        {
+            title: 'Соц. мережі',
+            dataIndex: 'partnerSourceLinks',
+            key: 'partnerSourceLinks',
+            width: '12%',
+            render: (links:PartnerSourceLink[], partner) => (
+                <div key={`${links.length}${partner.id}${partner.logoId}`} className="partner-links">
+                    {links.map((link) => (
+                        <a
+                            key={`${link.id}${link.targetUrl}`}
+                            rel="noreferrer"
+                            target="_blank"
+                            className="sourceLink"
+                            href={link.targetUrl.href}
+                        >
+                            <img
+                                key={link.id * link.logoType}
+                                src={LogoType[link.logoType]}
+                                alt={link.targetUrl.title}
+                            />
+                        </a>
+                    ))}
+                </div>
+            ),
+        },
+        { title: 'Дії',
+          dataIndex: 'action',
+          key: 'action',
+          width: '10%',
+          render: (value, partner, index) => (
+              <div key={`${partner.id}${index}`} className="partner-page-actions">
+                  <DeleteOutlined
+                      key={`${partner.id}${index}111`}
+                      className="actionButton"
+                      onClick={() => {
+                          modalStore.setConfirmationModal(
+                              'confirmation',
+                              () => {
+                                  PartnersApi.delete(partner.id)
+                                      .then(() => {
+                                          partnersStore.PartnerMap.delete(partner.id);
+                                      }).catch((e) => {});
+                                  modalStore.setConfirmationModal('confirmation');
+                              },
+                              'Ви впевнені, що хочете видалити цього партнера?',
+                          );
+                      }}
+                  />
+                  <EditOutlined
+                      key={`${partner.id}${index}222`}
+                      className="actionButton"
+                      onClick={() => {
+                          setPartnerToedit(partner);
+                          setModalEditOpened(true);
+                      }}
+                  />
+
+              </div>
+          ) },
+    ];
+    return (
+        <div className="partners-page">
+            <AdminBar />
+            <div className="partners-page-container">
+                <div className="container-justify-end">
+                    <Button
+                        className="streetcode-custom-button partners-page-add-button"
+                        onClick={() => setModalAddOpened(true)}
+                    >
+                    Створити партнера
+                    </Button>
+                </div>
+                <Table
+                    pagination={{ pageSize: 10 }}
+                    className="partners-table"
+                    columns={columns}
+                    dataSource={partnersStore?.getPartnerArray}
+                    rowKey="id"
+                />
+            </div>
+            <PartnerModal open={modalAddOpened} setIsModalOpen={setModalAddOpened} isStreetcodeVisible />
+            <PartnerModal
+                open={modalEditOpened}
+                setIsModalOpen={setModalEditOpened}
+                partnerItem={partnerToEdit}
+                isStreetcodeVisible
+            />
         </div>
-      ),
-    },
-    {
-      title: "Дії",
-      dataIndex: "action",
-      key: "action",
-      width: "10%",
-      render: (value, partner, index) => (
-        <div key={`${partner.id}${index}`} className="partner-page-actions">
-          <DeleteOutlined
-            key={`${partner.id}${index}111`}
-            className="actionButton"
-            onClick={() => {
-              modalStore.setConfirmationModal(
-                "confirmation",
-                () => {
-                  PartnersApi.delete(partner.id)
-                    .then(() => {
-                      partnersStore.PartnerMap.delete(partner.id);
-                    })
-                    .catch((e) => {});
-                  modalStore.setConfirmationModal("confirmation");
-                },
-                "Ви впевнені, що хочете видалити цього партнера?",
-              );
-            }}
-          />
-          <EditOutlined
-            key={`${partner.id}${index}222`}
-            className="actionButton"
-            onClick={() => {
-              setPartnerToedit(partner);
-              setModalEditOpened(true);
-            }}
-          />
-        </div>
-      ),
-    },
-  ];
-  return (
-    <div className="partners-page">
-      <AdminBar />
-      <div className="partners-page-container">
-        <div className="container-justify-end">
-          <Button
-            className="streetcode-custom-button partners-page-add-button"
-            onClick={() => setModalAddOpened(true)}
-          >
-            Створити партнера
-          </Button>
-        </div>
-        <Table
-          pagination={{ pageSize: 10 }}
-          className="partners-table"
-          columns={columns}
-          dataSource={partnersStore?.getPartnerArray}
-          rowKey="id"
-        />
-      </div>
-      <PartnerModal
-        open={modalAddOpened}
-        setIsModalOpen={setModalAddOpened}
-        isStreetcodeVisible
-      />
-      <PartnerModal
-        open={modalEditOpened}
-        setIsModalOpen={setModalEditOpened}
-        partnerItem={partnerToEdit}
-        isStreetcodeVisible
-      />
-    </div>
-  );
+
+    );
 });
 export default Partners;

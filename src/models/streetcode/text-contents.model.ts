@@ -10,10 +10,21 @@ export interface Fact {
   factContent: string;
   image?: Image;
   imageId: number;
+  index?: number;
+  streetcodeId: number;
+  imageDescription?: string;
 }
 export interface FactCreate extends Fact {
   imageDescription?: string;
 }
+
+export interface FactAdminSavePayload {
+  title: string;
+  factContent: string;
+  imageId: number;
+  imageDescription?: string;
+}
+
 export interface FactUpdate extends FactCreate, IModelState, IPersisted {
   streetcodeId?: number;
 }

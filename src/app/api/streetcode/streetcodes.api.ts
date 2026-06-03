@@ -56,6 +56,12 @@ const StreetcodesApi = {
     existWithIndex: (index:number) => Agent.get<boolean>(`${API_ROUTES.STREETCODES.EXIST_WITH_INDEX}/${index}`),
 
     existWithUrl: (url: string) => Agent.get<boolean>(`${API_ROUTES.STREETCODES.EXIST_WITH_URL}/${url}`),
+
+    create: (streetcode: Streetcode) => Agent.post<Streetcode>(`${API_ROUTES.STREETCODES.CREATE}`, streetcode),
+
+    update: (streetcode: Streetcode) => Agent.put<Streetcode>(`${API_ROUTES.STREETCODES.UPDATE}`, streetcode),
+
+    getAll: () => Agent.get<Streetcode[]>(`${API_ROUTES.STREETCODES.GET_ALL}`),
 };
 
 export default StreetcodesApi;

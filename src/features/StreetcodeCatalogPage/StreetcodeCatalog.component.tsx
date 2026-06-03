@@ -10,7 +10,11 @@ import { useAsync } from '@/app/common/hooks/stateful/useAsync.hook';
 
 import StreetcodeCatalogItem from './StreetcodeCatalogItem/StreetcodeCatalogItem.component';
 
-const StreetcodeCatalog = () => {
+interface Props {
+    showAdminActions?: boolean;
+}
+
+const StreetcodeCatalog = ({ showAdminActions = false }: Props) => {
     const { streetcodeCatalogStore } = useMobx();
     const { fetchCatalogStreetcodes, getCatalogStreetcodesArray } = streetcodeCatalogStore;
     const [loading, setLoading] = useState(false);
@@ -46,6 +50,7 @@ const StreetcodeCatalog = () => {
                                     streetcode={streetcode}
                                     isLast={index === getCatalogStreetcodesArray.length - 1}
                                     handleNextScreen={handleSetNextScreen}
+                                    showAdminActions={showAdminActions}
                                 />
                             ),
                         )

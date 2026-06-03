@@ -7,7 +7,7 @@ import AdminBar from './AdminBar.component';
 const AdminPage = () => (
     <div className="adminPageContainer">
         <AdminBar />
-        <StreetcodeCatalogComponent />
+        <StreetcodeCatalogComponent showAdminActions />
     </div>
 );
 

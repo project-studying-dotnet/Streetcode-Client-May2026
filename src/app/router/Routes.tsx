@@ -1,5 +1,6 @@
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
 import FRONTEND_ROUTES from '@constants/frontend-routes.constants';
+import EditStreetcodePage from '@features/AdminPage/EditStreetcodePage/EditStreetcodePage.component';
 import ForFansMainPage from '@features/AdminPage/ForFansPage/ForFansMainPage.component';
 import App from '@layout/app/App.component';
 import StreetcodeContent from '@streetcode/Streetcode.component';
@@ -12,6 +13,8 @@ import SupportPage from '@/features/AdditionalPages/SupportUsPage/SupportUs.comp
 import AdminPage from '@/features/AdminPage/AdminPage.component';
 import Dictionary from '@/features/AdminPage/DictionaryPage/Dictionary.component';
 import Partners from '@/features/AdminPage/PartnersPage/Partners.component';
+import StreetcodeCreate from '@/features/AdminPage/StreetcodesPage/StreetcodeCreate/StreetcodeCreate.component';
+import Streetcodes from '@/features/AdminPage/StreetcodesPage/Streetcodes.component';
 import TeamPage from '@/features/AdminPage/TeamPage/TeamPage.component';
 import StreetcodeCatalog from '@/features/StreetcodeCatalogPage/StreetcodeCatalog.component';
 
@@ -22,8 +25,24 @@ const router = createBrowserRouter(createRoutesFromElements(
             element={<AdminPage />}
         />
         <Route
+            path={`${FRONTEND_ROUTES.ADMIN.EDIT_STREETCODE}/:streetcodeId`}
+            element={<EditStreetcodePage />}
+        />
+        <Route
             path={`${FRONTEND_ROUTES.ADMIN.BASE}/:id`}
             element={<StreetcodeContent />}
+        />
+        <Route
+            path={`${FRONTEND_ROUTES.ADMIN.STREETCODES}`}
+            element={<Streetcodes />}
+        />
+        <Route
+            path={`${FRONTEND_ROUTES.ADMIN.NEW_STREETCODE}`}
+            element={<StreetcodeCreate />}
+        />
+        <Route
+            path={`${FRONTEND_ROUTES.ADMIN.EDIT_STREETCODE}/:id`}
+            element={<StreetcodeCreate />}
         />
         <Route
             path={FRONTEND_ROUTES.ADMIN.FOR_FANS}
