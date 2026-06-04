@@ -10,6 +10,9 @@ import PartnersModal from '@components/modals/Partners/PartnersModal.component';
 import RelatedFigureItemModal from '@components/modals/RelatedFigures/RelatedFigureItemModal.component';
 import RelatedFiguresModal from '@components/modals/RelatedFigures/RelatedFiguresModal.component';
 import SourcesModal from '@components/modals/Sources/SourcesModal.component';
+import DeleteImageModal from '@components/modals/EditImageModal/DeleteImageModal.component';
+import EditImageModal from '@components/modals/EditImageModal/EditImageModal.component';
+import TemplatesModal from '@components/modals/EditImageModal/TemplatesModal.component';
 
 const ModalWrapper = () => (
     <>
@@ -25,6 +28,9 @@ const ModalWrapper = () => (
         <ConfirmationModal />
         <RelatedFigureItemModal />
         <StatisticsModal />
+        <EditImageModal />
+        <DeleteImageModal />
+        <TemplatesModal />
     </>
 );
 

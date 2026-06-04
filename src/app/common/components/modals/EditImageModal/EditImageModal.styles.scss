@@ -1,0 +1,43 @@
+@use "@assets/sass/variables/_variables.colors.scss" as c;
+@use "@assets/sass/mixins/_utils.mixins.scss" as mut;
+@use "@assets/sass/_utils.functions.scss" as f;
+@use "@assets/sass/variables/_variables.fonts.scss" as ft;
+
+
+.addModal {
+    .ant-modal-content {
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .ant-modal-title {
+        color: c.$dark-red-color;
+        text-align: center;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .save-button {
+        @include mut.flex-centered();
+        @include mut.full-rounded(11px);
+        @include mut.rem-padded(8px, 10px, 8px, 10px);
+
+        height: f.pxToRem(38px);
+        width: fit-content;
+        margin-left: f.pxToRem(8px);
+        margin-right: f.pxToRem(8px);
+
+        color: c.$dark-red-color;
+        border: 2px solid c.$dark-red-color;
+        @include mut.with-font($font-weight: bold, $font-size: 15px);
+
+        &:hover {
+            color: c.$dark-red-color;
+            border-color: c.$dark-red-color;
+        }
+    }
+}

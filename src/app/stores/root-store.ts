@@ -33,6 +33,8 @@ import TeamStore from './team-store';
 import ToponymStore from './toponym-store';
 import UserLoginStore from './user-login-store';
 
+import TemplateStore from './image-template-store';
+
 interface Store {
     factsStore: FactsStore,
     subtitlesStore: SubtitlesStore,
@@ -69,6 +71,7 @@ export interface StreetcodeDataStore {
 }
 export interface ModalDataStore {
     modalStore: ModalStore,
+    templateStore: TemplateStore,
 }
 
 export const store: Store = {
@@ -107,6 +110,7 @@ export const streetcodeDataStore:StreetcodeDataStore = {
 
 export const modalDataStore:ModalDataStore = {
     modalStore: new ModalStore(),
+    templateStore: new TemplateStore(),
 };
 
 export const toponymDataStore:ToponymStore = new ToponymStore();

@@ -1,0 +1,108 @@
+
+
+.preview-slot {
+  background: #000;
+  border-radius: 4px;
+}
+
+/* -------------------------------- */
+/* Main-Big-Plus-Two */
+/* -------------------------------- */
+
+.preview-grid.main-big {
+  display: grid;
+
+  .preview-slot {
+    width: 255px;
+    height: 205px;
+  }
+}
+
+.preview-grid.medium {
+  display: grid;
+
+  grid-template-columns: repeat(1, 137px);
+  gap: 5px;
+
+  .preview-slot {
+    width: 137px;
+    height: 203px;
+  }
+}
+
+/* -------------------------------- */
+/* Two-Medium */
+/* -------------------------------- */
+
+.preview-grid.two-medium {
+  display: grid;
+
+  grid-template-columns: repeat(2, 137px);
+
+  gap: 5px;
+
+  .preview-slot {
+    width: 137px;
+    height: 203px;
+  }
+}
+
+/* -------------------------------- */
+/* Mid-Plus-Two-Small */
+/* -------------------------------- */
+
+.preview-grid.mid-plus-two-small {
+  display: grid;
+
+  grid-template-columns: 137px 135px;
+  grid-template-rows: 101px 101px;
+
+  gap: 4px;
+
+  .preview-slot:nth-child(1) {
+    grid-row: 1 / span 2;
+  }
+}
+
+/* -------------------------------- */
+/* Four-Small */
+/* -------------------------------- */
+
+.preview-grid.four-small {
+  display: grid;
+
+  grid-template-columns: repeat(2, 135px);
+  grid-template-rows: repeat(2, 101px);
+
+  gap: 4px;
+}
+
+
+// .preview-grid {
+//   display: grid;
+//   gap: 5px; // Значение по умолчанию
+
+//   &.main-big { grid-template-columns: 255px; grid-template-rows: 205px; }
+//   &.medium { grid-template-columns: 137px; grid-template-rows: 203px; }
+//   &.two-medium { grid-template-columns: repeat(2, 137px); grid-template-rows: 203px; }
+  
+//   &.mid-plus-two-small {
+//     grid-template-columns: 137px 135px;
+//     grid-template-rows: 101px 101px;
+//     gap: 4px;
+//     .preview-slot:first-child { grid-row: span 2; }
+//   }
+
+//   &.four-small {
+//     grid-template-columns: repeat(2, 135px);
+//     grid-template-rows: repeat(2, 101px);
+//     gap: 4px;
+//   }
+// }
+
+// .preview-slot {
+//   background: #000;
+//   border-radius: 4px;
+//   width: 100%; // Слот сам заполнит ячейку сетки
+//   height: 100%;
+// }

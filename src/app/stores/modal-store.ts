@@ -4,6 +4,7 @@ type ModalState = {
     isOpen: boolean;
     fromCardId?: number;
     confirmationProps?:ConfirmationProps;
+    image?: any;
 };
 interface ConfirmationProps {
  onSubmit?:()=>void,
@@ -15,6 +16,7 @@ const DefaultModalState: ModalState = {
     isOpen: false,
     fromCardId: undefined,
     confirmationProps: undefined,
+    image: undefined,
 };
 
 interface ModalList {
@@ -36,6 +38,9 @@ interface ModalList {
     adminFacts: ModalState;
     adminChronology: ModalState;
     statistics: ModalState;
+    editImage: ModalState;
+    deleteImage: ModalState;
+    templates: ModalState;
 }
 
 export default class ModalStore {
@@ -58,6 +63,9 @@ export default class ModalStore {
         adminFacts: DefaultModalState,
         adminChronology: DefaultModalState,
         statistics: DefaultModalState,
+        editImage: DefaultModalState,
+        deleteImage: DefaultModalState,
+        templates: DefaultModalState,
     };
 
     public isPageDimmed = false;
@@ -70,10 +78,11 @@ export default class ModalStore {
         this.isPageDimmed = dimmed ?? !this.isPageDimmed;
     };
 
-    public setModal = (modalName: keyof ModalList, fromId?: number, opened?: boolean) => {
+    public setModal = (modalName: keyof ModalList, fromId?: number, opened?: boolean, data?: any) => {
         this.modalsState[modalName] = {
             isOpen: opened ?? !this.modalsState[modalName].isOpen,
             fromCardId: fromId,
+            image: data,
         };
     };
 

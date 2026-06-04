@@ -1,0 +1,26 @@
+.delete-confirmation-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.5);
+  color: #ff0000;
+  gap: 10px;
+  z-index: 10;
+  
+  p { font-weight: bold; margin: 0; }
+  
+  .buttons {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    justify-content: center;
+  }
+  button {
+    width: 80%; 
+    padding: 8px;
+    cursor: pointer;
+  }
+}
