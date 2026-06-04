@@ -1,0 +1,136 @@
+.loginPage {
+    min-height: calc(100vh - 120px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 72px 16px;
+    background-color: #fafafa;
+}
+
+.loginCard {
+    width: 100%;
+    max-width: 500px;
+    padding: 48px 52px 40px;
+    border-radius: 40px;
+    background-color: #fff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+
+    h1 {
+        margin-bottom: 8px;
+        text-align: center;
+        font-size: 24px;
+        font-weight: 700;
+    }
+}
+
+.loginSubtitle {
+    margin-bottom: 32px;
+    text-align: center;
+    color: #6f6f6f;
+}
+
+.loginOptions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: -8px;
+    margin-bottom: 24px;
+
+    .ant-btn-link {
+        padding: 0;
+        color: #9f211c;
+        font-weight: 600;
+
+        &[disabled] {
+            color: #9f211c;
+            opacity: 0.7;
+        }
+    }
+}
+
+.loginSubmitBtn {
+    height: 56px;
+    border: none;
+    border-radius: 8px;
+    background-color: #b71c1c;
+    color: #fff;
+    font-weight: 700;
+
+    &:hover,
+    &:focus {
+        background-color: #c9322a;
+        color: #fff;
+    }
+}
+
+.loginRegister {
+    margin-top: 12px;
+    text-align: center;
+    color: #777;
+
+    .ant-btn-link {
+        padding: 0 0 0 4px;
+        color: #9f211c;
+        font-weight: 700;
+    }
+}
+
+.loginDivider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 20px;
+    color: #999;
+    font-size: 14px;
+
+    span {
+        flex: 1;
+        height: 1px;
+        background-color: #e0e0e0;
+    }
+}
+
+.googleLoginBtn {
+    display: block;
+    min-width: 120px;
+    height: 44px;
+    margin: 0 auto;
+    border: none;
+    border-radius: 8px;
+    background-color: #f4f4f4;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .loginPage {
+        align-items: flex-start;
+        padding-top: 64px;
+    }
+
+    .loginCard {
+        max-width: 440px;
+        padding: 40px 36px;
+        border-radius: 36px;
+    }
+}
+
+@media (max-width: 480px) {
+    .loginPage {
+        padding: 32px 16px;
+        background-color: #fff;
+    }
+
+    .loginCard {
+        padding: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .loginOptions {
+        font-size: 12px;
+    }
+
+    .loginSubmitBtn {
+        height: 52px;
+    }
+}

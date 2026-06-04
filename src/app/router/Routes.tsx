@@ -4,6 +4,7 @@ import ForFansMainPage from '@features/AdminPage/ForFansPage/ForFansMainPage.com
 import App from '@layout/app/App.component';
 import EditStreetcodePage from '@features/AdminPage/EditStreetcodePage/EditStreetcodePage.component';
 import StreetcodeContent from '@streetcode/Streetcode.component';
+import RequireAuth from '@components/RequireAuth/RequireAuth.component';
 
 import NotFound from '@/features/AdditionalPages/NotFoundPage/NotFound.component';
 import PartnersPage from '@/features/AdditionalPages/PartnersPage/Partners.component';
@@ -16,52 +17,31 @@ import ContactUs from '@/features/AdditionalPages/ContactUsPage/ContanctUs.compo
 import SupportPage from '@/features/AdditionalPages/SupportUsPage/SupportUs.component';
 import Streetcodes from '@/features/AdminPage/StreetcodesPage/Streetcodes.component';
 import StreetcodeCreate from '@/features/AdminPage/StreetcodesPage/StreetcodeCreate/StreetcodeCreate.component';
+import LoginPage from '@/features/AdminPage/LoginPage/LoginPage.component';
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<App />}>
-        <Route
-            path={`${FRONTEND_ROUTES.ADMIN.BASE}`}
-            element={<AdminPage />}
-        />
-        <Route
-            path={`${FRONTEND_ROUTES.ADMIN.EDIT_STREETCODE}/:streetcodeId`}
-            element={<EditStreetcodePage />}
-        />
-        <Route
-            path={`${FRONTEND_ROUTES.ADMIN.BASE}/:id`}
-            element={<StreetcodeContent />}
-        />
-        <Route
-            path={`${FRONTEND_ROUTES.ADMIN.STREETCODES}`}
-            element={<Streetcodes />}
-        />
-        <Route
-            path={`${FRONTEND_ROUTES.ADMIN.NEW_STREETCODE}`}
-            element={<StreetcodeCreate />}
-        />
-        <Route
-            path={`${FRONTEND_ROUTES.ADMIN.EDIT_STREETCODE}/:id`}
-            element={<StreetcodeCreate />}
-        />
-        <Route
-            path={FRONTEND_ROUTES.ADMIN.FOR_FANS}
-            element={<ForFansMainPage />}
-        />
-        <Route
-            path={FRONTEND_ROUTES.ADMIN.PARTNERS}
-            element={<Partners />}
-        />
+        <Route path={FRONTEND_ROUTES.ADMIN.LOGIN} element={<LoginPage />} />
+
+        <Route element={<RequireAuth />}>
+            <Route path={FRONTEND_ROUTES.ADMIN.BASE} element={<AdminPage />} />
+            <Route path={`${FRONTEND_ROUTES.ADMIN.EDIT_STREETCODE}/:streetcodeId`} element={<EditStreetcodePage />} />
+            <Route path={`${FRONTEND_ROUTES.ADMIN.BASE}/:id`} element={<StreetcodeContent />} />
+            <Route path={FRONTEND_ROUTES.ADMIN.STREETCODES} element={<Streetcodes />} />
+            <Route path={FRONTEND_ROUTES.ADMIN.NEW_STREETCODE} element={<StreetcodeCreate />} />
+            <Route path={`${FRONTEND_ROUTES.ADMIN.EDIT_STREETCODE}/:id`} element={<StreetcodeCreate />} />
+            <Route path={FRONTEND_ROUTES.ADMIN.FOR_FANS} element={<ForFansMainPage />} />
+            <Route path={FRONTEND_ROUTES.ADMIN.PARTNERS} element={<Partners />} />
+            <Route path={FRONTEND_ROUTES.ADMIN.TEAM} element={<TeamPage />} />
+        </Route>
+
         <Route path={FRONTEND_ROUTES.OTHER_PAGES.CATALOG} element={<StreetcodeCatalog />} />
-        <Route
-            path={FRONTEND_ROUTES.ADMIN.TEAM}
-            element={(<TeamPage />)}
-        />
-        <Route path="*" element={<NotFound />} />
         <Route path={FRONTEND_ROUTES.OTHER_PAGES.PARTNERS} element={<PartnersPage />} />
         <Route path={FRONTEND_ROUTES.OTHER_PAGES.CONTACT_US} element={<ContactUs />} />
         <Route path={FRONTEND_ROUTES.OTHER_PAGES.SUPPORT_US} element={<SupportPage />} />
         <Route index path="/:id" element={<StreetcodeContent />} />
         <Route index path={`${FRONTEND_ROUTES.OTHER_PAGES.NEWS}/:id`} element={<NewsPage />} />
+        <Route path="*" element={<NotFound />} />
     </Route>,
 ));
 
