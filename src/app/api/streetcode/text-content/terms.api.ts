@@ -1,13 +1,13 @@
 import Agent from '@api/agent.api';
 import { API_ROUTES } from '@constants/api-routes.constants';
-import { Term } from '@models/streetcode/text-contents.model';
+import { Term, TermCreate } from '@models/streetcode/text-contents.model';
 
 const TermsApi = {
     getById: (id: number) => Agent.get<Term>(`${API_ROUTES.TERMS.GET}/${id}`),
 
     getAll: () => Agent.get<Term[]>(`${API_ROUTES.TERMS.GET_ALL}`),
 
-    create: (term: Term) => Agent.post<Term>(`${API_ROUTES.TERMS.CREATE}`, term),
+    create: (term: TermCreate) => Agent.post<Term>(`${API_ROUTES.TERMS.CREATE}`, term),
 
     update: (term: Term) => Agent.put<Term>(`${API_ROUTES.TERMS.UPDATE}`, term),
 

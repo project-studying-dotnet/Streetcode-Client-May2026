@@ -1,35 +1,35 @@
-import './Partners.styles.scss';
+import "./Partners.styles.scss";
 
-import { observer } from 'mobx-react-lite';
-import React, { useEffect, useState } from 'react';
-import { DeleteOutlined, EditOutlined, StarOutlined } from '@ant-design/icons';
-import facebook from '@assets/images/partners/facebook.png';
-import instagram from '@assets/images/partners/instagram.png';
-import twitter from '@assets/images/partners/twitter.png';
-import youtube from '@assets/images/partners/youtube.png';
-import ImageStore from '@stores/image-store';
-import useMobx, { useModalContext } from '@stores/root-store';
+import { observer } from "mobx-react-lite";
+import React, { useEffect, useState } from "react";
+import { DeleteOutlined, EditOutlined, StarOutlined } from "@ant-design/icons";
+import facebook from "@assets/images/partners/facebook.png";
+import instagram from "@assets/images/partners/instagram.png";
+import twitter from "@assets/images/partners/twitter.png";
+import youtube from "@assets/images/partners/youtube.png";
+import AdminBar from "@features/AdminPage/AdminBar.component";
+import ImageStore from "@stores/image-store";
+import useMobx, { useModalContext } from "@stores/root-store";
 
-import { Button } from 'antd';
-import Table, { ColumnsType } from 'antd/es/table';
+import { Button } from "antd";
+import Table, { ColumnsType } from "antd/es/table";
 
-import PartnersApi from '@/app/api/partners/partners.api';
-import base64ToUrl from '@/app/common/utils/base64ToUrl.utility';
-import Image from '@/models/media/image.model';
-import Partner, { PartnerSourceLink } from '@/models/partners/partners.model';
+import PartnersApi from "@/app/api/partners/partners.api";
+import base64ToUrl from "@/app/common/utils/base64ToUrl.utility";
+import Image from "@/models/media/image.model";
+import Partner, { PartnerSourceLink } from "@/models/partners/partners.model";
 
-import PartnerModal from './PartnerModal/PartnerModal.component';
-import AdminBar from '../AdminBar.component';
+import PartnerModal from "./PartnerModal/PartnerModal.component";
 
 const LogoType = [twitter, instagram, facebook, youtube];
 
-const Partners:React.FC = observer(() => {
-    const { partnersStore } = useMobx();
+const Partners: React.FC = observer(() => {
+  const { partnersStore } = useMobx();
 
-    const { modalStore } = useModalContext();
-    const [modalAddOpened, setModalAddOpened] = useState<boolean>(false);
-    const [modalEditOpened, setModalEditOpened] = useState<boolean>(false);
-    const [partnerToEdit, setPartnerToedit] = useState<Partner>();
+  const { modalStore } = useModalContext();
+  const [modalAddOpened, setModalAddOpened] = useState<boolean>(false);
+  const [modalEditOpened, setModalEditOpened] = useState<boolean>(false);
+  const [partnerToEdit, setPartnerToedit] = useState<Partner>();
 
     const updatedPartners = () => {
         Promise.all([
