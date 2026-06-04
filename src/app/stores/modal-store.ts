@@ -35,29 +35,31 @@ interface ModalList {
   deleteStreetcode: ModalState;
   confirmation: ModalState;
   adminFacts: ModalState;
+  adminChronology: ModalState;
   statistics: ModalState;
 }
 
 export default class ModalStore {
-  public modalsState: ModalList = {
-    relatedFigures: DefaultModalState,
-    relatedFigureItem: DefaultModalState,
-    sources: DefaultModalState,
-    facts: DefaultModalState,
-    audio: DefaultModalState,
-    donates: DefaultModalState,
-    login: DefaultModalState,
-    artGallery: DefaultModalState,
-    partners: DefaultModalState,
-    tagsList: DefaultModalState,
-    addTerm: DefaultModalState,
-    editTerm: DefaultModalState,
-    deleteTerm: DefaultModalState,
-    deleteStreetcode: DefaultModalState,
-    confirmation: DefaultModalState,
-    adminFacts: DefaultModalState,
-    statistics: DefaultModalState,
-  };
+    public modalsState: ModalList = {
+        relatedFigures: DefaultModalState,
+        relatedFigureItem: DefaultModalState,
+        sources: DefaultModalState,
+        facts: DefaultModalState,
+        audio: DefaultModalState,
+        donates: DefaultModalState,
+        login: DefaultModalState,
+        artGallery: DefaultModalState,
+        partners: DefaultModalState,
+        tagsList: DefaultModalState,
+        addTerm: DefaultModalState,
+        editTerm: DefaultModalState,
+        deleteTerm: DefaultModalState,
+        deleteStreetcode: DefaultModalState,
+        confirmation: DefaultModalState,
+        adminFacts: DefaultModalState,
+        adminChronology: DefaultModalState,
+        statistics: DefaultModalState,
+    };
 
   public isPageDimmed = false;
 

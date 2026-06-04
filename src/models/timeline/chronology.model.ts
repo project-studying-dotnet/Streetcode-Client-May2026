@@ -24,6 +24,7 @@ export default interface TimelineItem {
     dateViewPattern:DateViewPattern,
     title: string;
     description?: string | undefined;
+    streetcodeId: number;
     historicalContexts: HistoricalContext[];
 }
 

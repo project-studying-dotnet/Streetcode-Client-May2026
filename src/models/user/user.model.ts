@@ -15,15 +15,18 @@ export interface UserLoginRequest {
 export interface UserLoginResponce {
     user:User;
     token:string;
+    refreshToken: string;
     expireAt:Date;
 }
 
 export interface RefreshTokenRequest {
     token:string;
+    refreshToken: string;
 }
 
 export interface RefreshTokenResponce {
     token:string;
+    refreshToken: string;
     expireAt:Date;
 }
 

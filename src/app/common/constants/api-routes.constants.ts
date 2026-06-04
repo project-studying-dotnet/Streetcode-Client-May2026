@@ -218,4 +218,8 @@ export const API_ROUTES = {
         UPDATE: 'statisticRecord/update',
         DELETE: 'statisticRecord/delete',
     },
+    ADMIN_AUTHORIZATION: {
+        LOGIN: 'auth/login',
+        REFRESH_TOKEN: 'auth/refresh-token',
+    },
 };
