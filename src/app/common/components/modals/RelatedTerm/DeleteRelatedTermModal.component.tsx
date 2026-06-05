@@ -30,7 +30,7 @@ const DeleteRelatedTermModal  : React.FC<Props> = ({
       footer={null}
     >
       <div className="term-modal">
-          <p>Ви впевнені, що хочете видалити цей пов'язаний терм?</p>
+          <p>Ви впевнені, що хочете видалити цей пов'язаний термін?</p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div className="modal-buttons">
             <Button className="cancel-button" onClick={onClose}>

@@ -8,7 +8,7 @@ export interface VideoCreateDTO {
   streetcodeId: number;
 }
 
-export interface TextCreateDTO {
+export interface TextCreateDto {
   title: string;
   textContent: string;
   streetcodeId: number;
