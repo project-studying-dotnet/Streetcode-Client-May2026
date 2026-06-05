@@ -30,7 +30,7 @@ const TextEditor: React.FC<Props> = ({
         Основний текст
       </label>
 
-      <section
+      <div
         id="main-text-editor"
         ref={editorRef}
         contentEditable
