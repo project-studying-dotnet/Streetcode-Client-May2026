@@ -14,20 +14,20 @@ import { TextVideoBlock } from '../../../models/streetcode/TextVideoBlock/TextVi
 
 import { PreviewText } from './components/previewModal/PreviewText';
 import TextEditor from './components/textEditor/TextEditor';
-import TermModal from './components/modals/TermModal.component';
-import DeleteTermModal from './components/modals/DeleteTermModal.component';
 
 import { replaceFirstTermOccurrence, removeTermTag } from './utils/relatedTerm.utils';
 import { getCleanTextLength } from './utils/htmlUtils';
 
-import './TextVideoBlockForm.styles.scss';
-
 import { Term } from '@/models/streetcode/text-contents.model';
+import DeleteRelatedTermModal from '@/app/common/components/modals/RelatedTerm/DeleteRelatedTermModal.component';
+import RelatedTermModal from '@/app/common/components/modals/RelatedTerm/RelatedTermModal.component';
+
+import './TextVideoBlockForm.styles.scss';
 
 const { TextArea } = Input;
 
 const TextVideoBlockForm: React.FC<Props> = ({
-  streetcodeId = 4,
+  streetcodeId,
 }) => {
   const DEFAULT_AUTHORSHIP =
     'Текст підготовлений спільно з';
@@ -292,7 +292,7 @@ const TextVideoBlockForm: React.FC<Props> = ({
 
           <Button
             type="primary"
-            className="add-button"
+            className="streetcode-red-button"
           >
             Додати новий термін
           </Button>
@@ -316,14 +316,14 @@ const TextVideoBlockForm: React.FC<Props> = ({
 
           <Button
             type="default"
-            className="connect-button"
+            className="streetcode-white-button connect-term-button"
             onClick={() => setShowTermModal(true)}
           >
             Пов'язати
           </Button>
 
           <Button
-            className="delete-button"
+            className="streetcode-white-button delete-term-button"
             icon={<TrashIcon />}
             onClick={() => {
               setShowDeleteTermModal(true)
@@ -382,7 +382,7 @@ const TextVideoBlockForm: React.FC<Props> = ({
       <div className="text-video-form__actions">
         <Button
           type="default"
-          className="show-text-button"
+          className="streetcode-white-button show-text-button"
           onClick={handleTogglePreview}
         >
           Переглянути текст
@@ -390,7 +390,7 @@ const TextVideoBlockForm: React.FC<Props> = ({
 
         <Button
           type="primary"
-          className="add-button"
+          className="streetcode-red-button"
           loading={loading}
           onClick={submit}
         >
@@ -410,13 +410,13 @@ const TextVideoBlockForm: React.FC<Props> = ({
           />
         )}
 
-      <TermModal
+      <RelatedTermModal
         open={showTermModal}
         onClose={() => setShowTermModal(false)}
         onConfirm={handleTermModalConfirm}
         initialValue={termInputValue}
       />
-      <DeleteTermModal
+      <DeleteRelatedTermModal
         open={showDeleteTermModal}
         onClose={() => setShowDeleteTermModal(false)}
         onConfirm={handleDeleteTermModalConfirm}

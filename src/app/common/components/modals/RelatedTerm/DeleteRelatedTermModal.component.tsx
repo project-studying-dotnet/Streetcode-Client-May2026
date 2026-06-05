@@ -1,8 +1,8 @@
 import React from 'react';
 import { Modal, Button } from 'antd';
+import CancelBtn from "@images/utils/Cancel_btn.svg";
 
-import '@features/AdminPage/AdminModal.styles.scss';
-import './TermModal.styles.scss';
+import "./DeleteRelatedTermModal.styles.scss";
 
 interface Props {
   open: boolean;
@@ -10,7 +10,7 @@ interface Props {
   onConfirm: () => void;
 }
 
-const DeleteTermModal: React.FC<Props> = ({
+const DeleteRelatedTermModal  : React.FC<Props> = ({
   open,
   onClose,
   onConfirm,
@@ -23,13 +23,14 @@ const DeleteTermModal: React.FC<Props> = ({
 
   return (
     <Modal
-      title="Ви впевнені, що хочете видалити цей тег?"
+       closeIcon={<CancelBtn />}
       open={open}
       onCancel={onClose}
       className="modalContainer"
       footer={null}
     >
       <div className="term-modal">
+          <p>Ви впевнені, що хочете видалити цей пов'язаний терм?</p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div className="modal-buttons">
             <Button className="cancel-button" onClick={onClose}>
@@ -46,4 +47,4 @@ const DeleteTermModal: React.FC<Props> = ({
   );
 };
 
-export default DeleteTermModal;
+export default DeleteRelatedTermModal;

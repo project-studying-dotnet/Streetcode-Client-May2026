@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Input, Button, Select } from 'antd';
+import { Modal, Button, Select } from 'antd';
 import TermsApi from '@api/streetcode/text-content/terms.api';
 import { Term } from '@models/streetcode/text-contents.model';
+import CancelBtn from "@images/utils/Cancel_btn.svg";
 
-import '@features/AdminPage/AdminModal.styles.scss';
-import './TermModal.styles.scss';
+import './RelatedTermModal.styles.scss';
 
 interface Props {
   open: boolean;
@@ -13,15 +13,13 @@ interface Props {
   initialValue?: string;
 }
 
-const TermModal: React.FC<Props> = ({ open, onClose, onConfirm, initialValue = '' }) => {
+const RelatedTermModal: React.FC<Props> = ({ open, onClose, onConfirm, initialValue = '' }) => {
   const [terms, setTerms] = useState<Term[]>([]);
- 
-  const [word, setWord] = useState(initialValue);
+
   const [selectedTerm, setSelectedTerm] = useState<Term | null>(null);
 
   useEffect(() => {
     if (open) {
-      setWord(initialValue);
       setSelectedTerm(null);
       TermsApi.getAll().then((data) => setTerms(data ?? [])).catch(console.error);
     }
@@ -32,27 +30,26 @@ const TermModal: React.FC<Props> = ({ open, onClose, onConfirm, initialValue = '
       onClose();
       return;
     }
-    onConfirm(word, selectedTerm);
+    onConfirm(initialValue, selectedTerm);
     onClose();
   };
 
   return (
     <Modal
-      title="Оберіть термін"
+    closeIcon={<CancelBtn />}
       open={open}
       onCancel={onClose}
-      className="modalContainer" 
+      className="modalContainer"
       footer={null}
     >
       <div className="term-modal">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          
-          <Input
-            placeholder="Введіть слово"
-            value={word}
-            onChange={(e) => setWord(e.target.value)}
-          />
-
+          <p>
+            {initialValue
+              ? <>Пов'язати термін <b>"{initialValue}"</b>?</>
+              : <>Пов'язати термін?</>
+            }
+          </p>
           <Select
             showSearch
             placeholder="Виберіть термін з бази"
@@ -77,4 +74,4 @@ const TermModal: React.FC<Props> = ({ open, onClose, onConfirm, initialValue = '
   );
 };
 
-export default TermModal;
+export default RelatedTermModal;

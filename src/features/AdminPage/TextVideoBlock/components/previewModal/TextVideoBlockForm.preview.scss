@@ -26,17 +26,21 @@
     &__preview-author {
         display: flex;
         justify-content: flex-end;
+        align-items: center; 
         margin-top: 20px;
         font-size: 14px;
         color: c.$text-light-gray-color;
 
-        a {
-            color: c.$dark-red-color !important;
-            text-decoration: underline;
+        & > a {
+            display: inline-block;
+            color: c.$dark-red-color ;
+            text-decoration: underline !important;
             margin-left: 4px;
+            cursor: pointer;
 
             &:hover {
-                text-decoration: none;
+                text-decoration: none !important;
+                color: c.$dark-red-color;
             }
         }
     }

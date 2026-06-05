@@ -24,7 +24,7 @@ const TextEditor: React.FC<Props> = ({
 }) => {
 
   return (
-    <div className="text-video-form__group mb-17">
+    <div className="text-video-form__group">
       <label className="text-video-form__label"
         htmlFor="main-text-label">
         Основний текст
@@ -38,6 +38,8 @@ const TextEditor: React.FC<Props> = ({
         className="text-video-form__editor"
         aria-labelledby="main-text-label"
         onInput={onEditorChange}
+        onMouseUp={onTextSelection}
+        onKeyUp={onTextSelection}
       />
 
       {showToolbar && (

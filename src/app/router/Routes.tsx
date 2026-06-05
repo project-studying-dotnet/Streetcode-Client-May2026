@@ -19,6 +19,7 @@ import StreetcodeCreate from '@/features/AdminPage/StreetcodesPage/StreetcodeCre
 import Streetcodes from '@/features/AdminPage/StreetcodesPage/Streetcodes.component';
 import TeamPage from '@/features/AdminPage/TeamPage/TeamPage.component';
 import StreetcodeCatalog from '@/features/StreetcodeCatalogPage/StreetcodeCatalog.component';
+import StreetcodeEditor from '@/features/AdminPage/StreetcodesPage/StreetcodeEditor.component';
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<App />}>
@@ -29,7 +30,7 @@ const router = createBrowserRouter(createRoutesFromElements(
             <Route path={`${FRONTEND_ROUTES.ADMIN.EDIT_STREETCODE}/:streetcodeId`} element={<EditStreetcodePage />} />
             <Route path={`${FRONTEND_ROUTES.ADMIN.BASE}/:id`} element={<StreetcodeContent />} />
             <Route path={FRONTEND_ROUTES.ADMIN.STREETCODES} element={<Streetcodes />} />
-            <Route path={FRONTEND_ROUTES.ADMIN.NEW_STREETCODE} element={<StreetcodeCreate />} />
+            <Route path={FRONTEND_ROUTES.ADMIN.NEW_STREETCODE} element={<StreetcodeEditor />} />
             <Route path={`${FRONTEND_ROUTES.ADMIN.EDIT_STREETCODE}/:id`} element={<StreetcodeCreate />} />
             <Route path={FRONTEND_ROUTES.ADMIN.FOR_FANS} element={<ForFansMainPage />} />
             <Route path={FRONTEND_ROUTES.ADMIN.PARTNERS} element={<Partners />} />
