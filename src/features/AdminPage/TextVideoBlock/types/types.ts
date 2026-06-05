@@ -2,7 +2,7 @@ export interface Props {
   streetcodeId: number;
 }
 
-export interface VideoCreateDTO {
+export interface VideoCreateDto {
   title: string;
   url: string;
   streetcodeId: number;
