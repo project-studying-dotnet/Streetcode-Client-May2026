@@ -37,6 +37,11 @@ const TextEditor: React.FC<Props> = ({
         suppressContentEditableWarning
         className="text-video-form__editor"
         aria-labelledby="main-text-label"
+
+        role="textbox"
+        aria-multiline="true"
+        tabIndex={0}
+
         onInput={onEditorChange}
         onMouseUp={onTextSelection}
         onKeyUp={onTextSelection}
