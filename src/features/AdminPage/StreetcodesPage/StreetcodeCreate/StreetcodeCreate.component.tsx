@@ -131,6 +131,12 @@ const StreetcodeCreate: React.FC = observer(() => {
         date: 'date',
         month: 'month',
     };
+    const getPlainTextPreview = (html = '', limit = 300) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    return (doc.body.textContent ?? '').trim().slice(0, limit);
+    };
 
     return (
         <div className="streetcode-create-page">
@@ -353,7 +359,7 @@ const StreetcodeCreate: React.FC = observer(() => {
                     <div className="streetcode-create-page__forFans__list">
                         {forFansItems.map((item, index) => (
                             <Card key={`${item.sourceLinkCategoryId}-${index}`}>
-                                <p>{item.text?.replace(/<[^>]*>/g, '').slice(0, 300)}</p>
+                                <p>{getPlainTextPreview(item.text)}</p>
                             </Card>
                         ))}
                     </div>

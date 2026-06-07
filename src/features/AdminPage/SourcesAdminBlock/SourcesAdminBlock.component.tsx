@@ -17,14 +17,18 @@ import SourcesAdminModal from './SourcesAdminModal.component';
 
 interface Props {
     streetcodeId: number;
-}
+}   
 
 type SourceCategoryWithText = SourceCategory & {
     text?: string;
 };
 
 const getPreviewText = (html = '', wordsLimit = 100) => {
-    const text = html.replace(/<[^>]*>/g, '').trim();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    const text = doc.body.textContent?.trim() ?? '';
+
     const words = text.split(/\s+/).filter(Boolean);
 
     return words.length > wordsLimit
