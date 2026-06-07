@@ -70,16 +70,12 @@
     cursor: pointer;
     padding: 0;
 
+    transition: 0.4s ease;
+
     &::before {
         display: block;
         width: 40px;
         height: 58px;
-    }
-}
-.sourcesSliderArrow {
-    transition: 0.4s ease;
-
-    &::before {
         transition: 0.4s ease;
     }
 

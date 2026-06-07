@@ -132,48 +132,56 @@ const SourcesAdminBlock = ({ streetcodeId }: Props) => {
         }
     };
 
+    let content: React.ReactNode;
+
+    if (loading) {
+        content = <Spin />;
+    } else if (items.length === 0) {
+        content = <Empty description="Немає блоків" />;
+    } else {
+        content = (
+            <div className="sourcesAdminList">
+                {items.map((item) => (
+                    <Card key={item.id} className="sourcesAdminCard">
+                        <div className="sourcesAdminContent">
+                            <h3>{item.title}</h3>
+
+                            <p className="sourcesAdminPreview">
+                                {getPreviewText(item.text)}
+                            </p>
+                        </div>
+
+                        <div className="sourcesAdminActions">
+                            <Button
+                                icon={<EditOutlined />}
+                                onClick={() => handleEdit(item.id)}
+                            />
+
+                            <Button
+                                danger
+                                icon={<DeleteOutlined />}
+                                onClick={() => handleDelete(item.id)}
+                            />
+                        </div>
+                    </Card>
+                ))}
+            </div>
+        );
+    }
+
     return (
         <section className="sourcesAdminBlock">
-            <header className="sourcesAdminHeader">
-                <h2>Для фанатів</h2>
-                <Button
-                    icon={<PlusOutlined />}
-                    className="streetcode-custom-button sourcesAdminAddButton"
-                    onClick={handleCreate}
-                />
-            </header>
+        <header className="sourcesAdminHeader">
+            <h2>Для фанатів</h2>
 
-            {loading ? (
-                <Spin />
-            ) : items.length === 0 ? (
-                <Empty description="Немає блоків" />
-            ) : (
-                <div className="sourcesAdminList">
-                    {items.map((item) => (
-                        <Card key={item.id} className="sourcesAdminCard">
-                            <div className="sourcesAdminContent">
-                                <h3>{item.title}</h3>
+            <Button
+                icon={<PlusOutlined />}
+                className="streetcode-custom-button sourcesAdminAddButton"
+                onClick={handleCreate}
+            />
+        </header>
 
-                                <p className="sourcesAdminPreview">
-                                    {getPreviewText(item.text)}
-                                </p>
-                            </div>
-
-                            <div className="sourcesAdminActions">
-                                <Button
-                                    icon={<EditOutlined />}
-                                    onClick={() => handleEdit(item.id)}
-                                />
-                                <Button
-                                    danger
-                                    icon={<DeleteOutlined />}
-                                    onClick={() => handleDelete(item.id)}
-                                />
-                            </div>
-                        </Card>
-                    ))}
-                </div>
-            )}
+        {content}
 
             <SourcesAdminModal
                 open={modalOpen}

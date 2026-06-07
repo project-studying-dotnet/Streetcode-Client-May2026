@@ -23,7 +23,7 @@ const convertImageToGrayscaleDataUrl = (file: RcFile): Promise<string> => new Pr
     const reader = new FileReader();
 
     reader.onload = () => {
-        const img = new window.Image();
+        const img = new globalThis.Image();
 
         img.onload = () => {
             const canvas = document.createElement('canvas');

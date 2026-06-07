@@ -83,11 +83,11 @@ const SourceItem = ({ srcCategory }: Props) => {
 
     useEffect(() => {
         if (imageId.current) {
-            Promise.all([ImagesApi.getById(imageId.current)])
-                .then((r) => setImage(r.at(0)));
+            ImagesApi.getById(imageId.current)
+                .then((image) => setImage(image));
         }
     }, []);
-
+    
     return (
         <div
             className="sourcesSliderItem"
