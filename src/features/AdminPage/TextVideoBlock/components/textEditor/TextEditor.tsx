@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 type FormatCommand = 'bold' | 'italic';
 
@@ -22,26 +22,43 @@ const TextEditor: React.FC<Props> = ({
   onTextSelection,
   onApplyFormatting,
 }) => {
+  useEffect(() => {
+    const el = editorRef.current;
+    if (!el) return;
+
+    el.contentEditable = 'true';
+
+    const handleInput = () => onEditorChange();
+    const handleSelection = () => onTextSelection();
+
+    el.addEventListener('input', handleInput);
+    el.addEventListener('mouseup', handleSelection);
+    el.addEventListener('keyup', handleSelection);
+
+    return () => {
+      el.removeEventListener('input', handleInput);
+      el.removeEventListener('mouseup', handleSelection);
+      el.removeEventListener('keyup', handleSelection);
+    };
+  }, [editorRef, onEditorChange, onTextSelection]);
 
   return (
     <div className="text-video-form__group">
-      <label className="text-video-form__label"
-        htmlFor="main-text-label">
+      <label
+        className="text-video-form__label"
+        htmlFor="main-text-label"
+      >
         Основний текст
       </label>
 
-      <div
-        id="main-text-editor"
-        ref={editorRef}
-        contentEditable
-        suppressContentEditableWarning
-        className="text-video-form__editor"
-        aria-labelledby="main-text-label"
-        tabIndex={0}
-        onInput={onEditorChange}
-        onMouseUp={onTextSelection}
-        onKeyUp={onTextSelection}
-      />
+      <div className="text-video-form__editor-wrapper">
+        <div
+          id="main-text-editor"
+          ref={editorRef}
+          className="text-video-form__editor"
+          aria-labelledby="main-text-label"
+        />
+      </div>
 
       {showToolbar && (
         <div
@@ -52,8 +69,9 @@ const TextEditor: React.FC<Props> = ({
           }}
         >
           <button
-            className={`toolbar-btn toolbar-btn--bold ${activeFormats.bold ? 'active' : ''
-              }`}
+            className={`toolbar-btn toolbar-btn--bold ${
+              activeFormats.bold ? 'active' : ''
+            }`}
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => onApplyFormatting('bold')}
           >
@@ -61,8 +79,9 @@ const TextEditor: React.FC<Props> = ({
           </button>
 
           <button
-            className={`toolbar-btn toolbar-btn--italic ${activeFormats.italic ? 'active' : ''
-              }`}
+            className={`toolbar-btn toolbar-btn--italic ${
+              activeFormats.italic ? 'active' : ''
+            }`}
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => onApplyFormatting('italic')}
           >
