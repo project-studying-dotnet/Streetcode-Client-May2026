@@ -127,9 +127,12 @@
       min-height: 160px !important;
       resize: none;
       padding: 12px;
+        padding-bottom: 28px;
     }
   }
-
+.ant-input-textarea-show-count.ant-input-affix-wrapper .ant-input-data-count {
+  bottom: -32px !important;
+}
 
   &__input-wrapper {
     display: flex;

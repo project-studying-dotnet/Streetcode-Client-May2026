@@ -1,4 +1,4 @@
-import { TextVideoBlock } from '../../../../models/streetcode/TextVideoBlock/TextVideoBlock';
+import { TextVideoBlock } from '../../../../models/streetcode/text-video-block/text-video-block';
 
   export const isYoutubeLink = (url: string) => {
     const value = url.trim();

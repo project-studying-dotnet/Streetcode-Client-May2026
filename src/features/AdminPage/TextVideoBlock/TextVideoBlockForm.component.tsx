@@ -2,23 +2,24 @@ import React, { useMemo, useRef, useState } from 'react';
 import { Form, Input, Button } from 'antd';
 import type { InputRef } from 'antd';
 
-import { Props } from './types/types';
-import { isYoutubeLink } from './utils/validation';
-
 import RelatedTermApi from '@api/streetcode/text-content/related-terms.api';
-import { useTextEditor } from './hooks/useTextEditor';
-import { useTextVideoSubmit } from './hooks/useTextVideoSubmit';
-
-import { TrashIcon } from '../../../assets/images/icons/TrashIcon';
-import { TextVideoBlock } from '../../../models/streetcode/TextVideoBlock/TextVideoBlock';
-
-import { PreviewText } from './components/previewModal/PreviewText';
-import TextEditor from './components/textEditor/TextEditor';
-
-import { replaceFirstTermOccurrence, removeTermTag } from './utils/relatedTerm.utils';
-import { getCleanTextLength } from './utils/htmlUtils';
-
 import { Term } from '@/models/streetcode/text-contents.model';
+
+import { TextVideoBlockFormProps } from '@models/streetcode/text-video-block/text-video-block';
+import { isYoutubeLink } from '@/app/common/utils/text-video-block/validation';
+import {
+  replaceFirstTermOccurrence,
+  removeTermTag,
+} from '@/app/common/utils/text-video-block/relatedTerm.utils';
+import { getCleanTextLength } from '@/app/common/utils/text-video-block/htmlUtils';
+import { useTextEditor } from '@features/AdminPage/TextVideoBlock/hooks/useTextEditor';
+import { useTextVideoSubmit } from '@features/AdminPage/TextVideoBlock/hooks/useTextVideoSubmit';
+
+import { TrashIcon } from '@images/icons/TrashIcon';
+import { TextVideoBlock } from '@/models/streetcode/text-video-block/text-video-block';
+
+import { PreviewText } from '@features/AdminPage/TextVideoBlock/components/previewModal/PreviewText';
+import TextEditor from '@features/AdminPage/TextVideoBlock/components/textEditor/TextEditor';
 import DeleteRelatedTermModal from '@/app/common/components/modals/RelatedTerm/DeleteRelatedTermModal.component';
 import RelatedTermModal from '@/app/common/components/modals/RelatedTerm/RelatedTermModal.component';
 
@@ -26,7 +27,7 @@ import './TextVideoBlockForm.styles.scss';
 
 const { TextArea } = Input;
 
-const TextVideoBlockForm: React.FC<Props> = ({
+const TextVideoBlockForm: React.FC<TextVideoBlockFormProps> = ({
   streetcodeId,
 }) => {
   const DEFAULT_AUTHORSHIP =
@@ -337,6 +338,7 @@ const TextVideoBlockForm: React.FC<Props> = ({
           id="authorship-textarea"
           value={formData.additionalText}
           maxLength={200}
+          showCount
           autoSize={{
             minRows: 6,
             maxRows: 12,
@@ -349,11 +351,6 @@ const TextVideoBlockForm: React.FC<Props> = ({
             )
           }
         />
-        <div className="text-video-form__meta">
-          <div className="text-video-form__counter">
-            {formData.additionalText?.length ?? 0}/200
-          </div>
-        </div>
       </Form.Item>
 
       <Form.Item label="Відео"

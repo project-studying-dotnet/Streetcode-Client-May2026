@@ -1,4 +1,4 @@
-import { VideoCreateDto } from '@/features/AdminPage/TextVideoBlock/types/types';
+import { VideoCreateDto } from '@/models/media/video.model';
 import Agent from '@api/agent.api';
 import { API_ROUTES } from '@constants/api-routes.constants';
 import Video from '@models/media/video.model';

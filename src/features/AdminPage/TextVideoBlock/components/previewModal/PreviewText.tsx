@@ -1,7 +1,7 @@
 import React from 'react';
 import DOMPurify from 'dompurify';
-import { TextVideoBlock } from '../../../../../models/streetcode/TextVideoBlock/TextVideoBlock';
-import { isYoutubeLink } from '../../utils/validation';
+import { TextVideoBlock } from '@/models/streetcode/text-video-block/text-video-block';
+import { isYoutubeLink } from '@/app/common/utils/text-video-block/validation';
 
 interface Props {
     open: boolean;

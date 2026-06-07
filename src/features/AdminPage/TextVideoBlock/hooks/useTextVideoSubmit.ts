@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import TextsApi from '@api/streetcode/text-content/texts.api';
 import VideosApi from '@api/media/videos.api';
-import { validateForm } from '../utils/validation';
+import { validateForm } from '../../../../app/common/utils/text-video-block/validation';
 import { TextCreateDTO, VideoCreateDTO } from '../types/types';
-import { extractApiError } from '../utils/extractApiError';
-import { sanitizeEditorHtml } from '../utils/htmlUtils';
+import { extractApiError } from '../../../../app/common/utils/text-video-block/extractApiError';
+import { sanitizeEditorHtml } from '../../../../app/common/utils/text-video-block/htmlUtils';
 
 type Params = {
   formData: any;

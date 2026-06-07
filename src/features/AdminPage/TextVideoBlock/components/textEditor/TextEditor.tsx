@@ -30,7 +30,6 @@ const TextEditor: React.FC<Props> = ({
         Основний текст
       </label>
 
-{/* eslint-disable-next-line jsx-a11y/no-interactive-element-to-noninteractive-role */}
       <div
         id="main-text-editor"
         ref={editorRef}
@@ -38,11 +37,7 @@ const TextEditor: React.FC<Props> = ({
         suppressContentEditableWarning
         className="text-video-form__editor"
         aria-labelledby="main-text-label"
-
-        role="textbox"
-        aria-multiline="true"
         tabIndex={0}
-
         onInput={onEditorChange}
         onMouseUp={onTextSelection}
         onKeyUp={onTextSelection}
