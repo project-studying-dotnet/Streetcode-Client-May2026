@@ -42,6 +42,10 @@ export interface RelatedTerm {
   word: string;
   termId: number;
 }
+export interface CreateRelatedTerm {
+  word: string;
+  termId: number;
+}
 
 export interface Text {
   id: number;
