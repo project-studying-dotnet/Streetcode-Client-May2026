@@ -97,15 +97,20 @@ export const API_ROUTES = {
         UPDATE: 'toponym/update',
         DELETE: 'toponym/delete',
     },
-    SOURCES: {
-        GET_ALL_CATEGORIES_NAMES: 'sources/getAllNames',
-        GET_ALL_CATEGORIES: 'sources/getAllCategories',
-        GET: 'sources/getCategoryById',
-        GET_CATEGORIES_BY_STREETCODE_ID: 'sources/getCategoriesByStreetcodeId',
-        GET_CONTENT_BY_STREETCODE_ID: 'sources/getCategoryContentByStreetcodeId',
-        CREATE: 'sources/createCategory',
-        UPDATE: 'sources/updateCategory',
-        DELETE: 'sources/deleteCategory',
+        SOURCES: {
+        GET_ALL_CATEGORIES_NAMES: 'Sources/GetAllNames/names',
+        GET_ALL_CATEGORIES: 'Sources/GetAllCategories/categories',
+        GET_CATEGORY_BY_ID: 'Sources/GetCategoryById/category',
+        GET_CATEGORIES_BY_STREETCODE_ID: 'Sources/GetCategoriesByStreetcodeId/streetcode',
+        GET_CONTENT_BY_STREETCODE_ID: 'Sources/GetCategoryContentByStreetcodeId/category-content',
+
+        CREATE_CATEGORY: 'Sources/CreateCategory/category',
+        UPDATE_CATEGORY: 'Sources/UpdateCategory/category',
+        DELETE_CATEGORY: 'Sources/DeleteCategory/category',
+
+        CREATE: 'Sources/Create',
+        UPDATE: 'Sources/Update',
+        DELETE: 'Sources/Delete',
     },
     TRANSACTION_LINKS: {
         GET_ALL: 'transactLinks/getAll',

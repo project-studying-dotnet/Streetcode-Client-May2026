@@ -9,8 +9,8 @@ import useMobx from '@stores/root-store';
 import { Button, Form, Input, Modal } from 'antd';
 
 interface AddSourceModalProps {
-  isAddModalVisible: boolean;
-  handleAddCancel: () => void;
+    isAddModalVisible: boolean;
+    handleAddCancel: () => void;
 }
 
 const AddSourceModal: React.FC<AddSourceModalProps> = ({
@@ -25,22 +25,31 @@ const AddSourceModal: React.FC<AddSourceModalProps> = ({
     useAsync(() => sourcesAdminStore.fetchSourceCategories(), []);
 
     async function onSubmit(formData: any) {
-        handleAddCancel();
         const newSource: SourceCategoryAdmin = {
-            id: 0,
             title: formData.title,
             imageId: imageId.current,
-            image,
         };
+
         await sourcesAdminStore.addSourceCategory(newSource);
+
+        imageId.current = 0;
+        setImage(undefined);
         form.resetFields();
+        handleAddCancel();
     }
+
+    const handleCancel = () => {
+        imageId.current = 0;
+        setImage(undefined);
+        form.resetFields();
+        handleAddCancel();
+    };
 
     return (
         <Modal
             title="Додати категорію"
             open={isAddModalVisible}
-            onCancel={handleAddCancel}
+            onCancel={handleCancel}
             footer={null}
         >
             <Form form={form} layout="vertical" onFinish={onSubmit}>
@@ -51,32 +60,39 @@ const AddSourceModal: React.FC<AddSourceModalProps> = ({
                 >
                     <Input placeholder="Title" />
                 </Form.Item>
+
                 <Form.Item
                     name="image"
                     label="Картинка: "
                     rules={[{ required: true, message: 'Додайте зображення' }]}
                 >
-                <FileUploader
-                    multiple={false}
-                    accept=".jpeg,.png,.jpg"
-                    listType="picture-card"
-                    maxCount={1}
-                    uploadTo="image"
-                    onSuccessUpload={(value) => {
-                        const uploadedImage = value as Image;
-                        imageId.current = uploadedImage.id;
-                        setImage(uploadedImage);
-                    }}
-                    onRemove={() => {
-                        ImagesApi.delete(imageId.current);
-                    }}
-                >
-                    <p>Виберіть чи перетягніть файл</p>
-                </FileUploader>
+                    <FileUploader
+                        multiple={false}
+                        accept=".jpeg,.png,.jpg"
+                        listType="picture-card"
+                        maxCount={1}
+                        uploadTo="image"
+                        onSuccessUpload={(value) => {
+                            const uploadedImage = value as Image;
+                            imageId.current = uploadedImage.id;
+                            setImage(uploadedImage);
+                        }}
+                        onRemove={() => {
+                            if (imageId.current) {
+                                ImagesApi.delete(imageId.current);
+                            }
+
+                            imageId.current = 0;
+                            setImage(undefined);
+                        }}
+                    >
+                        <p>Виберіть чи перетягніть файл</p>
+                    </FileUploader>
                 </Form.Item>
+
                 <div className="center">
                     <Button className="streetcode-custom-button" onClick={() => form.submit()}>
-            Зберегти
+                        Зберегти
                     </Button>
                 </div>
             </Form>
