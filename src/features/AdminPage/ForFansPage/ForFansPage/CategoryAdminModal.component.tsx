@@ -56,21 +56,23 @@ const AddSourceModal: React.FC<AddSourceModalProps> = ({
                     label="Картинка: "
                     rules={[{ required: true, message: 'Додайте зображення' }]}
                 >
-                    <FileUploader
-                        multiple={false}
-                        accept=".jpeg,.png,.jpg"
-                        listType="picture-card"
-                        maxCount={1}
-                        onSuccessUpload={(img: Image) => {
-                            imageId.current = img.id;
-                            setImage(img);
-                        }}
-                        onRemove={() => {
-                            ImagesApi.delete(imageId.current);
-                        }}
-                    >
-                        <p>Виберіть чи перетягніть файл</p>
-                    </FileUploader>
+                <FileUploader
+                    multiple={false}
+                    accept=".jpeg,.png,.jpg"
+                    listType="picture-card"
+                    maxCount={1}
+                    uploadTo="image"
+                    onSuccessUpload={(value) => {
+                        const uploadedImage = value as Image;
+                        imageId.current = uploadedImage.id;
+                        setImage(uploadedImage);
+                    }}
+                    onRemove={() => {
+                        ImagesApi.delete(imageId.current);
+                    }}
+                >
+                    <p>Виберіть чи перетягніть файл</p>
+                </FileUploader>
                 </Form.Item>
                 <div className="center">
                     <Button className="streetcode-custom-button" onClick={() => form.submit()}>
