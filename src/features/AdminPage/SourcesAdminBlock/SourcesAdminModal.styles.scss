@@ -1,0 +1,59 @@
+.sourcesAdminModal {
+    .ant-modal-content {
+        padding: 32px 48px 28px;
+    }
+
+    .ant-modal-close {
+        top: 20px;
+        right: 20px;
+    }
+
+    .ant-form-item {
+        margin-bottom: 22px;
+    }
+
+    .ant-form-item-label > label {
+        font-size: 15px;
+    }
+
+    .ant-select-selector {
+        border-radius: 6px;
+    }
+
+    .tox-tinymce {
+        border-radius: 6px;
+    }
+}
+
+.sourcesAdminModalTitle {
+    margin-bottom: 28px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 400;
+}
+
+.sourcesAdminSymbolsCounter {
+    margin-top: 4px;
+    text-align: right;
+    color: #999;
+    font-size: 12px;
+}
+
+.sourcesAdminModalSaveBtn {
+    display: block;
+    min-width: 140px;
+    height: 36px;
+    margin: 0 auto;
+    border: none;
+    border-radius: 18px;
+    background-color: #c62828;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+
+    &:hover,
+    &:focus {
+        background-color: #c9322a;
+        color: #fff;
+    }
+}

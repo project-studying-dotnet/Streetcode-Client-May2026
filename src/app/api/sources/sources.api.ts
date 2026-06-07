@@ -24,11 +24,9 @@ const SourcesApi = {
         `${API_ROUTES.SOURCES.GET_CATEGORIES_BY_STREETCODE_ID}/${streetcodeId}`,
     ),
 
-    getCategoryContentByStreetcodeId: (
-        categoryId: number,
-        streetcodeId: number,
-    ) => Agent.get<StreetcodeCategoryContent>(
-        `${API_ROUTES.SOURCES.GET_CONTENT_BY_STREETCODE_ID}/${categoryId}/${streetcodeId}`,
+    getCategoryContentByStreetcodeId: (streetcodeId: number, categoryId: number) =>
+        Agent.get<StreetcodeCategoryContent>(
+            `${API_ROUTES.SOURCES.GET_CONTENT_BY_STREETCODE_ID}/${categoryId}/${streetcodeId}`,
     ),
 
     createCategory: (source: SourceCategoryAdmin) => Agent.post<SourceCategoryAdmin>(
@@ -45,19 +43,20 @@ const SourcesApi = {
         `${API_ROUTES.SOURCES.DELETE_CATEGORY}/${id}`,
     ),
 
-    createContent: (content: StreetcodeCategoryContent) => Agent.post<StreetcodeCategoryContent>(
-        API_ROUTES.SOURCES.CREATE,
-        { categoryContent: content },
-    ),
+    createContent: (content: StreetcodeCategoryContent) =>
+        Agent.post<StreetcodeCategoryContent>(
+            API_ROUTES.SOURCES.CREATE,
+            content,
+        ),
 
-    updateContent: (content: StreetcodeCategoryContent) => Agent.put<StreetcodeCategoryContent>(
-        API_ROUTES.SOURCES.UPDATE,
-        { categoryContent: content },
-    ),
+    updateContent: (content: StreetcodeCategoryContent) =>
+        Agent.put<StreetcodeCategoryContent>(
+            API_ROUTES.SOURCES.UPDATE,
+            content,
+        ),
 
-    deleteContent: (streetcodeId: number, categoryId: number) => Agent.delete(
-        `${API_ROUTES.SOURCES.DELETE}/${streetcodeId}/${categoryId}`,
-    ),
+    deleteContent: (streetcodeId: number, categoryId: number) =>
+        Agent.delete(`${API_ROUTES.SOURCES.DELETE}/${streetcodeId}/${categoryId}`),
 };
 
 export default SourcesApi;

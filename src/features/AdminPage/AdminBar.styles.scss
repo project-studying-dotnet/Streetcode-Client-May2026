@@ -20,5 +20,9 @@
             outline: none;
             box-shadow: none;
         }
+         &.active {
+        color: #E04031;
+        font-weight: 500;
+    }    
     }
 }

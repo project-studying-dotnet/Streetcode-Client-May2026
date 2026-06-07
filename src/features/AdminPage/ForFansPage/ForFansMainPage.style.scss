@@ -4,30 +4,38 @@
 @use "@sass/_utils.functions.scss" as f;
 $articlesImg: "@assets/images/sources/Articles.png";
 
- .MainForFansContainer {
-     @include mut.sized(80%);
-
-      margin-top: f.pxToRem(100px);
-      margin-right: f.pxToRem(50px);
-      float: right;
-      h1 {
-         color: white;
-         font-weight: 500;
-       }
- }
 .ForFansPageContainer {
-  padding-top: 6.25rem;
-  display: flex;
-  gap: 0.625rem;
+    padding: 120px 32px 48px;
 }
-.forFansPage{
-  max-width: 100%;
-  width: 80vw;
+
+.MainForFansContainer {
+    width: 100%;
+    margin-top: 48px;
 }
+
+.forFansPage {
+    width: 100%;
+}
+
+.forFansHeader {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 32px;
+}
+
+.forFansAddButton {
+    min-width: 240px;
+    height: 48px;
+}
+
+.forFansGrid {
+    display: flex;
+    gap: 48px;
+    flex-wrap: wrap;
+}
+
 .sourceActions {
-  display: flex;
-  justify-content: space-around;
-  gap: 5px;
-  margin-left: 5px;
-  z-index: 2;
+    display: flex;
+    gap: 6px;
+    margin-left: 8px;
 }

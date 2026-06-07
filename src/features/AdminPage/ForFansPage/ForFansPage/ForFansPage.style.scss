@@ -6,94 +6,69 @@
 $bookImg: "@assets/images/sources/Books_stretched.png";
 $articlesImg: "@assets/images/sources/Articles.png";
 
-.ForFansContainer {
-    @include mut.sized(80%);
-   
-     margin-top: f.pxToRem(85px);
-     margin-right: f.pxToRem(50px);
-     h1 {
-        color: white;
-        font-weight: 500;
-      }
+.forFansPage {
+    width: 100%;
+    padding: 0 32px;
+}
+
+.forFansHeader {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 40px;
+}
+
+.forFansAddButton {
+    min-width: 240px;
+    height: 48px;
+
+    border-radius: 12px !important;
+
+    background-color: c.$accented-red-color !important;
+    border-color: c.$accented-red-color !important;
+    color: c.$pure-white-color !important;
+
+    font-size: 16px;
+    font-weight: 500;
+
+    &:hover {
+        background-color: c.$dark-red-color !important;
+        border-color: c.$dark-red-color !important;
+    }
+}
+
+.forFansGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 340px));
+    justify-content: center;
+    gap: 48px 64px;
+}
+
+.sourcesSliderItem {
+    width: 340px;
+    height: 190px;
 }
 
 .actionButton {
-  margin-right: 8px;
+    margin-right: 8px;
 
-  &:hover {
-      color: c.$dark-red-color;
-      cursor: pointer;
-      scale: 1.2;
-  }
+    &:hover {
+        color: c.$dark-red-color;
+        cursor: pointer;
+        scale: 1.2;
+    }
 }
 
-.addButton {
-  @include mut.sized(142px, 39px);
-  @include mut.flex-centered();
-  @include mut.full-rounded(12px);
-  @include mut.with-font($font-weight: 400, $font-size: 16px);
-
-  margin: 10px;
-
-  background-color: c.$accented-red-color;
-  border-color: c.$accented-red-color;
-  color: c.$pure-white-color;
-
-  &:hover {
-      background-color: c.$dark-red-color;
-  }
-}
-.forFansPage{
-  .modal {
+.modal {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #fff;
+
+    background: white;
     padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
+
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+
     z-index: 1000;
-  }
-  
-  .modal form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .modal label {
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  .modal input {
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    border: none;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
-  }
-  
-  .modal button {
-    padding: 10px;
-    border-radius: 5px;
-    border: none;
-    background-color: #3f51b5;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 10px;
-  }
-  
-  .modal button:hover {
-    background-color: #303f9f;
-  }
-  
-  .modal button:focus {
-    outline: none;
-  }
-  
-  .modal button:last-child {
-    margin-left: 10px;
-  }
 }

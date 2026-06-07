@@ -11,70 +11,95 @@
     .sourcesContainer {
         @include mut.sizedImportant(100%, 100%);
 
-        @media screen and (max-width: 768px) {
-            justify-content: stretch !important;
-        }
-        .sourceContentContainer {
-            @include mut.flex-centered();
-            margin-top: pxToRem(24px);
-            .slick-slide {
-                .slider-item-container {
-                    .left, .right {
-                        display: none;
-                    }
-                }
-            }
-        }
-
         > .blockHeadingWrapper {
             margin-top: pxToRem(30px);
         }
     }
+}
 
-    .sourcesSliderContainer {
-        @include mut.sizedImportant(1230px, 100%);
-        .slick-arrow {
-            display: none;
-            visibility: hidden;
-        }
-    }
+.sourceContentContainer {
+    margin-top: pxToRem(24px);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
 
-    .sliderClass {
-        .slick-list {
-            @include mut.rem-padded($bottom: 4px);
-        }
+.sourcesSliderWrapper {
+    position: relative;
+    width: 1230px;
+    max-width: 100%;
+}
 
-        .slick-track {
-            @include mut.flex-centered($gap: 30px);
-            width: unset !important;
-            .slick-slide {
-                @include vnd.vendored(transition, 'all .5s ease');
-                .left, .right{
-                    width: 0;
-                }
-    
-                &:hover {
-                    scale: 101%;
-                    filter: contrast(135%);
-                    cursor: pointer;
-                }
-            }
-            .slick-cloned{
-                display: none;
-            }
-        }
+.sourcesHorizontalList {
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+    width: 100%;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 20px 0;
+    cursor: pointer;
+
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
     }
 }
 
-@media screen and (max-width: 780px) {
-    .sourcesWrapper .sourcesContainer {
-        margin-bottom: 0;
+.sourcesHorizontalList > * {
+    flex: 0 0 340px;
+}
+
+.sourcesSliderItem {
+    width: 340px;
+    min-width: 340px;
+}
+
+.sourcesSliderArrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+
+    width: 40px;
+    height: 58px;
+
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+
+    &::before {
+        display: block;
+        width: 40px;
+        height: 58px;
     }
-    .sourcesWrapper .sliderClass .slick-track {
-        gap: f.pxToRem(5px);
+}
+.sourcesSliderArrow {
+    transition: 0.4s ease;
+
+    &::before {
+        transition: 0.4s ease;
     }
-    .sourcesWrapper .slick-dots{
-        left: f.pxToRem(1px);
+
+    &:hover::before {
+        filter: brightness(85%);
     }
 }
 
+.sourcesSliderArrow--left {
+    left: f.pxToRem(-97px);
+
+    &::before {
+        content: url("@assets/images/utils/LeftDefaultSliderArrow.svg");
+    }
+}
+
+.sourcesSliderArrow--right {
+    right: f.pxToRem(-97px);
+
+    &::before {
+        content: url("@assets/images/utils/RightDefaultSliderArrow.svg");
+    }
+}
