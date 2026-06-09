@@ -1,3 +1,8 @@
+@use "@sass/variables/_variables.colors.scss" as c;
+@use "@sass/_utils.functions.scss" as f;
+
+$newAccentColor: #891f16;
+
 .vacancies-page {
     width: 100%;
 }
@@ -24,13 +29,13 @@
 }
 
 .vacancies-add-button {
-    background-color: #e04031;
-    color: #fff;
+    background-color: $newAccentColor;
+    color: c.$pure-white-color;
     border: none;
 
     &:hover {
         background-color: #c9362a !important;
-        color: #fff !important;
+        color: c.$pure-white-color !important;
     }
 }
 
@@ -41,5 +46,5 @@
 .vacancy-actions {
     display: flex;
     gap: 12px;
-    color: #e04031;
+    color: $newAccentColor;
 }

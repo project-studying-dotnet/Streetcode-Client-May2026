@@ -67,6 +67,30 @@ const Partners: React.FC = observer(() => {
         });
     }, [searchText, partnersStore?.getPartnerArray]);
 
+    const handleDeletePartner = async (partnerId: number) => {
+        try {
+            await PartnersApi.delete(partnerId);
+            partnersStore.PartnerMap.delete(partnerId);
+        } catch (e) {
+            console.error(e);
+        }
+
+        modalStore.setConfirmationModal('confirmation');
+    };
+
+    const openDeleteModal = (partner: Partner) => {
+        modalStore.setConfirmationModal(
+            'confirmation',
+            () => handleDeletePartner(partner.id),
+            'Ви впевнені, що хочете видалити цього партнера?',
+        );
+    };
+
+    const openEditModal = (partner: Partner) => {
+        setPartnerToEdit(partner);
+        setModalEditOpened(true);
+    };
+
     const columns: ColumnsType<Partner> = [
         {
             title: 'Назва',
@@ -150,29 +174,12 @@ const Partners: React.FC = observer(() => {
                   <EditOutlined
                       key={`${partner.id}${index}222`}
                       className="actionButton"
-                      onClick={() => {
-                          setPartnerToEdit(partner);
-                          setModalEditOpened(true);
-                      }}
+                      onClick={() => openEditModal(partner)}
                   />
                   <DeleteOutlined
                       key={`${partner.id}${index}111`}
                       className="actionButton"
-                      onClick={() => {
-                          modalStore.setConfirmationModal(
-                              'confirmation',
-                              () => {
-                                  PartnersApi.delete(partner.id)
-                                      .then(() => {
-                                          partnersStore.PartnerMap.delete(partner.id);
-                                      }).catch((e) => {
-                                          console.error(e);
-                                      });
-                                  modalStore.setConfirmationModal('confirmation');
-                              },
-                              'Ви впевнені, що хочете видалити цього партнера?',
-                          );
-                      }}
+                      onClick={() => openDeleteModal(partner)}
                   />
               </div>
           ) },

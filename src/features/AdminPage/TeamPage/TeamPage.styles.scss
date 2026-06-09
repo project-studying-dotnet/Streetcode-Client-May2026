@@ -30,12 +30,12 @@ $newAccentColor: #891f16;
     border: none;
     border-radius: f.pxToRem(4px);
     font-weight: 500;
-    background-color: #e04031;
-    color: #fff;
+    background-color: $newAccentColor;
+    color: c.$pure-white-color;
 
     &:hover {
         background-color: #c9362a !important;
-        color: #fff !important;
+        color: c.$pure-white-color !important;
     }
 }
 
@@ -54,7 +54,7 @@ $newAccentColor: #891f16;
 .team-page-actions {
     display: flex;
     gap: 12px;
-    color: #e04031;
+    color: $newAccentColor;
 }
 
 .team-links {

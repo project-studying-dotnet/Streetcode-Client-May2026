@@ -62,13 +62,11 @@ const AdminBar = () => {
     return (
     <nav className="adminBar">
         <div className="adminBarHeader">
-            <div onClick={() => window.location.href=`/`}>
-                {
-                    windowSize.width > 1024
-                        ? <StreetcodeSvg />
-                        : <StreetcodeSvgMobile />
-                }
-            </div>
+            <NavLink to={FRONTEND_ROUTES.BASE} className="adminBarLogoButton">
+                {windowSize.width > 1024
+                    ? <StreetcodeSvg />
+                    : <StreetcodeSvgMobile />}
+            </NavLink>
             <span className="adminBarBeta">Beta</span>
         </div>
         {adminNavItems.map(({ title, to }) => (

@@ -32,8 +32,8 @@ $newAccentColor: #891f16;
                 border-radius: f.pxToRem(4px);
                 font-weight: 500;
                 transition: background-color 0.3s;
-                background-color: #E04031;
-                color: #fff;
+                background-color: $newAccentColor;
+                color: c.$pure-white-color;
             }
 
             .streetcodes-page-header {
@@ -87,5 +87,5 @@ $newAccentColor: #891f16;
 .streetcode-page-actions {
     display: flex;
     gap: 12px;
-    color: #e04031;
+    color: $newAccentColor;
 }
