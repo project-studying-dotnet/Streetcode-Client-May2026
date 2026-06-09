@@ -19,6 +19,14 @@ const vacancies: VacancyItem[] = [
     { id: 4, title: 'CEO', salary: 37773, status: true },
 ];
 
+const compareStatus = (a: VacancyItem, b: VacancyItem) => {
+    if (a.status === b.status) {
+        return 0;
+    }
+
+    return a.status ? -1 : 1;
+};
+
 const VacanciesPage = () => {
     const columns: ColumnsType<VacancyItem> = [
         {
@@ -39,7 +47,7 @@ const VacanciesPage = () => {
             title: 'Статус',
             dataIndex: 'status',
             key: 'status',
-            sorter: (a, b) => a.status === b.status ? 0 : a.status ? -1 : 1,
+            sorter: compareStatus,
             sortIcon: CustomSortIcon,
             render: (status: boolean) => (
                 <Select
