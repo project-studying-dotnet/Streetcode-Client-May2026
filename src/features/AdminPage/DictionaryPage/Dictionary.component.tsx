@@ -7,7 +7,6 @@ import {
   EditOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import AdminBar from "@features/AdminPage/AdminBar.component";
 import useMobx, { useModalContext } from "@stores/root-store";
 
 import Button from "antd/es/button";
@@ -88,7 +87,6 @@ export const Dictionary = () => {
 
   return (
     <div className="dictionary-page">
-      <AdminBar />
       <div className="dictionary-page-container">
         <div className="dictionary-header-container">
           <Input

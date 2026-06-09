@@ -1,14 +1,15 @@
 import './TeamPage.styles.scss';
 
 import { observer } from 'mobx-react-lite';
-import { useEffect, useState } from 'react';
-import { DeleteOutlined, EditOutlined, StarOutlined } from '@ant-design/icons';
+import { useEffect, useMemo, useState } from 'react';
+import { DeleteOutlined, EditOutlined, SearchOutlined, StarOutlined } from '@ant-design/icons';
+import { Button, Input, Table } from 'antd';
 import facebook from '@assets/images/partners/facebook.png';
 import instagram from '@assets/images/partners/instagram.png';
 import twitter from '@assets/images/partners/twitter.png';
 import youtube from '@assets/images/partners/youtube.png';
-import { Button, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
+import CustomSortIcon from '@/app/common/components/SortIcon.component';
 
 import Image from '@/models/media/image.model';
 
@@ -18,7 +19,6 @@ import useMobx, { useModalContext } from '../../../app/stores/root-store';
 import TeamMember, { TeamMemberLink } from '../../../models/team/team.model';
 
 import TeamModal from './TeamModal/TeamModal.component';
-import AdminBar from '../AdminBar.component';
 
 const LogoType = [twitter, instagram, facebook, youtube];
 const TeamPage = () => {
@@ -27,6 +27,7 @@ const TeamPage = () => {
     const [modalAddOpened, setModalAddOpened] = useState<boolean>(false);
     const [modalEditOpened, setModalEditOpened] = useState<boolean>(false);
     const [teamToEdit, setTeamToedit] = useState<TeamMember>();
+    const [searchText, setSearchText] = useState('');
 
     const updatedTeam = () => {
         Promise.all([teamStore?.fetchTeamAll()]).then(() => {
@@ -50,18 +51,39 @@ const TeamPage = () => {
             alt={image?.imageDetails?.alt}
         />
     );
+
+    const filteredTeam = useMemo(() => {
+        const normalizedSearch = searchText.trim().toLowerCase();
+
+        return (teamStore?.getTeamArray ?? []).filter((team) => {
+            const fullName = `${team.lastName ?? ''} ${team.firstName ?? ''}`;
+            const positions = team.positions?.map((x) => x.position).join(' ') ?? '';
+
+            return [
+                fullName,
+                positions,
+                team.description,
+            ].some((value) => value?.toLowerCase().includes(normalizedSearch));
+        });
+    }, [searchText, teamStore?.getTeamArray]);
+
     const columns: ColumnsType<TeamMember> = [
         {
             title: "Прізвище та ім'я",
             dataIndex: 'lastName',
             key: 'lastName',
+            sortIcon: CustomSortIcon,
+            sorter: (a, b) => {
+                const firstName = `${a.lastName ?? ''} ${a.firstName ?? ''}`;
+                const secondName = `${b.lastName ?? ''} ${b.firstName ?? ''}`;
+
+                return firstName.localeCompare(secondName);
+            },
             render(value, record) {
                 return (
                     <div key={`${value}${record.id}`} className="team-table-item-name">
                         <p>
-                            {value}
-                            {' '}
-                            {record.firstName}
+                            {value} {record.firstName}
                         </p>
                         {record.isMain ? <StarOutlined /> : ''}
                     </div>
@@ -114,7 +136,7 @@ const TeamPage = () => {
                       <a
                           key={`${link.id}${link.targetUrl}`}
                           rel="noreferrer"
-                          target="_blanc"
+                          target="_blank"
                           className="teamLink"
                           href={link.targetUrl.href}
                       >
@@ -134,8 +156,16 @@ const TeamPage = () => {
             width: '5%',
             render: (value, team, index) => (
                 <div key={`${team.id}${index}`} className="team-page-actions">
+                    <EditOutlined
+                        key={`${team.id}${index}`}
+                        className="actionButton"
+                        onClick={() => {
+                            setTeamToedit(team);
+                            setModalEditOpened(true);
+                        }}
+                    />
                     <DeleteOutlined
-                        key={`${team.id}${index}111`}
+                        key={`${team.id}${index}`}
                         className="actionButton"
                         onClick={() => {
                             modalStore.setConfirmationModal(
@@ -152,15 +182,6 @@ const TeamPage = () => {
                             );
                         }}
                     />
-                    <EditOutlined
-                        key={`${team.id}${index}222`}
-                        className="actionButton"
-                        onClick={() => {
-                            setTeamToedit(team);
-                            setModalEditOpened(true);
-                        }}
-                    />
-
                 </div>
             ),
         },
@@ -168,29 +189,38 @@ const TeamPage = () => {
     return (
         <div className="team-page">
             <div className="team-page-container">
-            <AdminBar />
-                <div className="container-justify-end">
+                <div className="team-page-header">
+                    <Input
+                        placeholder="Пошук по назві"
+                        prefix={<SearchOutlined style={{ color: '#bfbfbf' }} />}
+                        className="team-search-input"
+                        allowClear
+                        value={searchText}
+                        onChange={(event) => setSearchText(event.target.value)}
+                    />
+
                     <Button
-                        className="streetcode-custom-button team-page-add-button"
+                        className="team-page-add-button"
                         onClick={() => setModalAddOpened(true)}
                     >
-                        Створити нового члена команди
+                        Додати члена команди
                     </Button>
                 </div>
+
                 <Table
                     pagination={{ pageSize: 10 }}
                     className="team-table"
                     columns={columns}
-                    dataSource={teamStore?.getTeamArray}
+                    dataSource={filteredTeam}
                     rowKey="id"
                 />
             </div>
+
             <TeamModal open={modalAddOpened} setIsModalOpen={setModalAddOpened} />
             <TeamModal
                 open={modalEditOpened}
                 setIsModalOpen={setModalEditOpened}
                 teamMember={teamToEdit}
-
             />
         </div>
     );

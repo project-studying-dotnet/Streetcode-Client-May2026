@@ -76,15 +76,11 @@ $newAccentColor: #891f16;
 }
 
 .dictionary-page {
-  padding-top: f.pxToRem(100px);
   display: flex;
   gap: f.pxToRem(10px);
   width: 100%;
 
   .dictionary-page-container {
-    @include mut.sized(80%);
-    margin: 0 auto;
-    margin-top: f.pxToRem(40px);
 
     .dictionary-header-container {
       @include mut.flexed(row, center, space-between);
@@ -106,69 +102,6 @@ $newAccentColor: #891f16;
       }
     }
 
-    .ant-table-pagination.ant-pagination {
-      margin-top: f.pxToRem(30px) !important;
-      justify-content: left !important;
-
-      .ant-pagination-item {
-        border: none;
-        border-radius: 5px;
-        background-color: transparent;
-
-        a {
-          color: $newAccentColor;
-          font-weight: 500;
-        }
-      }
-
-      // Активна сторінка
-      .ant-pagination-item-active {
-        background-color: transparent;
-        border: 1px solid $newAccentColor !important;
-        transition: background-color 0.2s;
-
-        a {
-          color: $newAccentColor !important;
-        }
-
-        &:hover {
-          background-color: $newAccentColor !important;
-          border-color: $newAccentColor !important;
-
-          a {
-            color: #fff !important;
-          }
-        }
-      }
-
-      .ant-pagination-prev,
-      .ant-pagination-next {
-        .ant-pagination-item-link {
-          border: none;
-          background-color: transparent;
-          color: $newAccentColor;
-        }
-
-        &.ant-pagination-disabled .ant-pagination-item-link {
-          color: #bfbfbf;
-          background-color: transparent;
-        }
-      }
-
-      .ant-pagination-jump-prev,
-      .ant-pagination-jump-next {
-        .ant-pagination-item-container {
-          .ant-pagination-item-ellipsis {
-            color: $newAccentColor;
-          }
-
-          .ant-pagination-item-link-icon {
-            color: $newAccentColor;
-          }
-        }
-      }
-    }
-
     .dictionaries-table {
       margin-top: f.pxToRem(20px);
 
@@ -176,22 +109,6 @@ $newAccentColor: #891f16;
         font-weight: 600;
         background-color: transparent;
         user-select: none;
-      }
-
-      .ant-table-thead > tr > th.ant-table-column-has-sorters {
-        .ant-table-column-sorters {
-          justify-content: flex-start !important;
-
-          .ant-table-column-title {
-            margin-right: f.pxToRem(2px) !important;
-            flex: 0 0 auto !important;
-            width: auto !important;
-          }
-
-          svg path {
-            transition: fill 0.3s ease-in-out;
-          }
-        }
       }
 
       .dictionary-table-item-name {

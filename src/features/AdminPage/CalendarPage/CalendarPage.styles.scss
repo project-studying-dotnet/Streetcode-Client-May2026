@@ -1,0 +1,62 @@
+@use "@sass/_utils.functions.scss" as f;
+
+$newAccentColor: #891f16;
+
+.calendar-page {
+    width: 100%;
+}
+
+.calendar-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.calendar-search-input {
+    width: 360px;
+}
+
+.calendar-header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.calendar-type-select {
+    width: 110px;
+}
+
+.calendar-add-button {
+    background-color: #e04031;
+    color: #fff;
+    border: none;
+
+    &:hover {
+        background-color: #c9362a !important;
+        color: #fff !important;
+    }
+}
+
+.calendar-related-codes {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-start;
+}
+
+.calendar-code-tag {
+    color: #e04031;
+    border-color: #ff8a80;
+    background: #fff;
+}
+
+.calendar-status-select {
+    width: 150px;
+}
+
+.calendar-actions {
+    display: flex;
+    gap: 12px;
+    color: #e04031;
+}

@@ -30,5 +30,9 @@ import {
                 API_ROUTES.ADMIN_AUTHORIZATION.REFRESH_TOKEN,
                 token,
             ),
+        adminLogout: () =>
+            Agent.post<void>(
+                API_ROUTES.ADMIN_AUTHORIZATION.LOGOUT, {},
+            ),
     };
 export default UserApi;

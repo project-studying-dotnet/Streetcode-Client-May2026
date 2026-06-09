@@ -1,0 +1,45 @@
+.vacancies-page {
+    width: 100%;
+}
+
+.vacancies-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.vacancies-search-input {
+    width: 360px;
+}
+
+.vacancies-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.vacancies-status-filter {
+    width: 120px;
+}
+
+.vacancies-add-button {
+    background-color: #e04031;
+    color: #fff;
+    border: none;
+
+    &:hover {
+        background-color: #c9362a !important;
+        color: #fff !important;
+    }
+}
+
+.vacancy-status-select {
+    width: 120px;
+}
+
+.vacancy-actions {
+    display: flex;
+    gap: 12px;
+    color: #e04031;
+}

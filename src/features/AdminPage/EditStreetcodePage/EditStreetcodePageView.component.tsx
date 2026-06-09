@@ -1,6 +1,5 @@
 import './EditStreetcodePage.styles.scss';
 
-import AdminBar from '@features/AdminPage/AdminBar.component';
 import InterestingFactsAdminBlock from '@features/AdminPage/InterestingFactsAdminBlock/InterestingFactsAdminBlock.component';
 import ChronologyAdminBlock from '@features/AdminPage/ChronologyAdminBlock/ChronologyAdminBlock.component';
 
@@ -13,7 +12,6 @@ type EditStreetcodePageViewProps =
 
 const EditStreetcodePageView = (props: EditStreetcodePageViewProps) => (
     <main className="editStreetcodePage">
-        <AdminBar />
         {props.viewState === 'loading' && (
             <p className="editStreetcodeLoading">{EDIT_STREETCODE_PAGE_MESSAGES.LOADING}</p>
         )}
