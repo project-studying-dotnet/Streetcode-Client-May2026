@@ -4,6 +4,8 @@ import { DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons'
 import { Button, Input, Select, Table, Tag } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 
+import CustomSortIcon from '@/app/common/components/SortIcon.component';
+
 type CalendarItem = {
     id: number;
     title: string;
@@ -49,6 +51,7 @@ const CalendarPage = () => {
             dataIndex: 'title',
             key: 'title',
             sorter: (a, b) => a.title.localeCompare(b.title),
+            sortIcon: CustomSortIcon,
         },
         {
             title: 'Дата',

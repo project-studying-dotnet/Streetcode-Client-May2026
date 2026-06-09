@@ -3,6 +3,7 @@ import './VacanciesPage.styles.scss';
 import { DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Select, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
+import CustomSortIcon from '@/app/common/components/SortIcon.component';
 
 type VacancyItem = {
     id: number;
@@ -25,17 +26,21 @@ const VacanciesPage = () => {
             dataIndex: 'title',
             key: 'title',
             sorter: (a, b) => a.title.localeCompare(b.title),
+            sortIcon: CustomSortIcon,
         },
         {
             title: 'Заробітна плата',
             dataIndex: 'salary',
             key: 'salary',
             sorter: (a, b) => a.salary - b.salary,
+            sortIcon: CustomSortIcon,
         },
         {
             title: 'Статус',
             dataIndex: 'status',
             key: 'status',
+            sorter: (a, b) => a.status === b.status ? 0 : a.status ? -1 : 1,
+            sortIcon: CustomSortIcon,
             render: (status: boolean) => (
                 <Select
                     size="small"

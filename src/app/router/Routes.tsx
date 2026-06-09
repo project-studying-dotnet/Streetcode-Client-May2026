@@ -7,7 +7,6 @@ import App from '@layout/app/App.component';
 import StreetcodeContent from '@streetcode/Streetcode.component';
 
 import ContactUs from '@/features/AdditionalPages/ContactUsPage/ContanctUs.component';
-import NewsPage from '@/features/AdditionalPages/NewsPage/News.component';
 import NotFound from '@/features/AdditionalPages/NotFoundPage/NotFound.component';
 import PartnersPage from '@/features/AdditionalPages/PartnersPage/Partners.component';
 import SupportPage from '@/features/AdditionalPages/SupportUsPage/SupportUs.component';

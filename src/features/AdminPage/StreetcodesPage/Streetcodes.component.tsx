@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite';
 import { Button, Select, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import Streetcode from "@/models/streetcode/streetcode-types.model";
-import { CloseCircleFilled,DeleteOutlined, EditOutlined, SearchOutlined, } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, SearchOutlined, } from "@ant-design/icons";
 import useMobx, { useModalContext } from '@/app/stores/root-store';
 import StreetcodesApi from '@api/streetcode/streetcodes.api';
 import Input from "antd/es/input";
