@@ -1,5 +1,3 @@
-import { CREATED } from " http-status-codes/build/cjs ";
-
 // eslint-disable-next-line import/prefer-default-export
 const SOURCES_BASE = 'Sources';
 export const API_ROUTES = {

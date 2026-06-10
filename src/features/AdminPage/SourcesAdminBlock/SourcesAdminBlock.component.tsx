@@ -83,7 +83,9 @@ const SourcesAdminBlock = ({ streetcodeId }: Props) => {
             setItems(categoriesWithText);
             setCategories(allCategories);
         } catch (e) {
-            message.error('Не вдалося завантажити блок "Для фанатів"');
+        console.error('SourcesAdminBlock loadData failed:', e);
+
+        message.error('Не вдалося завантажити блок "Для фанатів"');
         } finally {
             if (!signal?.aborted) {
                 setLoading(false);

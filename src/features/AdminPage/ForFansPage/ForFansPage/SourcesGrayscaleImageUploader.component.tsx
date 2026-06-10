@@ -8,7 +8,6 @@ import Image from '@/models/media/image.model';
 
 import {
     convertImageToGrayscaleDataUrl,
-    getBase64FromDataUrl,
     buildImageCreatePayload,
 } from '@/app/common/utils/imageProcessing';
 
