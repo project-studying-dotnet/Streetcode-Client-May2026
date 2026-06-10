@@ -91,7 +91,7 @@ const SourcesAdminModal = ({
             onCancel={onCancel}
             footer={null}
             width={700}
-            className="sourcesAdminModal"
+            rootClassName="sourcesAdminModal"
         >
             <h2 className="sourcesAdminModalTitle">Для фанатів</h2>
 

@@ -6,6 +6,8 @@ import useMobx, { useStreetcodeDataContext } from '@stores/root-store';
 import BlockHeading from '@streetcode/HeadingBlock/BlockHeading.component';
 
 import SourceItem from './SourceItem/SourceItem.component';
+import LeftArrow from '@assets/images/utils/LeftDefaultSliderArrow.svg';
+import RightArrow from '@assets/images/utils/RightDefaultSliderArrow.svg';
 
 const SourcesComponent = () => {
     const { sourcesStore } = useMobx();
@@ -44,7 +46,9 @@ const SourcesComponent = () => {
                                 className="sourcesSliderArrow sourcesSliderArrow--left"
                                 onClick={() => scrollSources('left')}
                                 aria-label="Попередні категорії"
-                            />
+                            >
+                                <LeftArrow />
+                            </button>
                         )}
 
                         <div className="sourcesHorizontalList" ref={sliderRef}>
@@ -62,7 +66,9 @@ const SourcesComponent = () => {
                                 className="sourcesSliderArrow sourcesSliderArrow--right"
                                 onClick={() => scrollSources('right')}
                                 aria-label="Наступні категорії"
-                            />
+                            >
+                                <RightArrow />
+                            </button>
                         )}
                     </div>
                 </div>

@@ -24,11 +24,6 @@ const SourcesApi = {
         `${API_ROUTES.SOURCE_CATEGORIES.GET_BY_STREETCODE_ID}/${streetcodeId}`,
     ),
 
-    getCategoryContentByStreetcodeId: (streetcodeId: number, categoryId: number) =>
-        Agent.get<StreetcodeCategoryContent>(
-            `${API_ROUTES.SOURCE_CATEGORIES.GET_CONTENT_BY_STREETCODE_ID}/${categoryId}/${streetcodeId}`,
-    ),
-
     createCategory: (source: SourceCategoryAdmin) => Agent.post<SourceCategoryAdmin>(
         API_ROUTES.SOURCE_CATEGORIES.CREATE,
         source,
@@ -43,6 +38,11 @@ const SourcesApi = {
         `${API_ROUTES.SOURCE_CATEGORIES.DELETE}/${id}`,
     ),
 
+    getCategoryContentByStreetcodeId: (streetcodeId: number, categoryId: number) =>
+        Agent.get<StreetcodeCategoryContent>(
+            `${API_ROUTES.SOURCE_CATEGORIES.GET_CONTENT_BY_STREETCODE_ID}/${categoryId}/${streetcodeId}`,
+    ),
+    
     createContent: (content: StreetcodeCategoryContent) =>
         Agent.post<StreetcodeCategoryContent>(
             API_ROUTES.SOURCES.CREATE_CONTENT,

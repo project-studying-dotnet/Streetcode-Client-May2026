@@ -54,10 +54,12 @@ const StreetcodeCreate: React.FC = observer(() => {
     };
 
     useEffect(() => {
-        sourcesApi.getAllNames()
-            .then(setSourceCategories)
-            .catch(() => {});
-    }, []);
+    sourcesApi.getAllNames()
+        .then(setSourceCategories)
+        .catch((error) => {
+            console.error('Failed to load source categories:', error);
+        });
+        }, []);
 
     useEffect(() => {
         if (id) {

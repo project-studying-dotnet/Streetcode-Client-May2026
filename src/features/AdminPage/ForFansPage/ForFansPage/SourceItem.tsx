@@ -82,12 +82,16 @@ const SourceItem = ({ srcCategory }: Props) => {
     };
 
     useEffect(() => {
-        if (imageId.current) {
-            ImagesApi.getById(imageId.current)
-                .then((image) => setImage(image));
-        }
+        if (!imageId.current) return;
+
+        ImagesApi.getById(imageId.current)
+            .then((image) => setImage(image))
+            .catch((error) => {
+                console.error('Failed to load image by id:', error);
+                setImage(undefined);
+            });
     }, []);
-    
+
     return (
         <div
             className="sourcesSliderItem"

@@ -4,42 +4,28 @@ import { NavLink } from 'react-router-dom';
 
 import FRONTEND_ROUTES from '@/app/common/constants/frontend-routes.constants';
 
+const adminLinks = [
+    { to: FRONTEND_ROUTES.ADMIN.STREETCODES, label: 'Стріткоди' },
+    { to: FRONTEND_ROUTES.ADMIN.FOR_FANS, label: 'Для фанів' },
+    { to: FRONTEND_ROUTES.ADMIN.PARTNERS, label: 'Партнери' },
+    { to: FRONTEND_ROUTES.ADMIN.TEAM, label: 'Команда' },
+    { to: FRONTEND_ROUTES.ADMIN.DICTIONARY, label: 'Словник' },
+];
+
+const getLinkClassName = ({ isActive }: { isActive: boolean }) =>
+    `Link ${isActive ? 'active' : ''}`;
+
 const AdminBar = () => (
     <div className="adminBar">
-        <NavLink
-            to={FRONTEND_ROUTES.ADMIN.STREETCODES}
-            className={({ isActive }) => `Link ${isActive ? 'active' : ''}`}
-        >
-            Стріткоди
-        </NavLink>
-
-        <NavLink
-            to={FRONTEND_ROUTES.ADMIN.FOR_FANS}
-            className={({ isActive }) => `Link ${isActive ? 'active' : ''}`}
-        >
-            Для фанатів
-        </NavLink>
-
-        <NavLink
-            to={FRONTEND_ROUTES.ADMIN.PARTNERS}
-            className={({ isActive }) => `Link ${isActive ? 'active' : ''}`}
-        >
-            Партнери
-        </NavLink>
-
-        <NavLink
-            to={FRONTEND_ROUTES.ADMIN.TEAM}
-            className={({ isActive }) => `Link ${isActive ? 'active' : ''}`}
-        >
-            Команда
-        </NavLink>
-
-        <NavLink
-            to={FRONTEND_ROUTES.ADMIN.DICTIONARY}
-            className={({ isActive }) => `Link ${isActive ? 'active' : ''}`}
-        >
-            Словник
-        </NavLink>
+        {adminLinks.map(({ to, label }) => (
+            <NavLink
+                key={to}
+                to={to}
+                className={getLinkClassName}
+            >
+                {label}
+            </NavLink>
+        ))}
     </div>
 );
 

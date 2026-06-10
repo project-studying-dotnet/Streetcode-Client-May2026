@@ -1,3 +1,5 @@
+@use "@sass/variables/_variables.colors.scss" as c;
+
 .sourcesAdminModal {
     .ant-modal-content {
         padding: 32px 48px 28px;
@@ -35,7 +37,7 @@
 .sourcesAdminSymbolsCounter {
     margin-top: 4px;
     text-align: right;
-    color: #999;
+    color: c.$normal-gray-color;
     font-size: 12px;
 }
 
@@ -46,14 +48,35 @@
     margin: 0 auto;
     border: none;
     border-radius: 18px;
-    background-color: #c62828;
-    color: #fff;
+
+    background-color: c.$accented-red-color;
+    color: c.$white-color;
+
     font-size: 18px;
     font-weight: 700;
 
+    cursor: pointer;
+    transition: all 0.2s ease;
+
     &:hover,
     &:focus {
-        background-color: #c9322a;
-        color: #fff;
+        background-color: c.$dark-red-color;
+        color: c.$white-color;
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+
+    &:disabled {
+        background-color: c.$accented-gray-color;
+        color: c.$normal-gray-color;
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+
+    &.ant-btn-loading {
+        cursor: wait;
+        opacity: 0.8;
     }
 }

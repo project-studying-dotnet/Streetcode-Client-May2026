@@ -169,7 +169,7 @@ const SourcesAdminBlock = ({ streetcodeId }: Props) => {
                 {items.map((item) => (
                     <Card key={item.id} className="sourcesAdminCard">
                         <div className="sourcesAdminContent">
-                            <h3 className="sourcesAdminCardTitle">{item.title}</h3>
+                            <h3 className="sourcesAdminCard">{item.title}</h3>
 
                             <p className="sourcesAdminPreview">
                                 {item.previewText}
@@ -200,7 +200,7 @@ const SourcesAdminBlock = ({ streetcodeId }: Props) => {
                 <h2 className="sourcesAdminTitle">Для фанатів</h2>
 
                 <Button
-                    icon={<PlusOutlined className="sourcesAdminAddIcon"/>}
+                    icon={<PlusOutlined />}
                     className="streetcode-custom-button sourcesAdminAddButton"
                     onClick={handleCreate}
                 />
