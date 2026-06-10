@@ -14,7 +14,6 @@ import AdminPage from '@/features/AdminPage/AdminPage.component';
 import Dictionary from '@/features/AdminPage/DictionaryPage/Dictionary.component';
 import LoginPage from '@/features/AdminPage/LoginPage/LoginPage.component';
 import Partners from '@/features/AdminPage/PartnersPage/Partners.component';
-import StreetcodeCreate from '@/features/AdminPage/StreetcodesPage/StreetcodeCreate/StreetcodeCreate.component';
 import Streetcodes from '@/features/AdminPage/StreetcodesPage/Streetcodes.component';
 import TeamPage from '@/features/AdminPage/TeamPage/TeamPage.component';
 import StreetcodeCatalog from '@/features/StreetcodeCatalogPage/StreetcodeCatalog.component';
@@ -23,6 +22,7 @@ import CalendarPage from '@/features/AdminPage/CalendarPage/CalendarPage.compone
 import VacanciesPage from '@/features/AdminPage/VacanciesPage/VacanciesPage.component';
 import PublicNewsPage from '@/features/AdditionalPages/NewsPage/News.component';
 import AdminNewsPage from '@/features/AdminPage/NewsPage/NewsPage.component';
+import EditPge from '@/features/AdminPage/EditorPage/Editor.component';
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<App />}>
@@ -40,8 +40,7 @@ const router = createBrowserRouter(createRoutesFromElements(
                 <Route path="news" element={<AdminNewsPage />} />
                 <Route path="vacancies" element={<VacanciesPage />} />
 
-                <Route path={FRONTEND_ROUTES.ADMIN.NEW_STREETCODE} element={<StreetcodeEditor />} />
-                <Route path={`${FRONTEND_ROUTES.ADMIN.EDIT_STREETCODE}/:streetcodeId`} element={<EditStreetcodePage />} />
+                <Route path={FRONTEND_ROUTES.ADMIN.NEW_STREETCODE} element={<EditPge />} />
             </Route>
 
         </Route>
