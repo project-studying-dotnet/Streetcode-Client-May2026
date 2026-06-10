@@ -13,7 +13,7 @@ import {
 
 import PreviewFileModal from '@/app/common/components/PreviewFileModal/PreviewFileModal.component';
 
-import SourcesImageUploader from './SourcesImageUploader.component';
+import SourcesImageUploader from './SourcesGrayscaleImageUploader.component';
 
 interface Props {
     srcCategory: SourceCategoryAdmin;

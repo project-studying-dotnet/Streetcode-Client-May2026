@@ -28,14 +28,14 @@ export default class SourcesStore {
         } catch (error: unknown) {}
     };
 
-    public createSourceCategory = async (srcCategory: SourceCategory) => {
+    public createCategory = async (srcCategory: SourceCategory) => {
         try {
             await sourcesApi.createCategory(srcCategory);
             this.setCategoryItem(srcCategory);
         } catch (error: unknown) {}
     };
 
-    public updateSourceCategory = async (srcCategory: SourceCategory) => {
+    public updateCategory = async (srcCategory: SourceCategory) => {
         try {
             await sourcesApi.updateCategory(srcCategory);
             runInAction(() => {
@@ -47,7 +47,7 @@ export default class SourcesStore {
         } catch (error: unknown) {}
     };
 
-    public deleteSourceCategory = async (SourceCategoryId: number) => {
+    public deleteCategory = async (SourceCategoryId: number) => {
         try {
             await sourcesApi.deleteCategory(SourceCategoryId);
             runInAction(() => {

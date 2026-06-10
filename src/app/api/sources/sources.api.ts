@@ -9,54 +9,54 @@ import {
 
 const SourcesApi = {
     getAllCategories: () => Agent.get<SourceCategory[]>(
-        API_ROUTES.SOURCES.GET_ALL_CATEGORIES,
+        API_ROUTES.SOURCE_CATEGORIES.GET_ALL,
     ),
 
     getAllNames: () => Agent.get<SourceCategoryName[]>(
-        API_ROUTES.SOURCES.GET_ALL_CATEGORIES_NAMES,
+        API_ROUTES.SOURCE_CATEGORIES.GET_ALL_NAMES,
     ),
 
     getById: (id: number) => Agent.get<SourceCategory>(
-        `${API_ROUTES.SOURCES.GET_CATEGORY_BY_ID}/${id}`,
+        `${API_ROUTES.SOURCE_CATEGORIES.GET_BY_ID}/${id}`,
     ),
 
     getCategoriesByStreetcodeId: (streetcodeId: number) => Agent.get<SourceCategory[]>(
-        `${API_ROUTES.SOURCES.GET_CATEGORIES_BY_STREETCODE_ID}/${streetcodeId}`,
+        `${API_ROUTES.SOURCE_CATEGORIES.GET_BY_STREETCODE_ID}/${streetcodeId}`,
     ),
 
     getCategoryContentByStreetcodeId: (streetcodeId: number, categoryId: number) =>
         Agent.get<StreetcodeCategoryContent>(
-            `${API_ROUTES.SOURCES.GET_CONTENT_BY_STREETCODE_ID}/${categoryId}/${streetcodeId}`,
+            `${API_ROUTES.SOURCE_CATEGORIES.GET_CONTENT_BY_STREETCODE_ID}/${categoryId}/${streetcodeId}`,
     ),
 
     createCategory: (source: SourceCategoryAdmin) => Agent.post<SourceCategoryAdmin>(
-        API_ROUTES.SOURCES.CREATE_CATEGORY,
+        API_ROUTES.SOURCE_CATEGORIES.CREATE,
         source,
     ),
 
     updateCategory: (source: SourceCategoryAdmin) => Agent.put<SourceCategoryAdmin>(
-        API_ROUTES.SOURCES.UPDATE_CATEGORY,
+        API_ROUTES.SOURCE_CATEGORIES.UPDATE,
         source,
     ),
 
     deleteCategory: (id: number) => Agent.delete(
-        `${API_ROUTES.SOURCES.DELETE_CATEGORY}/${id}`,
+        `${API_ROUTES.SOURCE_CATEGORIES.DELETE}/${id}`,
     ),
 
     createContent: (content: StreetcodeCategoryContent) =>
         Agent.post<StreetcodeCategoryContent>(
-            API_ROUTES.SOURCES.CREATE,
+            API_ROUTES.SOURCES.CREATE_CONTENT,
             content,
         ),
 
     updateContent: (content: StreetcodeCategoryContent) =>
         Agent.put<StreetcodeCategoryContent>(
-            API_ROUTES.SOURCES.UPDATE,
+            API_ROUTES.SOURCES.UPDATE_CONTENT,
             content,
         ),
 
     deleteContent: (streetcodeId: number, categoryId: number) =>
-        Agent.delete(`${API_ROUTES.SOURCES.DELETE}/${streetcodeId}/${categoryId}`),
+        Agent.delete(`${API_ROUTES.SOURCES.DELETE_CONTENT}/${streetcodeId}/${categoryId}`),
 };
 
 export default SourcesApi;

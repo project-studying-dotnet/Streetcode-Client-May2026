@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import ImagesApi from '@api/media/images.api';
-import SourcesImageUploader from './SourcesImageUploader.component';
+import SourcesImageUploader from './SourcesGrayscaleImageUploader.component';
 import { useAsync } from '@hooks/stateful/useAsync.hook';
 import Image from '@models/media/image.model';
 import { SourceCategoryAdmin } from '@models/sources/sources.model';
@@ -9,8 +9,8 @@ import useMobx from '@stores/root-store';
 import { Button, Form, Input, Modal } from 'antd';
 
 interface AddSourceModalProps {
-  isAddModalVisible: boolean;
-  handleAddCancel: () => void;
+    isAddModalVisible: boolean;
+    handleAddCancel: () => void;
 }
 
 const AddSourceModal: React.FC<AddSourceModalProps> = ({
@@ -25,18 +25,18 @@ const AddSourceModal: React.FC<AddSourceModalProps> = ({
     useAsync(() => sourcesAdminStore.fetchSourceCategories(), []);
 
     async function onSubmit(formData: any) {
-    const newSource: SourceCategoryAdmin = {
-        title: formData.title,
-        imageId: imageId.current,
-    };
+        const newSource: SourceCategoryAdmin = {
+            title: formData.title,
+            imageId: imageId.current,
+        };
 
-    await sourcesAdminStore.addSourceCategory(newSource);
+        await sourcesAdminStore.addSourceCategory(newSource);
 
-    imageId.current = 0;
-    setImage(undefined);
-    form.resetFields();
-    handleAddCancel();
-}
+        imageId.current = 0;
+        setImage(undefined);
+        form.resetFields();
+        handleAddCancel();
+    }
 
     return (
         <Modal
@@ -58,30 +58,37 @@ const AddSourceModal: React.FC<AddSourceModalProps> = ({
                     label="Картинка: "
                     rules={[{ required: true, message: 'Додайте зображення' }]}
                 >
-                <SourcesImageUploader
-                multiple={false}
-                accept=".jpeg,.png,.jpg"
-                listType="picture-card"
-                maxCount={1}
-                onSuccessUpload={(uploadedImage: Image) => {
-                    imageId.current = uploadedImage.id;
-                    setImage(uploadedImage);
-                }}
-                onRemove={() => {
-                    if (imageId.current) {
-                        ImagesApi.delete(imageId.current);
-                    }
-
-                    imageId.current = 0;
-                    setImage(undefined);
-                }}
-                >
-                    <p>Виберіть чи перетягніть файл</p>
-                </SourcesImageUploader>
+                    <SourcesImageUploader
+                        multiple={false}
+                        accept=".jpeg,.png,.jpg"
+                        listType="picture-card"
+                        maxCount={1}
+                        onSuccessUpload={(uploadedImage: Image) => {
+                            imageId.current = uploadedImage.id;
+                            setImage(uploadedImage);
+                        }}
+                        onRemove={async () => {
+                            try {
+                                await ImagesApi.delete(imageId.current);
+                                imageId.current = 0;
+                                setImage(undefined);
+                                
+                                return true;
+                            } catch (error) {
+                                console.error('Не вдалося видалити зображення:', error);
+                                return false;
+                            }
+                        }}
+                    >
+                        <p>Виберіть чи перетягніть файл</p>
+                    </SourcesImageUploader>
                 </Form.Item>
                 <div className="center">
-                    <Button className="streetcode-custom-button" onClick={() => form.submit()}>
-                    Зберегти
+                    <Button
+                        className="streetcode-custom-button"
+                        onClick={() => form.submit()}
+                    >
+                        Зберегти
                     </Button>
                 </div>
             </Form>

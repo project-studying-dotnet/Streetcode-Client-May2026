@@ -1,6 +1,6 @@
 import './SourcesAdminBlock.styles.scss';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import sourcesApi from '@api/sources/sources.api';
 import {
@@ -10,17 +10,23 @@ import {
 } from '@models/sources/sources.model';
 
 import {
-    Button, Card, Empty, message, Modal, Spin,
+    Button,
+    Card,
+    Empty,
+    message,
+    Modal,
+    Spin,
 } from 'antd';
 
 import SourcesAdminModal from './SourcesAdminModal.component';
 
 interface Props {
     streetcodeId: number;
-}   
+}
 
 type SourceCategoryWithText = SourceCategory & {
     text?: string;
+    previewText?: string;
 };
 
 const getPreviewText = (html = '', wordsLimit = 100) => {
@@ -28,7 +34,6 @@ const getPreviewText = (html = '', wordsLimit = 100) => {
     const doc = parser.parseFromString(html, 'text/html');
 
     const text = doc.body.textContent?.trim() ?? '';
-
     const words = text.split(/\s+/).filter(Boolean);
 
     return words.length > wordsLimit
@@ -41,9 +46,10 @@ const SourcesAdminBlock = ({ streetcodeId }: Props) => {
     const [categories, setCategories] = useState<SourceCategoryName[]>([]);
     const [loading, setLoading] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
-    const [editingContent, setEditingContent] = useState<StreetcodeCategoryContent | null>(null);
+    const [editingContent, setEditingContent] =
+        useState<StreetcodeCategoryContent | null>(null);
 
-    const loadData = async () => {
+    const loadData = useCallback(async (signal?: AbortSignal) => {
         setLoading(true);
 
         try {
@@ -52,34 +58,48 @@ const SourcesAdminBlock = ({ streetcodeId }: Props) => {
                 sourcesApi.getAllNames(),
             ]);
 
+            if (signal?.aborted) return;
+
             const categoriesWithText = await Promise.all(
-                streetcodeCategories.map(async (category: SourceCategory) => {
-                    const content = await sourcesApi.getCategoryContentByStreetcodeId(
-                        streetcodeId,
-                        category.id,
-                    );
+                streetcodeCategories.map(async (category) => {
+                    const content =
+                        await sourcesApi.getCategoryContentByStreetcodeId(
+                            streetcodeId,
+                            category.id,
+                        );
+
+                    const previewText = getPreviewText(content.text);
 
                     return {
                         ...category,
                         text: content.text,
+                        previewText,
                     };
                 }),
             );
 
+            if (signal?.aborted) return;
+
             setItems(categoriesWithText);
             setCategories(allCategories);
-        } catch {
+        } catch (e) {
             message.error('Не вдалося завантажити блок "Для фанатів"');
         } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        if (streetcodeId > 0) {
-            loadData();
+            if (!signal?.aborted) {
+                setLoading(false);
+            }
         }
     }, [streetcodeId]);
+
+    useEffect(() => {
+        if (streetcodeId <= 0) return;
+
+        const controller = new AbortController();
+
+        loadData(controller.signal);
+
+        return () => controller.abort();
+    }, [streetcodeId, loadData]);
 
     const handleCreate = () => {
         setEditingContent(null);
@@ -88,7 +108,12 @@ const SourcesAdminBlock = ({ streetcodeId }: Props) => {
 
     const handleEdit = async (categoryId: number) => {
         try {
-            const content = await sourcesApi.getCategoryContentByStreetcodeId(streetcodeId, categoryId);
+            const content =
+                await sourcesApi.getCategoryContentByStreetcodeId(
+                    streetcodeId,
+                    categoryId,
+                );
+
             setEditingContent(content);
             setModalOpen(true);
         } catch {
@@ -106,7 +131,7 @@ const SourcesAdminBlock = ({ streetcodeId }: Props) => {
                 try {
                     await sourcesApi.deleteContent(streetcodeId, categoryId);
                     message.success('Блок видалено');
-                    await loadData();
+                    loadData();
                 } catch {
                     message.error('Не вдалося видалити блок');
                 }
@@ -126,7 +151,7 @@ const SourcesAdminBlock = ({ streetcodeId }: Props) => {
 
             setModalOpen(false);
             setEditingContent(null);
-            await loadData();
+            loadData();
         } catch {
             message.error('Не вдалося зберегти блок');
         }
@@ -144,10 +169,10 @@ const SourcesAdminBlock = ({ streetcodeId }: Props) => {
                 {items.map((item) => (
                     <Card key={item.id} className="sourcesAdminCard">
                         <div className="sourcesAdminContent">
-                            <h3>{item.title}</h3>
+                            <h3 className="sourcesAdminCardTitle">{item.title}</h3>
 
                             <p className="sourcesAdminPreview">
-                                {getPreviewText(item.text)}
+                                {item.previewText}
                             </p>
                         </div>
 
@@ -171,17 +196,17 @@ const SourcesAdminBlock = ({ streetcodeId }: Props) => {
 
     return (
         <section className="sourcesAdminBlock">
-        <header className="sourcesAdminHeader">
-            <h2>Для фанатів</h2>
+            <header className="sourcesAdminHeader">
+                <h2 className="sourcesAdminTitle">Для фанатів</h2>
 
-            <Button
-                icon={<PlusOutlined />}
-                className="streetcode-custom-button sourcesAdminAddButton"
-                onClick={handleCreate}
-            />
-        </header>
+                <Button
+                    icon={<PlusOutlined className="sourcesAdminAddIcon"/>}
+                    className="streetcode-custom-button sourcesAdminAddButton"
+                    onClick={handleCreate}
+                />
+            </header>
 
-        {content}
+            {content}
 
             <SourcesAdminModal
                 open={modalOpen}

@@ -1,4 +1,7 @@
+import { CREATED } from " http-status-codes/build/cjs ";
+
 // eslint-disable-next-line import/prefer-default-export
+const SOURCES_BASE = 'Sources';
 export const API_ROUTES = {
     BASE: '/',
     HISTORICAL_CONTEXT: {
@@ -97,20 +100,21 @@ export const API_ROUTES = {
         UPDATE: 'toponym/update',
         DELETE: 'toponym/delete',
     },
-        SOURCES: {
-        GET_ALL_CATEGORIES_NAMES: 'Sources/GetAllNames/names',
-        GET_ALL_CATEGORIES: 'Sources/GetAllCategories/categories',
-        GET_CATEGORY_BY_ID: 'Sources/GetCategoryById/category',
-        GET_CATEGORIES_BY_STREETCODE_ID: 'Sources/GetCategoriesByStreetcodeId/streetcode',
-        GET_CONTENT_BY_STREETCODE_ID: 'Sources/GetCategoryContentByStreetcodeId/category-content',
+    SOURCE_CATEGORIES: {
+        GET_ALL_NAMES: `${SOURCES_BASE}/GetAllNames/names`,
+        GET_ALL: `${SOURCES_BASE}/GetAllCategories/categories`,
+        GET_BY_ID: `${SOURCES_BASE}/GetCategoryById/category`,
+        GET_BY_STREETCODE_ID: `${SOURCES_BASE}/GetCategoriesByStreetcodeId/streetcode`,
+        GET_CONTENT_BY_STREETCODE_ID: `${SOURCES_BASE}/GetCategoryContentByStreetcodeId/category-content`,
 
-        CREATE_CATEGORY: 'Sources/CreateCategory/category',
-        UPDATE_CATEGORY: 'Sources/UpdateCategory/category',
-        DELETE_CATEGORY: 'Sources/DeleteCategory/category',
-
-        CREATE: 'Sources/Create',
-        UPDATE: 'Sources/Update',
-        DELETE: 'Sources/Delete',
+        CREATE: `${SOURCES_BASE}/CreateCategory/category`,
+        UPDATE: `${SOURCES_BASE}/UpdateCategory/category`,
+        DELETE: `${SOURCES_BASE}/DeleteCategory/category`,
+    },
+    SOURCES: {
+        CREATE_CONTENT: `${SOURCES_BASE}/Create`,
+        UPDATE_CONTENT: `${SOURCES_BASE}/Update`,
+        DELETE_CONTENT: `${SOURCES_BASE}/Delete`,
     },
     TRANSACTION_LINKS: {
         GET_ALL: 'transactLinks/getAll',

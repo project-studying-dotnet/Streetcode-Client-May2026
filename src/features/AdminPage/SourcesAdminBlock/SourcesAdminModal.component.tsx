@@ -1,13 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import {
     SourceCategoryName,
     StreetcodeCategoryContent,
 } from '@models/sources/sources.model';
 
-import {
-    Form, Modal, Select, message,
-} from 'antd';
+import { Form, Modal, Select, Button, message } from 'antd';
 
 import './SourcesAdminModal.styles.scss';
 
@@ -22,6 +20,12 @@ interface Props {
 
 const TEXT_LIMIT = 4000;
 
+const getPlainText = (html: string) => {
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    return div.textContent || div.innerText || '';
+};
+
 const SourcesAdminModal = ({
     open,
     streetcodeId,
@@ -32,6 +36,7 @@ const SourcesAdminModal = ({
 }: Props) => {
     const [form] = Form.useForm();
     const [text, setText] = useState('');
+    const [saving, setSaving] = useState(false);
 
     useEffect(() => {
         if (open) {
@@ -43,25 +48,41 @@ const SourcesAdminModal = ({
         }
     }, [open, initialContent, form]);
 
+    const plainTextLength = useMemo(() => {
+        return getPlainText(text).length;
+    }, [text]);
+
+    const isOverLimit = plainTextLength > TEXT_LIMIT;
+
     const handleSave = async () => {
-        const values = await form.validateFields();
+        try {
+            const values = await form.validateFields();
 
-        if (!text.trim()) {
-            message.error('Текст є обовʼязковим');
-            return;
+            if (!text.trim()) {
+                message.error('Текст є обовʼязковим');
+                return;
+            }
+
+            if (isOverLimit) {
+                message.error(`Ліміт — ${TEXT_LIMIT} символів (без HTML тегів)`);
+                return;
+            }
+
+            setSaving(true);
+
+            await onSave({
+                id: initialContent?.id,
+                streetcodeId,
+                sourceLinkCategoryId: values.sourceLinkCategoryId,
+                text,
+            });
+
+            onCancel();
+        } catch {
+            message.error('Не вдалося зберегти блок');
+        } finally {
+            setSaving(false);
         }
-
-        if (text.length > TEXT_LIMIT) {
-            message.error(`Максимальна довжина тексту — ${TEXT_LIMIT} символів`);
-            return;
-        }
-
-        await onSave({
-            id: initialContent?.id,
-            streetcodeId,
-            sourceLinkCategoryId: values.sourceLinkCategoryId,
-            text,
-        });
     };
 
     return (
@@ -72,9 +93,7 @@ const SourcesAdminModal = ({
             width={700}
             className="sourcesAdminModal"
         >
-            <h2 className="sourcesAdminModalTitle">
-                Для фанатів
-            </h2>
+            <h2 className="sourcesAdminModalTitle">Для фанатів</h2>
 
             <Form form={form} layout="vertical">
                 <Form.Item
@@ -101,9 +120,7 @@ const SourcesAdminModal = ({
                     <Editor
                         value={text}
                         onEditorChange={(value) => {
-                            if (value.length <= TEXT_LIMIT) {
-                                setText(value);
-                            }
+                            setText(value);
                         }}
                         init={{
                             height: 300,
@@ -120,20 +137,23 @@ const SourcesAdminModal = ({
                         }}
                     />
 
-                    <div className="sourcesAdminSymbolsCounter">
-                        {text.length}
-                        /
-                        {TEXT_LIMIT}
+                    <div
+                        className={`sourcesAdminSymbolsCounter ${isOverLimit ? 'error' : ''
+                            }`}
+                    >
+                        {plainTextLength}/{TEXT_LIMIT}
                     </div>
                 </Form.Item>
 
-                <button
-                    type="button"
-                    className="sourcesAdminModalSaveBtn"
+                <Button
+                    type="primary"
+                    loading={saving}
+                    disabled={saving || isOverLimit}
                     onClick={handleSave}
+                    className="sourcesAdminModalSaveBtn"
                 >
                     Зберегти
-                </button>
+                </Button>
             </Form>
         </Modal>
     );

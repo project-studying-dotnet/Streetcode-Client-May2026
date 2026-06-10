@@ -21,18 +21,18 @@ $articlesImg: "@assets/images/sources/Articles.png";
     min-width: 240px;
     height: 48px;
 
-    border-radius: 12px !important;
+    border-radius: 12px;
 
-    background-color: c.$accented-red-color !important;
-    border-color: c.$accented-red-color !important;
-    color: c.$pure-white-color !important;
+    background-color: c.$accented-red-color;
+    border-color: c.$accented-red-color;
+    color: c.$pure-white-color;
 
     font-size: 16px;
     font-weight: 500;
 
     &:hover {
-        background-color: c.$dark-red-color !important;
-        border-color: c.$dark-red-color !important;
+        background-color: c.$dark-red-color;
+        border-color: c.$dark-red-color;
     }
 }
 
