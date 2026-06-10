@@ -1,24 +1,29 @@
-@use "@sass/_utils.functions.scss" as *;
-@use "@sass/variables/_variables.colors.scss" as c;
-@use "@sass/mixins/_utils.mixins.scss" as mut;
 @use "@sass/_utils.functions.scss" as f;
+@use "@sass/variables/_variables.colors.scss" as c;
 
 .adminBar {
-    @include mut.flexed(row, $align-items: flex-start, $gap: 60px);
+    min-width: 230px;
+    display: flex;
+    flex-direction: column;
+    background-color: c.$pure-white-color;
+    border-right: 1px solid #f0f0f0;
+    box-shadow: 4px 0 12px rgb(0 0 0 / 6%);
+    min-height: calc(100vh - 100px);
+    z-index: 1;
 
-    position: fixed;
-    left: f.pxToRem(30px);
-    font-size: f.pxToRem(28px); 
-    .Link {
-        color: black;
-        margin-bottom: 10px;
+    .logoutButton {
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        margin-top: auto;
+        margin-bottom: 24px;
+        justify-content: flex-start;
+
+        font-size: 14px;
+        color: #666;
+
         &:hover {
-            cursor: pointer;
-            color: c.$dark-red-color;
-        }
-        &:focus {
-            outline: none;
-            box-shadow: none;
+            color: #e04031;
         }
          &.active {
         color: #E04031;
@@ -26,3 +31,52 @@
     }    
     }
 }
+
+.adminBarLink {
+    padding: f.pxToRem(12px) f.pxToRem(20px);
+    color: black;
+    text-decoration: none;
+    font-size: f.pxToRem(16px);
+
+    &:hover {
+        color: c.$dark-red-color;
+    }
+
+    &:focus {
+        outline: none;
+        box-shadow: none;
+    }
+
+    &.active {
+        background: #fbe7e7;
+        border-left: 4px solid #e04031;
+        font-weight: 600;
+    }
+}
+
+.adminBarHeader {
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 16px;
+    margin-bottom: 12px;
+}
+
+.adminBarLogo {
+    width: 90px;
+    height: auto;
+}
+
+.adminBarBeta {
+    font-size: 10px;
+    color: #666;
+    margin-top: 2px;
+}
+
+.adminBarLogoButton {
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+}
+

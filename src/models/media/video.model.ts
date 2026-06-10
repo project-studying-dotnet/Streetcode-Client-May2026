@@ -12,3 +12,9 @@ export default interface Video {
 export interface VideoCreate {
     url: string;
 }
+
+export interface VideoCreateDto {
+  title: string;
+  url: string;
+  streetcodeId: number;
+}

@@ -1,32 +1,101 @@
 import './AdminBar.styles.scss';
 
-import { NavLink } from 'react-router-dom';
+import { ArrowLeftOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
+import { NavLink, useNavigate } from 'react-router-dom';
 
-import FRONTEND_ROUTES from '@/app/common/constants/frontend-routes.constants';
+import useMobx from '@/app/stores/root-store';
+import useWindowSize from '@/app/common/hooks/stateful/useWindowSize.hook';
 
-const adminLinks = [
-    { to: FRONTEND_ROUTES.ADMIN.STREETCODES, label: 'Стріткоди' },
-    { to: FRONTEND_ROUTES.ADMIN.FOR_FANS, label: 'Для фанів' },
-    { to: FRONTEND_ROUTES.ADMIN.PARTNERS, label: 'Партнери' },
-    { to: FRONTEND_ROUTES.ADMIN.TEAM, label: 'Команда' },
-    { to: FRONTEND_ROUTES.ADMIN.DICTIONARY, label: 'Словник' },
+import StreetcodeSvg from '@images/header/Streetcode_logo.svg';
+import StreetcodeSvgMobile from '@images/header/Streetcode_logo_mobile.svg';
+
+import FRONTEND_ROUTES from '@constants/frontend-routes.constants';
+
+const adminNavItems = [
+    {
+        title: 'History-коди',
+        to: FRONTEND_ROUTES.ADMIN.STREETCODES,
+    },
+    {
+        title: 'Для фанів',
+        to: FRONTEND_ROUTES.ADMIN.FOR_FANS,
+    },
+    {
+        title: 'Партнери',
+        to: FRONTEND_ROUTES.ADMIN.PARTNERS,
+    },
+    {
+        title: 'Едітор',
+        to: FRONTEND_ROUTES.ADMIN.NEW_STREETCODE,
+    },
+    {
+        title: 'Команда',
+        to: FRONTEND_ROUTES.ADMIN.TEAM,
+    },
+    {
+        title: 'Календар',
+        to: FRONTEND_ROUTES.ADMIN.CALENDAR,
+    },
+    {
+        title: 'Новини',
+        to: FRONTEND_ROUTES.ADMIN.NEWS,
+    },
+    {
+        title: 'Вакансії',
+        to: FRONTEND_ROUTES.ADMIN.VACANCIES,
+    },
+    {
+        title: 'Словник',
+        to: FRONTEND_ROUTES.ADMIN.DICTIONARY,
+    },
 ];
 
-const getLinkClassName = ({ isActive }: { isActive: boolean }) =>
-    `Link ${isActive ? 'active' : ''}`;
+const AdminBar = () => {
+    const { userLoginStore } = useMobx();
+    const navigate = useNavigate();
+    const windowSize = useWindowSize();
 
-const AdminBar = () => (
-    <div className="adminBar">
-        {adminLinks.map(({ to, label }) => (
-            <NavLink
-                key={to}
-                to={to}
-                className={getLinkClassName}
+    const handleLogout = async () => {
+        await userLoginStore.logout();
+        navigate(FRONTEND_ROUTES.ADMIN.LOGIN);
+    };
+
+    return (
+        <nav className="adminBar">
+            <div className="adminBarHeader">
+                <NavLink to={FRONTEND_ROUTES.BASE} className="adminBarLogoButton">
+                    {windowSize.width > 1024 ? (
+                        <StreetcodeSvg />
+                    ) : (
+                        <StreetcodeSvgMobile />
+                    )}
+                </NavLink>
+
+                <span className="adminBarBeta">Beta</span>
+            </div>
+
+            {adminNavItems.map(({ title, to }) => (
+                <NavLink
+                    key={title}
+                    to={to}
+                    className="adminBarLink"
+                >
+                    {title}
+                </NavLink>
+            ))}
+
+            <Button
+                className="logoutButton"
+                type="text"
+                danger
+                icon={<ArrowLeftOutlined />}
+                onClick={handleLogout}
             >
-                {label}
-            </NavLink>
-        ))}
-    </div>
-);
+                Вихід
+            </Button>
+        </nav>
+    );
+};
 
 export default AdminBar;

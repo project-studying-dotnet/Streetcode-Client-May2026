@@ -228,5 +228,6 @@ export const API_ROUTES = {
     ADMIN_AUTHORIZATION: {
         LOGIN: 'auth/login',
         REFRESH_TOKEN: 'auth/refresh-token',
+        LOGOUT: 'auth/logout'
     },
 };
