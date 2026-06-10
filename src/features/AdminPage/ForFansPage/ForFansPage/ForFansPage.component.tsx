@@ -26,7 +26,7 @@ const ForFansPage = () => {
         <div className="forFansPage">
             <div className="forFansHeader">
                 <Button
-                    className="streetcode-custom-button forFansAddButton"
+                    className="forFansAddButton"
                     onClick={handleAdd}
                 >
                     Додати категорію

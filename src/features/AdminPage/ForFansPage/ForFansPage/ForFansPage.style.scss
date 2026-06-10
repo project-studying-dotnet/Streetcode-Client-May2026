@@ -1,4 +1,4 @@
-@use '@sass/mixins/_utils.mixins.scss' as mut;
+@use "@sass/mixins/_utils.mixins.scss" as mut;
 @use "@sass/variables/_variables.fonts.scss" as ft;
 @use "@sass/variables/_variables.colors.scss" as c;
 @use "@sass/_utils.functions.scss" as f;
@@ -8,67 +8,64 @@ $articlesImg: "@assets/images/sources/Articles.png";
 
 .forFansPage {
     width: 100%;
-    padding: 0 32px;
-}
-
-.forFansHeader {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 40px;
-}
-
-.forFansAddButton {
-    min-width: 240px;
-    height: 48px;
-
-    border-radius: 12px;
-
-    background-color: c.$accented-red-color;
-    border-color: c.$accented-red-color;
-    color: c.$pure-white-color;
-
-    font-size: 16px;
-    font-weight: 500;
-
-    &:hover {
-        background-color: c.$dark-red-color;
-        border-color: c.$dark-red-color;
+    .forFansHeader {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        margin-bottom: 24px;
     }
-}
 
-.forFansGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 340px));
-    justify-content: center;
-    gap: 48px 64px;
-}
+    .forFansAddButton {
+        min-height: f.pxToRem(34px);
+        min-width: f.pxToRem(120px);
+        border: none;
+        border-radius: f.pxToRem(4px);
+        font-weight: 500;
+        transition: background-color 0.3s;
+        background-color: #e04031;
+        color: c.$pure-white-color;
+        padding: 0 f.pxToRem(16px);
+        height: f.pxToRem(34px);
 
-.sourcesSliderItem {
-    width: 340px;
-    height: 190px;
-}
+        &:hover {
+        background-color: c.$dark-red-color;
+        }
+    }
 
-.actionButton {
-    margin-right: 8px;
+    .forFansGrid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 340px));
+        justify-content: center;
+        gap: 48px 64px;
+    }
 
-    &:hover {
+    .sourcesSliderItem {
+        width: 340px;
+        height: 190px;
+    }
+
+    .actionButton {
+        margin-right: 8px;
+
+        &:hover {
         color: c.$dark-red-color;
         cursor: pointer;
         scale: 1.2;
+        }
     }
-}
 
-.modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    .modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
 
-    background: white;
-    padding: 20px;
+        background: white;
+        padding: 20px;
 
-    border-radius: 8px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+        border-radius: 8px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
 
-    z-index: 1000;
+        z-index: 1000;
+    }
 }
