@@ -22,13 +22,15 @@ const CopyrightText = `Джерело: «Стріткод: історія на �
 const App = () => {
     const { pathname } = useLocation();
     const { modalStore: { isPageDimmed } } = useModalContext();
+
+    const isAdminPage = pathname.startsWith(FRONTEND_ROUTES.ADMIN.BASE);
     return (
         <div className="mainBlockWrapper" style={{ position: 'relative' }}>
             <ToastContainer position="bottom-right" limit={3} />
             <CopyWithCopyright copyrightText={CopyrightText}>
                 <ModalWrapper />
             </CopyWithCopyright>
-            <HeaderBlock />
+            {!isAdminPage && <HeaderBlock />}
             <div className="mainWrapper">
                 <div className={`${isPageDimmed ? 'dimmed' : ''}`} />
                 <CopyWithCopyright copyrightText={CopyrightText}>
@@ -43,9 +45,11 @@ const App = () => {
                     )}
                 </CopyWithCopyright>
             </div>
-            <div className="footerWrapper">
-                <Footer />
-            </div>
+            {!isAdminPage && (
+                <div className="footerWrapper">
+                    <Footer />
+                </div>
+            )}
         </div>
     );
 };
