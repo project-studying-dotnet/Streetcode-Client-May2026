@@ -4,3 +4,9 @@
     flex-direction: column;
     gap: 20px;
 }
+
+.gallery-viewport.drop-active {
+  outline: 2px dashed #4d90fe;
+  background: rgba(77, 144, 254, 0.08);
+  transition: 0.2s ease;
+}

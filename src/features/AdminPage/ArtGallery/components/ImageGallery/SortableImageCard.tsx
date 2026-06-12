@@ -13,13 +13,15 @@ export const SortableImageCard: React.FC<SortableImageCardProps> = ({
     onConfirmRequest,
     onCancelRequest
 }) => {
-    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
-        id: image.id
+    const { attributes, listeners, setNodeRef, transform, transition,isDragging } = useSortable({
+        id: `img_${image.id}`
     });
 
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
+        opacity: isDragging ? 0.5 : 1,
+        zIndex: isDragging ? 100 : 'auto'
     };
 
     return (

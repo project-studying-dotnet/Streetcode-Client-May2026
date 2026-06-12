@@ -15,7 +15,6 @@ export const useFileUpload = (onUpload: (file: File) => void) => {
     if (file) onUpload(file);
   };
 
-  // Drag-and-Drop события
   const handleDragOver = (e: DragEvent) => {
     e.preventDefault();
     setIsDragging(true);

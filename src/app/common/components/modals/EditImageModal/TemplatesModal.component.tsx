@@ -1,18 +1,18 @@
-import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { Modal } from 'antd';
 import { useModalContext } from '@stores/root-store';
+import { TemplateRenderer } from '@components/ImageTemplates-grid/TemplateRenderer';
 import './TemplatesModal.styles.scss';
 
 const TemplatesModal = observer(() => {
     const {
         modalStore: { setModal, modalsState: { templates } },
-        templateStore
+        imageTemplateStore
     } = useModalContext();
 
     const handleSelect = (template: any) => {
-        templateStore.setActiveTemplate(template);
-        setModal('templates', undefined, false); // Закрываем окно
+        imageTemplateStore.setActiveTemplate(template);
+        setModal('templates', undefined, false); 
     };
 
     return (
@@ -24,24 +24,16 @@ const TemplatesModal = observer(() => {
             title="Шаблони"
         >
             <div className="templates-grid">
-                {templateStore.templates.map((item) => (
+                {imageTemplateStore.templates.map((item) => (
                     <div
                         key={item.id}
                         className="template-item"
                         onClick={() => handleSelect(item)}
                     >
-                        <div
-                            className={`preview-grid ${item.name
-                                .toLowerCase()
-                                .replace(/-/g, '-')}`}
-                        >
-                            {item.slots.map((slot) => (
-                                <div
-                                    key={slot.id}
-                                    className="preview-slot"
-                                />
-                            ))}
-                        </div>
+                        <TemplateRenderer 
+                            template={item} 
+                            renderSlot={() => null}
+                        />
                     </div>
                 ))}
             </div>

@@ -1,18 +1,20 @@
+@use "@sass/variables/_variables.colors.scss" as c;
+
 .add-button-card {
   width: 146px;
   height: 183px; 
-  border: 1px dashed #cccccc;
+  border: 1px dashed c.$accented-white-color;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  background-color: #fcfcfc;
+  background-color: c.$white-color;
   transition: border-color 0.2s;
   transition: all 0.2s ease;
 
   &:hover {
-    border-color: #999;
+    border-color: c.$normal-gray-color;
   }
 
   .content {
@@ -25,19 +27,19 @@
 
     .icon {
       font-size: 24px;
-      color: #666;
+      color: c.$normal-gray-color;
     }
 
     .text {
       font-size: 12px;
-      color: #757575;
+      color: c.$dark-gray-color;
       margin: 0;
       line-height: 1.4;
     }
   }
   &.dragging {
-    border-color: #2563eb;
-    background-color: #eff6ff; 
+    border-color: c.$accented-red-color;
+    background-color: c.$white-color; 
     transform: scale(1.02); 
   }
 }

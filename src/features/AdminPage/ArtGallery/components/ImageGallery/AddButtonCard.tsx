@@ -2,7 +2,11 @@ import React from 'react';
 import { useFileUpload } from '../../hooks/useFileUpload'; //
 import './AddButtonCard.styles.scss';
 
-export const AddButtonCard = ({ onUpload }) => {
+
+interface AddButtonCardProps {
+  onUpload: (file: File) => void;
+}
+export const AddButtonCard: React.FC<AddButtonCardProps> = ({ onUpload }) => {
   const { 
     fileInputRef, 
     isDragging, 

@@ -1,27 +1,94 @@
-import React from 'react';
-import { observer } from 'mobx-react-lite'; 
-import { useModalContext } from '@stores/root-store'; 
+import  { useState , useEffect} from 'react';
+import { observer } from 'mobx-react-lite';
+import { useModalContext } from '@stores/root-store';
+import { TemplateRenderer } from '@components/ImageTemplates-grid/TemplateRenderer';
+import {DroppableSlot} from './DroppableSlot';
 import './TemplateGrid.styles.scss';
 
-export const TemplateGrid = observer(() => { 
-  const { templateStore } = useModalContext();
-  const { activeTemplate } = templateStore;
-if (!activeTemplate) {
-    return <div>Загрузка шаблонов...</div>; 
+export const TemplateGrid = observer(({
+  slots,
+  onClearAll,
+  onSave,
+  onRemoveSlot
+}: any) => {
+  const { imageTemplateStore } = useModalContext();
+
+  const [showMenu, setShowMenu] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+
+  if (!imageTemplateStore.activeTemplate) {
+    return <div>Загрузка...</div>;
   }
+
+  const isTemplateFilled = Object.values(slots).some(
+    (image) => image !== null
+  );
+
+  useEffect(() => {
+  if (!isTemplateFilled) {
+    setIsEditing(false);
+  }
+}, [isTemplateFilled]);
+
   return (
-   <div className={`template-grid-container preview-grid ${activeTemplate.name}`}>
+    <div className="template-grid-wrapper">
       
-      {activeTemplate.slots.map((slot) => (
-        <div 
-          key={slot.id} 
-          className="preview-slot" 
-          onDrop={() => console.log(`Drop to ${slot.id}`)}
-          onDragOver={(e) => e.preventDefault()} 
-        >
+      <TemplateRenderer
+        template={imageTemplateStore.activeTemplate}
+        renderSlot={(slot: any) => (
+          <DroppableSlot
+            slot={slot}
+            image={slots[slot.id]}
+            onRemove={onRemoveSlot}
+            isEditing={isEditing}
+          />
+        )}
+      />
+
+      {isTemplateFilled && (
+        <div className="template-actions">
+          <button
+            className="dots-menu"
+            onClick={() => setShowMenu(!showMenu)}
+          >
+            ⋮
+          </button>
+
+          {showMenu && (
+            <div className="menu-overlay">
+              <button
+                onClick={() => {
+                  setIsEditing(true);
+                  setShowMenu(false);
+                }}
+              >
+                Редагувати
+              </button>
+
+              <button
+                onClick={() => {
+                  onClearAll();
+                  setShowMenu(false);
+                  setIsEditing(false);
+                }}
+              >
+                Видалити все
+              </button>
+
+              <button
+                onClick={() => {
+                  onSave();
+                  setShowMenu(false);
+                  setIsEditing(false);
+                }}
+                className="save-btn"
+              >
+                Зберегти
+              </button>
+            </div>
+          )}
         </div>
-      ))}
-      
+      )}
     </div>
   );
 });
