@@ -1,4 +1,5 @@
 import './AdminBar.styles.scss';
+
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -9,16 +10,16 @@ import useWindowSize from '@/app/common/hooks/stateful/useWindowSize.hook';
 import StreetcodeSvg from '@images/header/Streetcode_logo.svg';
 import StreetcodeSvgMobile from '@images/header/Streetcode_logo_mobile.svg';
 
-
-
-
-
 import FRONTEND_ROUTES from '@constants/frontend-routes.constants';
 
 const adminNavItems = [
     {
         title: 'History-коди',
         to: FRONTEND_ROUTES.ADMIN.STREETCODES,
+    },
+    {
+        title: 'Для фанів',
+        to: FRONTEND_ROUTES.ADMIN.FOR_FANS,
     },
     {
         title: 'Партнери',
@@ -59,36 +60,42 @@ const AdminBar = () => {
         await userLoginStore.logout();
         navigate(FRONTEND_ROUTES.ADMIN.LOGIN);
     };
-    return (
-    <nav className="adminBar">
-        <div className="adminBarHeader">
-            <NavLink to={FRONTEND_ROUTES.BASE} className="adminBarLogoButton">
-                {windowSize.width > 1024
-                    ? <StreetcodeSvg />
-                    : <StreetcodeSvgMobile />}
-            </NavLink>
-            <span className="adminBarBeta">Beta</span>
-        </div>
-        {adminNavItems.map(({ title, to }) => (
-            <NavLink 
-                to={to} 
-                key={title} 
-                className="adminBarLink"
-            >
-                {title}
-            </NavLink>
-        ))}
 
-        <Button
-            className="logoutButton"
-            type="text"
-            danger  
-            icon={<ArrowLeftOutlined />}
-            onClick={handleLogout}
-        >
-            Вихід
-        </Button>
-    </nav>
-)};
+    return (
+        <nav className="adminBar">
+            <div className="adminBarHeader">
+                <NavLink to={FRONTEND_ROUTES.BASE} className="adminBarLogoButton">
+                    {windowSize.width > 1024 ? (
+                        <StreetcodeSvg />
+                    ) : (
+                        <StreetcodeSvgMobile />
+                    )}
+                </NavLink>
+
+                <span className="adminBarBeta">Beta</span>
+            </div>
+
+            {adminNavItems.map(({ title, to }) => (
+                <NavLink
+                    key={title}
+                    to={to}
+                    className="adminBarLink"
+                >
+                    {title}
+                </NavLink>
+            ))}
+
+            <Button
+                className="logoutButton"
+                type="text"
+                danger
+                icon={<ArrowLeftOutlined />}
+                onClick={handleLogout}
+            >
+                Вихід
+            </Button>
+        </nav>
+    );
+};
 
 export default AdminBar;

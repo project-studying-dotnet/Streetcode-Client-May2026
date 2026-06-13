@@ -13,6 +13,8 @@ import QRBlock from '@streetcode/QRBlock/QR.component';
 import SourcesBlock from '@streetcode/SourcesBlock/Sources.component';
 import TextBlockComponent from '@streetcode/TextBlock/TextBlock.component';
 import TickerBlock from '@streetcode/TickerBlock/Ticker.component';
+import LogoAnimationWeb from '../../assets/images/gifs/Logo-animation_web.gif';
+import LogoAnimationMob from '../../assets/images/gifs/Logo-animation_mob.gif';
 
 import StatisticRecordApi from '@/app/api/analytics/statistic-record.api';
 import StreetcodesApi from '@/app/api/streetcode/streetcodes.api';
@@ -89,9 +91,7 @@ const StreetcodeContent = () => {
                     <img
                         className="spinner"
                         alt=""
-                        src={isMobile
-                            ? require('@images/gifs/Logo-animation_web.gif')
-                            : require('@images/gifs/Logo-animation_mob.gif')}
+                        src={isMobile ? LogoAnimationWeb : LogoAnimationMob}
                     />
                 </div>
             )}
@@ -104,7 +104,6 @@ const StreetcodeContent = () => {
                 <TextBlockComponent />
                 <InterestingFactsComponent />
                 <TimelineBlockComponent />
-                {/* <MapBlock /> */}
                 <ArtGalleryBlockComponent />
                 <RelatedFiguresComponent setActiveTagId={setActiveTagId} />
                 <SourcesBlock />

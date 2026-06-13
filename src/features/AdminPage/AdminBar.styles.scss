@@ -25,6 +25,10 @@
         &:hover {
             color: #e04031;
         }
+         &.active {
+        color: #E04031;
+        font-weight: 500;
+    }    
     }
 }
 
