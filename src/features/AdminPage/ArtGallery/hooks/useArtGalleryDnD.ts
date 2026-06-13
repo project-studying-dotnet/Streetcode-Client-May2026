@@ -6,8 +6,7 @@ export const useArtGalleryDnD = ({
   setImages,
   templateSlots,
   setTemplateSlots,
-  imageTemplateStore,
-  removeImage
+  imageTemplateStore
 }: any) => {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -85,7 +84,7 @@ export const useArtGalleryDnD = ({
           [overId]: dragged
         }));
 
-        removeImage(dragged.id);
+        setImages((prev: any) => prev.filter((img: any) => String(img.id) !== String(dragged.id)));
       }
 
       if (overId === 'gallery') {

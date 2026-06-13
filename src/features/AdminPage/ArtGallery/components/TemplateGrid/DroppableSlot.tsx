@@ -3,7 +3,7 @@ import './TemplateGrid.styles.scss';
 
 
 export const DroppableSlot = ({ slot, image, onRemove, isEditing }: any) => {
-  const { setNodeRef } = useDroppable({ id: slot.id });
+  const { setNodeRef } = useDroppable({ id: String(slot.id) });
 
   return (
     <div ref={setNodeRef} className="slot-content">

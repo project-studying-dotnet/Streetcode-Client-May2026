@@ -147,6 +147,15 @@ export const API_ROUTES = {
         GET_ALL: 'streetcodeArt/getAll',
         GET_BY_STREETCODE_ID: 'streetcodeArt/getByStreetcodeId',
     },
+    ART_SLIDES: {
+        GET_BY_STREETCODE_ID: '/art-slide',
+        CREATE: '/art-slide',
+        UPDATE: '/art-slide',
+        DELETE: '/art-slide',
+    },
+    ART_SLIDE_TEMPLATES: {
+        GET_ALL: '/ArtSlideTeamplates',
+    },
     RELATED_FIGURES: {
         GET_ALL: 'relatedFigure/getAll',
         GET: 'relatedFigure/getById',

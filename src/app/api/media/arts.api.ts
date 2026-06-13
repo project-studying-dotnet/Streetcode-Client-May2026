@@ -7,9 +7,10 @@ const ArtsApi = {
 
     getById: (id: number) => Agent.get<Art>(`${API_ROUTES.ARTS.GET}/${id}`),
 
-    create: (art: Art) => Agent.post<Art>(`${API_ROUTES.ARTS.CREATE}`, art),
+    create: (data: FormData) => Agent.post<Art>(`${API_ROUTES.ARTS.CREATE}`, data),
 
-    update: (art: Art) => Agent.post<Art>(`${API_ROUTES.ARTS.UPDATE}`, art),
+    update: (id: number, data: { title: string; description: string }) =>
+        Agent.put<Art>(`${API_ROUTES.ARTS.UPDATE}/${id}`, data),
 
     delete: (id: number) => Agent.delete(`${API_ROUTES.ARTS.DELETE}/${id}`),
 };

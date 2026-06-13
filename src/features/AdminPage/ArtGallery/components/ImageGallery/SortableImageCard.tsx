@@ -2,7 +2,7 @@ import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { ImageCard } from './ImageCard';
-import { SortableImageCardProps } from '../../types/gallery.types';
+import { SortableImageCardProps } from '@models/media/image.model';
 
 
 export const SortableImageCard: React.FC<SortableImageCardProps> = ({

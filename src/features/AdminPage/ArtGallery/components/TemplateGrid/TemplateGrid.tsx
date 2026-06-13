@@ -1,8 +1,8 @@
-import  { useState , useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useModalContext } from '@stores/root-store';
 import { TemplateRenderer } from '@components/ImageTemplates-grid/TemplateRenderer';
-import {DroppableSlot} from './DroppableSlot';
+import { DroppableSlot } from './DroppableSlot';
 import './TemplateGrid.styles.scss';
 
 export const TemplateGrid = observer(({
@@ -16,23 +16,26 @@ export const TemplateGrid = observer(({
   const [showMenu, setShowMenu] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
-  if (!imageTemplateStore.activeTemplate) {
-    return <div>Загрузка...</div>;
-  }
-
-  const isTemplateFilled = Object.values(slots).some(
-    (image) => image !== null
-  );
+  const isTemplateFilled = slots && Object.values(slots).some((image) => image !== null);
 
   useEffect(() => {
-  if (!isTemplateFilled) {
-    setIsEditing(false);
-  }
-}, [isTemplateFilled]);
+    imageTemplateStore.fetchTemplates();
+  }, [imageTemplateStore]);
 
+  useEffect(() => {
+    if (!isTemplateFilled) {
+      setIsEditing(false);
+    }
+  }, [isTemplateFilled]);
+
+  if (!imageTemplateStore.activeTemplate) {
+    return <div>Загрузка шаблонов...</div>;
+  }
+
+  console.log("imageTemplateStore",imageTemplateStore);
   return (
     <div className="template-grid-wrapper">
-      
+
       <TemplateRenderer
         template={imageTemplateStore.activeTemplate}
         renderSlot={(slot: any) => (

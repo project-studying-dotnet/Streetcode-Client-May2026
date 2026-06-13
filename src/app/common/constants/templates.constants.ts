@@ -1,4 +1,3 @@
-// constants/templates.constants.ts
 
 export interface SlotConfig {
   id: string;

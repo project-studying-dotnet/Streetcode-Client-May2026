@@ -1,4 +1,4 @@
-import { ArtImage } from '../types/gallery.types';
+import { ArtImage } from '@models/media/image.model';
 
 export const useTemplateSlots = (
   templateSlots: Record<string, ArtImage | null>,

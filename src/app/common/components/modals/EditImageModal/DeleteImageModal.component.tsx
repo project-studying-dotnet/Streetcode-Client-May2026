@@ -5,20 +5,18 @@ import { Modal } from 'antd';
 const DeleteImageModal = observer(() => {
     const { modalStore: { setModal, modalsState: { deleteImage } } } = useModalContext();
 
-    const onConfirm = () => {
-        console.log("Удаляем картинку ID:", deleteImage.image?.id);
-        setModal('deleteImage');
+   const onConfirm = () => {
+        deleteImage.image?.onConfirm?.(); 
+        setModal('deleteImage', undefined, false); 
     };
-
     return (
         <Modal
-            title="Видалити зображення"
+            title="Видалити"
             open={deleteImage.isOpen}
             onOk={onConfirm}
             onCancel={() => setModal('deleteImage')}
-            className="deleteModal" 
         >
-            <p>Ви впевнені, що хочете видалити це зображення?</p>
+            <p>Ви впевнені?</p>
         </Modal>
     );
 });

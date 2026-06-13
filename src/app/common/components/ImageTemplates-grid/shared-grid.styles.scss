@@ -25,67 +25,73 @@
   display: grid;
   gap: 5px;
 
-  &.main-big {
-    grid-template-columns: 255px;
-    grid-template-rows: 205px;
+  // 1-2 слотф
+  &.template-single-large { grid-template-columns: 255px; grid-template-rows: 205px; grid-template-areas: "slot-0"; }
+  &.template-single-medium { grid-template-columns: 137px; grid-template-rows: 203px; grid-template-areas: "slot-0"; }
+  &.template-two-horizontal { grid-template-columns: 137px 137px; grid-template-rows: 203px; grid-template-areas: "slot-0 slot-1"; }
+
+  // 3 слота
+  &.template-three-mixed { 
+    grid-template-columns: 137px 137px; 
+    grid-template-rows: 203px 100px; 
+    grid-template-areas: "slot-0 slot-1" "slot-2 slot-2"; 
   }
 
-  &.medium {
-    grid-template-columns: 137px;
-    grid-template-rows: 203px;
+  // 4 слота
+  &.template-four-grid { grid-template-columns: repeat(2, 135px); grid-template-rows: repeat(2, 101px); grid-template-areas: "slot-0 slot-1" "slot-2 slot-3"; }
+  &.template-four-sidebar-left { 
+    grid-template-columns: 135px 137px; grid-template-rows: 101px 101px; 
+    grid-template-areas: "slot-0 slot-1" "slot-0 slot-2"; 
+  }
+  &.template-four-sidebar-right { 
+    grid-template-columns: 137px 135px; grid-template-rows: 101px 101px; 
+    grid-template-areas: "slot-1 slot-0" "slot-2 slot-0"; 
   }
 
-  &.two-medium {
-    grid-template-columns: repeat(2, 137px);
-    grid-template-rows: 203px;
-  }
+  // 5 слотів
+  &.template-five-mixed { grid-template-columns: 137px 65px 65px; grid-template-rows: 101px 101px; grid-template-areas: "slot-0 slot-1 slot-2" "slot-0 slot-3 slot-4"; }
+  &.template-five-grid { grid-template-columns: repeat(3, 85px); grid-template-rows: repeat(2, 101px); grid-template-areas: "slot-0 slot-1 slot-2" "slot-3 slot-4 slot-4"; }
+  &.template-five-complex { grid-template-columns: repeat(2, 130px); grid-template-rows: repeat(3, 65px); grid-template-areas: "slot-0 slot-1" "slot-2 slot-3" "slot-4 slot-4"; }
 
-  &.mid-plus-two-small {
-    grid-template-columns: 137px 135px;
-    grid-template-rows: 101px 101px;
-    gap: 4px;
-
-    .preview-slot:first-child {
-      grid-row: span 2;
-    }
-  }
-
-  &.four-small {
-    grid-template-columns: repeat(2, 135px);
-    grid-template-rows: repeat(2, 101px);
-    gap: 4px;
-  }
+  // 6 слотів
+  &.template-six-grid { grid-template-columns: repeat(3, 85px); grid-template-rows: repeat(2, 101px); grid-template-areas: "slot-0 slot-1 slot-2" "slot-3 slot-4 slot-5"; }
+  &.template-six-compact { grid-template-columns: repeat(3, 85px); grid-template-rows: repeat(2, 101px); grid-template-areas: "slot-0 slot-1 slot-2" "slot-3 slot-4 slot-5"; }
+  &.template-six-mixed { grid-template-columns: repeat(3, 85px); grid-template-rows: repeat(2, 101px); grid-template-areas: "slot-0 slot-0 slot-1" "slot-2 slot-3 slot-4"; }
+  &.template-six-large { grid-template-columns: repeat(3, 85px); grid-template-rows: repeat(2, 101px); grid-template-areas: "slot-0 slot-1 slot-2" "slot-3 slot-4 slot-5"; }
 }
 
 .preview-grid.carousel-preview {
-  .preview-slot {
-    border-radius: 30px;
+  .preview-slot { border-radius: 30px; }
+
+  /* 1 слот */
+  &.template-single-large { grid-template-columns: 380px; grid-template-rows: 305px; }
+  &.template-single-medium { grid-template-columns: 205px; grid-template-rows: 305px; }
+
+  /* 2 слота */
+  &.template-two-horizontal { grid-template-columns: repeat(2, 205px); grid-template-rows: 305px; }
+
+  /* 3 слота */
+  &.template-three-mixed { grid-template-columns: 205px 205px; grid-template-rows: 305px 150px; gap: 6px; }
+
+  /* 4 слота */
+  &.template-four-grid { grid-template-columns: repeat(2, 200px); grid-template-rows: repeat(2, 150px); gap: 6px; }
+  &.template-four-sidebar-left { 
+    grid-template-columns: 200px 205px; grid-template-rows: 150px 150px; gap: 6px;
+    .preview-slot:first-child { grid-row: span 2; } 
+  }
+  &.template-four-sidebar-right { 
+    grid-template-columns: 205px 200px; grid-template-rows: 150px 150px; gap: 6px;
+    .preview-slot:first-child { grid-row: span 2; } 
   }
 
-  &.main-big {
-    grid-template-columns: 380px;
-    grid-template-rows: 305px;
-  }
+  /* 5 слотів */
+  &.template-five-mixed { grid-template-columns: 205px 100px 100px; grid-template-rows: 150px 150px; gap: 6px; }
+  &.template-five-grid { grid-template-columns: repeat(3, 130px); grid-template-rows: repeat(2, 150px); gap: 6px; }
+  &.template-five-complex { grid-template-columns: repeat(2, 200px); grid-template-rows: repeat(3, 100px); gap: 6px; }
 
-  &.medium {
-    grid-template-columns: 205px;
-    grid-template-rows: 305px;
-  }
-
-  &.two-medium {
-    grid-template-columns: repeat(2, 205px);
-    grid-template-rows: 305px;
-  }
-
-  &.mid-plus-two-small {
-    grid-template-columns: 205px 200px;
-    grid-template-rows: 150px 150px;
-    gap: 6px;
-  }
-
-  &.four-small {
-    grid-template-columns: repeat(2, 200px);
-    grid-template-rows: repeat(2, 150px);
-    gap: 6px;
-  }
+  /* 6 слотів */
+  &.template-six-grid { grid-template-columns: repeat(3, 130px); grid-template-rows: repeat(2, 150px); gap: 6px; }
+  &.template-six-compact { grid-template-columns: repeat(3, 130px); grid-template-rows: repeat(2, 150px); gap: 6px; }
+  &.template-six-mixed { grid-template-columns: repeat(3, 130px); grid-template-rows: repeat(2, 150px); gap: 6px; }
+  &.template-six-large { grid-template-columns: repeat(3, 130px); grid-template-rows: repeat(2, 150px); gap: 6px; }
 }

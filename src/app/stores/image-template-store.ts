@@ -1,22 +1,48 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { arrayMove } from '@dnd-kit/sortable';
-import { TEMPLATES_CONFIG } from '../common/constants/templates.constants';
+import ArtSlideTemplatesApi from '@api/media/art-slide-templates.api';
+import { ArtSlideTemplate } from '@models/media/art-slide-template.model';
 
 export default class ImageTemplateStore {
-    public templates = TEMPLATES_CONFIG;
-    public activeTemplate = TEMPLATES_CONFIG[0];
-
-    savedTemplates: any[] = [];
+    public TemplateMap = new Map<number, ArtSlideTemplate>();
+    public activeTemplate: ArtSlideTemplate | null = null;
+    public savedTemplates: ArtSlideTemplate[] = [];
+    
+    private isLoaded = false; 
 
     constructor() {
         makeAutoObservable(this);
     }
 
-    public setActiveTemplate = (template: any) => {
+    get templates() {
+        return Array.from(this.TemplateMap.values());
+    }
+
+    public fetchTemplates = async () => {
+        if (this.isLoaded) return; 
+
+        try {
+            const data = await ArtSlideTemplatesApi.getAll();
+            runInAction(() => {
+                data.forEach(template => {
+                    this.TemplateMap.set(template.id, template);
+                });
+                this.isLoaded = true;
+                
+                if (!this.activeTemplate && data.length > 0) {
+                    this.activeTemplate = data[0];
+                }
+            });
+        } catch (error: unknown) {
+            console.error("Failed to fetch templates", error);
+        }
+    };
+
+    public setActiveTemplate = (template: ArtSlideTemplate) => {
         this.activeTemplate = template;
     };
 
-    addTemplate(template: any) {
+    addTemplate(template: ArtSlideTemplate) {
         this.savedTemplates.push(template);
     }
 
@@ -24,7 +50,7 @@ export default class ImageTemplateStore {
         this.savedTemplates = arrayMove(this.savedTemplates, oldIndex, newIndex);
     }
 
-    updateTemplate(updatedTemplate: any) {
+    updateTemplate(updatedTemplate: ArtSlideTemplate) {
         const index = this.savedTemplates.findIndex(t => t.id === updatedTemplate.id);
         if (index !== -1) {
             this.savedTemplates[index] = updatedTemplate;

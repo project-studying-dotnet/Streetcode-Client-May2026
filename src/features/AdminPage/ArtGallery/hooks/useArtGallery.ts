@@ -1,30 +1,40 @@
-import { useState } from 'react';
-import { ArtImage } from '../types/gallery.types';
+import useMobx from '@stores/root-store';
+
+const toBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+};
+
 
 export const useArtGallery = () => {
-  const [images, setImages] = useState<ArtImage[]>([]);
+  const { imagesStore } = useMobx();
 
-  const addImage = (file: File) => {
-    const url = URL.createObjectURL(file);
-
-    const newImage: ArtImage = {
-      id: crypto.randomUUID(),
-      url,
-      isPublished: false,
-      offset: 4,
-    };
-
-    setImages(prev => [...prev, newImage]);
+  const addImage = async (file: File) => {
+    const localUrl = URL.createObjectURL(file);
+    const base64 = await toBase64(file);
+    await imagesStore.createImage({
+      baseFormat: base64.split(',')[1],
+      mimeType: file.type,
+      extension: file.name.split('.').pop() || 'jpg',
+      title: file.name
+    }, localUrl);
   };
 
-  const removeImage = (id: string) => {
-    setImages(prev => prev.filter(img => img.id !== id));
+  const removeImage = async (id: number) => {
+    await imagesStore.deleteImage(id);
   };
 
   return {
-    images,
-    setImages,
+    images: imagesStore.getImageArray,
     addImage,
     removeImage,
+    addImageBackToGallery: imagesStore.addImageBackToGallery,
+    moveImageToTemplate: imagesStore.moveImageToTemplate,
+    moveImageBackToGallery: imagesStore.moveImageBackToGallery,
+    reorderImages: imagesStore.reorderImages
   };
 };

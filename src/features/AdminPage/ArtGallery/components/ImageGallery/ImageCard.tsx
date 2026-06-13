@@ -1,12 +1,14 @@
 import React from 'react';
 import { useModalContext } from '@stores/root-store';
-import { ImageCardProps } from '../../types/gallery.types';
+import { ImageCardProps } from '@models/media/image.model';
+import { useArtGallery } from '../../hooks/useArtGallery';
 import './ImageCard.styles.scss';
 
 export const ImageCard: React.FC<ImageCardProps> = ({
   image, attributes, listeners
 }) => {
   const { modalStore: { setModal } } = useModalContext();
+  const { removeImage } = useArtGallery();
 
   return (
     <div className="image-card"
@@ -24,7 +26,11 @@ export const ImageCard: React.FC<ImageCardProps> = ({
 
         <button onClick={(e) => {
           e.stopPropagation();
-          setModal('deleteImage', undefined, true, image);
+          const imageWithAction = {
+            ...image,
+            onConfirm: () => removeImage(image.id)
+          };
+          setModal('deleteImage', undefined, true, imageWithAction);
         }}>🗑️</button>
       </div>
     </div>
