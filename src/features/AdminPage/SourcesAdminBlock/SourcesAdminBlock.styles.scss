@@ -1,0 +1,62 @@
+.sourcesAdminBlock {
+    margin: 48px;
+}
+
+.sourcesAdminHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+
+    .sourcesAdminTitle {
+        margin: 0 auto;
+        font-size: 28px;
+        font-weight: 500;
+    }
+
+    .ant-btn {
+        min-width: 3rem;
+    }
+}
+.sourcesAdminAddButton {
+    width: 56px;
+    min-width: 56px;
+    height: 32px;
+    padding: 0;
+
+    .sourcesAdminAddIcon {
+        font-size: 18px;
+    }
+}
+.sourcesAdminList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.sourcesAdminCard {
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    background: #fff;
+
+    .ant-card-body {
+        min-height: 52px;
+        padding: 18px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+    }
+
+    .sourcesAdminCardTitle {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+    }
+}
+
+.sourcesAdminActions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}

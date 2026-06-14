@@ -1,0 +1,62 @@
+@use '@sass/mixins/_utils.mixins.scss' as mut;
+@use "@assets/sass/variables/_variables.colors.scss" as c;
+@use "@assets/sass/variables/_variables.fonts.scss" as f;
+
+.text-video-form {
+
+  &__editor {
+    @include mut.with-font($font-family: f.$roboto-font, $font-weight: 300, $font-size: 20px);
+    line-height: 27px;
+    min-height: 269px;
+    width: 100%;
+    border: 1px solid c.$light-border-color;
+    padding: 16px;
+    border-radius: 8px;
+    outline: none !important;
+    resize: vertical;
+    transition: border-color 0.2s ease;
+
+    &:hover,
+    &:focus {
+      border-color: c.$pure-black-color !important;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+  }
+
+&__toolbar {
+  position: absolute;
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  background: c.$white-color;
+  border: 1px solid c.$light-border-color;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.toolbar-btn {
+  padding: 5px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: c.$white-color;
+
+  &:hover {
+    border-color: c.$accented-red-color;
+  }
+
+  &.active {
+    border: 1px solid c.$accented-red-color;
+  }
+
+  &--bold {
+    font-weight: 700;
+  }
+
+  &--italic {
+    font-style: italic;
+  }
+}
+}

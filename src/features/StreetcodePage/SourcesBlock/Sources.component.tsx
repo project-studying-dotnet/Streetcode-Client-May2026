@@ -1,63 +1,80 @@
 import './Sources.styles.scss';
 
 import { observer } from 'mobx-react-lite';
-import { useEffect } from 'react';
-import BlockSlider from '@features/SlickSlider/SlickSlider.component';
+import { useEffect, useRef } from 'react';
 import useMobx, { useStreetcodeDataContext } from '@stores/root-store';
 import BlockHeading from '@streetcode/HeadingBlock/BlockHeading.component';
 
-import useWindowSize from '@/app/common/hooks/stateful/useWindowSize.hook';
-
 import SourceItem from './SourceItem/SourceItem.component';
+import LeftArrow from '@assets/images/utils/LeftDefaultSliderArrow.svg';
+import RightArrow from '@assets/images/utils/RightDefaultSliderArrow.svg';
 
 const SourcesComponent = () => {
     const { sourcesStore } = useMobx();
     const { streetcodeStore: { getStreetCodeId } } = useStreetcodeDataContext();
-    const windowsize = useWindowSize();
-    useEffect(() => {
-        const streetcodeId = getStreetCodeId;
-        if (streetcodeId > 0) {
-            sourcesStore.fetchSrcCategoriesByStreetcodeId(streetcodeId);
-        }
-    }, [getStreetCodeId]);
-    const sliderProps = {
-        className: 'heightContainer',
-        infinite: true,
-        swipe: windowsize.width <= 1200,
-        dots: windowsize.width <= 1024,
-        variableWidth: windowsize.width <= 1200,
-        swipeOnClick: false,
-        slidesToShow: windowsize.width >= 1200 ? undefined : windowsize.width < 1200 ? 1 : 2,
-        slidesToScroll: windowsize.width >= 1200 ? undefined : windowsize.width < 1200 ? 1 : 2,
-        rows: 1,
-        initialSlide: 1,
-        centerMode: windowsize.width < 1200,
-        centerPadding: windowsize.width < 768 ? '10px' : '30px',
-    };
-    return (sourcesStore.getSrcCategoriesArray.length > 0
-        ? (
-            <div className="sourcesWrapper container">
+    const sliderRef = useRef<HTMLDivElement | null>(null);
 
-                <div className="sourcesContainer">
-                    <BlockHeading headingText="Для фанатів" />
-                    <div className="sourceContentContainer">
-                        <div className="sourcesSliderContainer">
-                            <BlockSlider
-                                {...sliderProps}
+    useEffect(() => {
+        if (getStreetCodeId > 0) {
+            sourcesStore.fetchSrcCategoriesByStreetcodeId(getStreetCodeId);
+        }
+    }, [getStreetCodeId, sourcesStore]);
+
+    const scrollSources = (direction: 'left' | 'right') => {
+        sliderRef.current?.scrollBy({
+            left: direction === 'right' ? 420 : -420,
+            behavior: 'smooth',
+        });
+    };
+
+    const items = sourcesStore.getSrcCategoriesArray;
+
+    if (items.length === 0) {
+        return <></>;
+    }
+
+    return (
+        <div className="sourcesWrapper container">
+            <div className="sourcesContainer">
+                <BlockHeading headingText="Для фанатів" />
+
+                <div className="sourceContentContainer">
+                    <div className="sourcesSliderWrapper">
+                        {items.length > 3 && (
+                            <button
+                                type="button"
+                                className="sourcesSliderArrow sourcesSliderArrow--left"
+                                onClick={() => scrollSources('left')}
+                                aria-label="Попередні категорії"
                             >
-                                {sourcesStore.getSrcCategoriesArray.map((sc) => (
-                                    <SourceItem
-                                        key={`${sc.id}${sc.streetcodeId}`}
-                                        srcCategory={sc}
-                                    />
-                                ))}
-                            </BlockSlider>
+                                <LeftArrow />
+                            </button>
+                        )}
+
+                        <div className="sourcesHorizontalList" ref={sliderRef}>
+                            {items.map((sc) => (
+                                <SourceItem
+                                    key={`${sc.id}${sc.streetcodeId}`}
+                                    srcCategory={sc}
+                                />
+                            ))}
                         </div>
+
+                        {items.length > 3 && (
+                            <button
+                                type="button"
+                                className="sourcesSliderArrow sourcesSliderArrow--right"
+                                onClick={() => scrollSources('right')}
+                                aria-label="Наступні категорії"
+                            >
+                                <RightArrow />
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>
-        )
-        : <></>);
+        </div>
+    );
 };
 
 export default observer(SourcesComponent);
