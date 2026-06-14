@@ -1,30 +1,72 @@
+@use "@assets/sass/variables/_variables.colors.scss" as c;
+
 .template-card {
-    position: relative; 
+    position: relative;
     display: inline-block;
     border-radius: 30px;
-    
-    .edit-btn {
-        position: absolute;
-        top: 8px;  
-        right: 8px;  
-        z-index: 10; 
-        
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background 0.2s;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    position: relative;
 
-        &:hover {
-            background: #fff;
+
+    &.template-active {
+        opacity: 0.4;
+        border: 2px solid #1890ff;
+        pointer-events: none;
+        filter: grayscale(0.5);
+        cursor: not-allowed;
+
+        .edit-btn {
+            display: none;
         }
     }
 
     .draggable-area {
         touch-action: none;
         cursor: grab;
+    }
+
+    .controls-overlay__item {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        width: 83px;
+        height: 39px;
+        background: rgba(29, 31, 35, 0.8);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+
+        opacity: 1;
+        transition: opacity 0.3s;
+        z-index: 100;
+        pointer-events: none;
+
+
+        button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            pointer-events: auto;
+
+            &:hover {
+                color: c.$accented-red-color;
+            }
+        }
+
+            .delete-btn:hover {
+                filter: invert(30%) sepia(90%) saturate(7000%) hue-rotate(350deg) brightness(90%) contrast(100%);
+            }
+        
+
+        &:hover .controls-overlay__item {
+            opacity: 1;
+            pointer-events: auto;
+        }
     }
 }

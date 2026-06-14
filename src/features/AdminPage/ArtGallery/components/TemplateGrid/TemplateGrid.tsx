@@ -29,7 +29,7 @@ export const TemplateGrid = observer(({
   }, [isTemplateFilled]);
 
   if (!imageTemplateStore.activeTemplate) {
-    return <div>Загрузка шаблонов...</div>;
+    return <div>Download templates...</div>;
   }
 
   console.log("imageTemplateStore",imageTemplateStore);
@@ -42,7 +42,7 @@ export const TemplateGrid = observer(({
           <DroppableSlot
             slot={slot}
             image={slots[slot.id]}
-            onRemove={onRemoveSlot}
+            onRemove={() => onRemoveSlot(slots[slot.id]?.id)}
             isEditing={isEditing}
           />
         )}

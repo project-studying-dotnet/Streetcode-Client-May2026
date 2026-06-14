@@ -1,4 +1,4 @@
-import useMobx from '@stores/root-store';
+import useMobx, { useModalContext } from '@/app/stores/root-store';
 
 const toBase64 = (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -12,6 +12,8 @@ const toBase64 = (file: File): Promise<string> => {
 
 export const useArtGallery = () => {
   const { imagesStore } = useMobx();
+  const { artStore, imageTemplateStore } = useModalContext();
+
 
   const addImage = async (file: File) => {
     const localUrl = URL.createObjectURL(file);
@@ -25,6 +27,12 @@ export const useArtGallery = () => {
   };
 
   const removeImage = async (id: number) => {
+    const art = imageTemplateStore.getArtByImageId(id);
+
+    if (art) {
+      await artStore.deleteArt(art.id);
+      imageTemplateStore.artsMap.delete(id);
+    }
     await imagesStore.deleteImage(id);
   };
 
@@ -38,3 +46,4 @@ export const useArtGallery = () => {
     reorderImages: imagesStore.reorderImages
   };
 };
+

@@ -1,6 +1,8 @@
+import type  Image  from '@models/media/image.model';
 
 export interface SlotConfig {
   id: string;
+    image?: Image | null;
 }
 
 export interface TemplateConfig {

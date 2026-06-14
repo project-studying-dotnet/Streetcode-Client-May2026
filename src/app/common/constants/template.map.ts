@@ -1,5 +1,8 @@
+import type  Image  from '@models/media/image.model';
+
 export interface SlotConfig {
   id: string;
+  image?: Image | null;
 }
 
 export interface TemplateConfig {
@@ -25,12 +28,12 @@ export const TEMPLATE_CLASS_MAP: Record<string, TemplateConfig> = {
   'OneAndTwoAndThreeToFour': { id: 7, className: 'template-four-sidebar-left', gap: 5, slots: [{id: 'mid1'}, {id: 's1'}, {id: 's2'}, {id: 's3'}] },
   'OneToFourAndFiveAndSix': { id: 6, className: 'template-four-sidebar-right', gap: 5, slots: [{id: 'mid1'}, {id: 's1'}, {id: 's2'}, {id: 's3'}] },
 
-  // 5 слотов
+  // 5 слотів
   'OneToFourAndFiveToSix': { id: 0, className: 'template-five-mixed', gap: 5, slots: [{id: 'mid1'}, {id: 's1'}, {id: 's2'}, {id: 's3'}, {id: 's4'}] },
   'OneAndTwoAndThreeToFourAndFive': { id: 11, className: 'template-five-grid', gap: 5, slots: [{id: 's1'}, {id: 's2'}, {id: 's3'}, {id: 's4'}, {id: 's5'}] },
   'OneAndTwoAndThreeAndFourAndFive': { id: 13, className: 'template-five-complex', gap: 5, slots: [{id: 's1'}, {id: 's2'}, {id: 's3'}, {id: 's4'}, {id: 's5'}] },
 
-  // 6 слотов
+  // 6 слотів
   'OneAndTwoAndThreeAndFourAndFiveAndSix': { id: 2, className: 'template-six-grid', gap: 5, slots: [{id: 's1'}, {id: 's2'}, {id: 's3'}, {id: 's4'}, {id: 's5'}, {id: 's6'}] },
   'OneToTwoAndThreeToFourAndFiveToSix': { id: 1, className: 'template-six-compact', gap: 5, slots: [{id: 's1'}, {id: 's2'}, {id: 's3'}, {id: 's4'}, {id: 's5'}, {id: 's6'}] },
   'OneAndTwoAndThreeToFourAndFiveToSix': { id: 10, className: 'template-six-mixed', gap: 5, slots: [{id: 's1'}, {id: 's2'}, {id: 's3'}, {id: 's4'}, {id: 's5'}, {id: 's6'}] },

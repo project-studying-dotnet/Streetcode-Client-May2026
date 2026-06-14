@@ -18,7 +18,6 @@ interface Props {
 }
 
 const StreetcodeSliderItem = ({ streetcode }: Props) => {
-    const { imagesStore } = useMobx();
     const [image, setImage] = useState<Image>();
 
     const id = streetcode?.id;

@@ -7,8 +7,9 @@ export default class ImageTemplateStore {
     public TemplateMap = new Map<number, ArtSlideTemplate>();
     public activeTemplate: ArtSlideTemplate | null = null;
     public savedTemplates: ArtSlideTemplate[] = [];
-    
-    private isLoaded = false; 
+
+    private isLoaded = false;
+    public artsMap = new Map<number, any>();
 
     constructor() {
         makeAutoObservable(this);
@@ -17,9 +18,18 @@ export default class ImageTemplateStore {
     get templates() {
         return Array.from(this.TemplateMap.values());
     }
+    public setArtForImage = (imageId: number, art: any) => {
+        runInAction(() => {
+            this.artsMap.set(imageId, art);
+        });
+    }
+
+    public getArtByImageId = (imageId: number) => {
+        return this.artsMap.get(imageId);
+    }
 
     public fetchTemplates = async () => {
-        if (this.isLoaded) return; 
+        if (this.isLoaded) return;
 
         try {
             const data = await ArtSlideTemplatesApi.getAll();
@@ -28,7 +38,7 @@ export default class ImageTemplateStore {
                     this.TemplateMap.set(template.id, template);
                 });
                 this.isLoaded = true;
-                
+
                 if (!this.activeTemplate && data.length > 0) {
                     this.activeTemplate = data[0];
                 }
@@ -40,6 +50,22 @@ export default class ImageTemplateStore {
 
     public setActiveTemplate = (template: ArtSlideTemplate) => {
         this.activeTemplate = template;
+    };
+
+    public updateSlotWithArt = (imageId: number, art: any) => {
+        runInAction(() => {
+            const updateFunction = (template: ArtSlideTemplate) => {
+                template.slots.forEach((slot: any) => {
+                    if (slot.image && slot.image.id === imageId) {
+                        slot.artId = art.id;
+                        slot.art = art;
+                    }
+                });
+            };
+
+            this.templates.forEach(updateFunction);
+            this.savedTemplates.forEach(updateFunction);
+        });
     };
 
     addTemplate(template: ArtSlideTemplate) {
@@ -62,5 +88,9 @@ export default class ImageTemplateStore {
         if (template) {
             Object.assign(template, status);
         }
+    }
+
+    removeTemplate(id: number) {
+        this.savedTemplates = this.savedTemplates.filter(t => t.id !== id);
     }
 }

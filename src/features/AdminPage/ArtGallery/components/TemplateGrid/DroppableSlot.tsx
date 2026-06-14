@@ -16,7 +16,7 @@ export const DroppableSlot = ({ slot, image, onRemove, isEditing }: any) => {
               className="remove-slot-btn"
               onClick={(e) => {
                 e.stopPropagation();
-                onRemove(slot.id);
+                onRemove();
               }}
             >
               🗑️

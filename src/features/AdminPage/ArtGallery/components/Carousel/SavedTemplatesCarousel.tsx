@@ -7,7 +7,7 @@ import BlockHeading from '@streetcode/HeadingBlock/BlockHeading.component';
 import './SavedTemplatesCarousel.styles.scss';
 
 export const SavedTemplatesCarousel = observer(
-    ({ savedTemplates, onEdit, onSaveToDb }: any) => {
+    ({ savedTemplates, onEdit,onDelete, editingTemplateId, onSaveToDb }: any) => {
         const rowRef = useRef<HTMLDivElement>(null);
         const [activeIndex, setActiveIndex] = useState(0);
         const [isScrollable, setIsScrollable] = useState(false);
@@ -108,7 +108,7 @@ export const SavedTemplatesCarousel = observer(
         }, [savedTemplates, activeIndex]);
 
 
-        console.log("savedTemplates", savedTemplates);
+        console.log("++++savedTemplates", savedTemplates);
         return (
             <div className="templates-list-container">
                 {savedTemplates && savedTemplates.length > 0 && (
@@ -136,8 +136,10 @@ export const SavedTemplatesCarousel = observer(
                                     <div className="template-slide" key={template.id}>
                                         <SortableTemplateCard
                                             template={template}
+                                            editingTemplateId={editingTemplateId}
                                             onSaveToDb={onSaveToDb}
                                             onEdit={onEdit}
+                                            onDelete={onDelete}
                                         />
                                     </div>
                                 ))}
@@ -163,7 +165,9 @@ export const SavedTemplatesCarousel = observer(
                 {savedTemplates?.length > 0 && (
                     <button
                         className="streetcode-custom-button"
-                        onClick={() => onSaveToDb(savedTemplates)}
+                        onClick={() => {
+                            onSaveToDb(savedTemplates);
+                        }}
                     >
                         Зберегти
                     </button>
@@ -172,3 +176,4 @@ export const SavedTemplatesCarousel = observer(
         );
     }
 );
+

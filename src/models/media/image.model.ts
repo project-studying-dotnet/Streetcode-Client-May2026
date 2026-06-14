@@ -6,6 +6,8 @@ export default interface Image {
     blobName?: string;
     mimeType?: string;
     imageDetails?: ImageDetails;
+      url?: string; 
+    isPublished?: boolean;
 }
 
 export enum ImageAssigment {
@@ -34,35 +36,35 @@ export interface ImageCreateUpdate extends IModelState {
 }
 
 
-export interface ArtImage extends Image {
-    id: number; 
-    url: string; 
-    isPublished: boolean;
-}
+// export interface ArtImage extends Image {
+//     id: number; 
+//     url: string; 
+//     isPublished: boolean;
+// }
 
 export interface GalleryListProps {
-    images: ArtImage[];
+    images: Image[];
     onUpload: (file: File) => void;
     onDelete: (id: number) => void;
-    onEdit: (image: ArtImage) => void;
+    onEdit: (image: Image) => void;
 }
 
 export interface ImageCardProps {
-    image: ArtImage;
+    image: Image;
     attributes: any;
     listeners: any;
 
     onDelete: (id: string) => void;
-    onEdit: (image: ArtImage) => void;
+    onEdit: (image: Image) => void;
     isConfirming: boolean;
     onConfirmRequest: () => void;
     onCancelRequest: () => void;
 }
 
 export interface SortableImageCardProps {
-    image: ArtImage;
+    image: Image;
     onDelete: (id: number) => void;
-    onEdit: (image: ArtImage) => void;
+    onEdit: (image: Image) => void;
     isConfirming: boolean;
     onConfirmRequest: () => void;
     onCancelRequest: () => void;

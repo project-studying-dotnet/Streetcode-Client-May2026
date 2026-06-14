@@ -5,6 +5,7 @@ type ModalState = {
     fromCardId?: number;
     confirmationProps?:ConfirmationProps;
     image?: any;
+    data?: any;
 };
 interface ConfirmationProps {
  onSubmit?:()=>void,

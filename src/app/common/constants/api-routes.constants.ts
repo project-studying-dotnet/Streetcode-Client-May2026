@@ -137,11 +137,11 @@ export const API_ROUTES = {
         DELETE: 'image/delete',
     },
     ARTS: {
-        GET_ALL: 'arts/getAll',
-        GET: 'arts/getById',
-        CREATE: 'arts/create',
-        UPDATE: 'arts/update',
-        DELETE: 'arts/delete',
+        GET_ALL: 'art/getAll',
+        GET: 'art/getById',
+        CREATE: 'art/create',
+        UPDATE: 'art/update',
+        DELETE: 'art/delete',
     },
     STREETCODE_ARTS: {
         GET_ALL: 'streetcodeArt/getAll',
@@ -150,6 +150,7 @@ export const API_ROUTES = {
     ART_SLIDES: {
         GET_BY_STREETCODE_ID: '/art-slide',
         CREATE: '/art-slide',
+        CREATE_ALL: '/artSlide/createAll',
         UPDATE: '/art-slide',
         DELETE: '/art-slide',
     },

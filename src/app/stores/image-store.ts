@@ -1,26 +1,33 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import imagesApi from '@api/media/images.api';
-import Image, { ArtImage, ImageCreate } from '@models/media/image.model';
+import Image, { ImageCreate } from '@models/media/image.model';
 import { arrayMove } from '@dnd-kit/sortable';
 
 export default class ImageStore {
-    public ImageMap: Map<number, ArtImage> = new Map();
+    public ImageMap = new Map<number, Image>();
 
     public constructor() {
         makeAutoObservable(this);
     }
 
-    get getImageArray(): ArtImage[] {
+
+    public getImage = (id: number) => this.ImageMap.get(id);
+
+    get getImageArray(): Image[] {
         return Array.from(this.ImageMap.values());
     }
 
+    private setItem = (image: Image) => {
+        this.ImageMap.set(image.id, image);
+    };
+
+    // --- Логика загрузки и API ---
     public fetchAll = async () => {
         try {
             const rawImages = await imagesApi.getAll();
-
             runInAction(() => {
                 rawImages.forEach(img => {
-                    this.ImageMap.set(Number(img.id), this.transformToArtImage(img));
+                    this.setItem(this.transformToImage(img));
                 });
             });
         } catch (error) {
@@ -28,45 +35,39 @@ export default class ImageStore {
         }
     };
 
-    public createImage = async (
-        data: ImageCreate,
-        localUrl?: string
-    ): Promise<ArtImage | undefined> => {
+    public fetchImage = async (id: number) => {
+        try {
+            const image = await imagesApi.getById(id);
+            this.setItem(this.transformToImage(image));
+        } catch (error: unknown) { }
+    };
+
+    public createImage = async (data: ImageCreate, localUrl?: string): Promise<Image | undefined> => {
         try {
             const rawImage = await imagesApi.create(data);
-
-            const artImage: ArtImage = {
-                ...this.transformToArtImage(rawImage),
-                url: localUrl ?? ''
-            };
-            console.log("artImage", artImage);
-            runInAction(() => {
-                this.ImageMap.set(Number(artImage.id), artImage);
-            });
-
-            return artImage;
+            const image = { ...this.transformToImage(rawImage), url: localUrl ?? '' };
+            runInAction(() => this.setItem(image));
+            return image;
         } catch (error) {
             console.error('Store error (createImage):', error);
             return undefined;
         }
     };
 
-    public addImageBackToGallery = (image: ArtImage) => {
-        runInAction(() => {
-            this.ImageMap.set(Number(image.id), image);
-        });
+    public updateImage = async (image: Image) => {
+        try {
+            await imagesApi.update(image);
+            runInAction(() => {
+                const updatedImage = { ...this.ImageMap.get(image.id), ...image };
+                this.setItem(updatedImage as Image);
+            });
+        } catch (error: unknown) { }
     };
-
-
 
     public deleteImage = async (imageId: number): Promise<boolean> => {
         try {
             await imagesApi.delete(imageId);
-
-            runInAction(() => {
-                this.ImageMap.delete(imageId);
-            });
-
+            runInAction(() => this.ImageMap.delete(imageId));
             return true;
         } catch (error) {
             console.error('Store error:', error);
@@ -74,34 +75,36 @@ export default class ImageStore {
         }
     };
 
-    public moveImageToTemplate = (imageId: number) => {
-        runInAction(() => {
-            this.ImageMap.delete(imageId);
-        });
-    };
-
-    public moveImageBackToGallery = (image: ArtImage) => {
-        runInAction(() => {
-            this.ImageMap.set(Number(image.id), image);
-        });
-    };
 
     public reorderImages = (oldIndex: number, newIndex: number) => {
         runInAction(() => {
             const arr = Array.from(this.ImageMap.values());
             const moved = arrayMove(arr, oldIndex, newIndex);
             this.ImageMap.clear();
-            moved.forEach(img => this.ImageMap.set(Number(img.id), img));
+            moved.forEach(img => this.setItem(img));
         });
     };
 
-    private transformToArtImage = (image: Image): ArtImage => {
-        const path = `/static-files/${image.id}.png`;
+    public moveImageToTemplate = (imageId: number) => {
+        runInAction(() => this.ImageMap.delete(imageId));
+    };
 
+    public moveImageBackToGallery = (image: Image) => {
+        runInAction(() => {
+            this.ImageMap.set(Number(image.id), image);
+        });
+    };
+
+    public addImageBackToGallery = (image: Image) => {
+        runInAction(() => this.setItem(image));
+    };
+
+
+    private transformToImage = (image: Image): Image => {
         return {
             ...image,
-            url: path,
-            isPublished: false
+            url: image.url ?? `/static-files/${image.id}.png`,
+            isPublished: image.isPublished ?? false
         };
     };
 }

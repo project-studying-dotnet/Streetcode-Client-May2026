@@ -10,63 +10,83 @@ import { useEffect, useState } from 'react';
 const EditImageModal = observer(() => {
     const [form] = Form.useForm();
 
-    const { 
-        artStore, 
-        imageTemplateStore,
-        modalStore: { setModal, modalsState: { editImage } }
-    } = useModalContext();
+    const { artStore, imageTemplateStore, modalStore: { setModal, modalsState: { editImage } } } = useModalContext();
+    const [loading, setLoading] = useState(false);
 
-    const [loading, setLoading] = useState(false); 
+    const data = editImage.image;
+
+    const existingArt = data ? imageTemplateStore.getArtByImageId(data.id) : null;
+    const isEditing = !!existingArt;
 
     useEffect(() => {
-        if (editImage.isOpen && editImage.image) {
+        if (editImage.isOpen && data) {
             form.setFieldsValue({
-                title: editImage.image.title,
-                description: editImage.image.description,
+                title: existingArt?.title || data.title,
+                description: existingArt?.description || data.description,
             });
         }
-    }, [editImage.isOpen, editImage.image, form]);
+    }, [editImage.isOpen, data, form, existingArt]);
 
-    const onSuccessfulSubmit = async (values: { title: string; description: string }) => {
-        if (!editImage.image) return;
+    const onSuccessfulSubmit = async (values: any) => {
+        if (!data) return;
+        setLoading(true);
 
         setLoading(true);
-        try {
-            await artStore.updateArt(editImage.image.id, {
-                title: values.title,
-                description: values.description
-            });
 
-            setModal('editImage');
-        } catch (error) {
-            console.error("Ошибка сохранения:", error);
+        try {
+            if (isEditing) {
+                const updatedArt = await artStore.updateArt(existingArt.id, {
+                    ...values,
+                    imageId: data.id
+                });
+                imageTemplateStore.setArtForImage(data.id, updatedArt);
+            } else {
+                const createdArt = await artStore.createArt({
+                    ...values,
+                    imageId: data.id
+                });
+                imageTemplateStore.setArtForImage(data.id, createdArt);
+            }
+
+            setModal('editImage', undefined, false);
+        } catch (e) {
+            console.error(e);
         } finally {
             setLoading(false);
         }
     };
+
     return (
         <Modal
             className="addModal"
             open={editImage.isOpen}
-            onCancel={() => setModal('editImage')}
-            footer={[null]}
+            onCancel={() => setModal('editImage', undefined, false)}
+            footer={null}
             closeIcon={<CancelBtn />}
         >
             <h2>Додаткові дані</h2>
-            {editImage.image && (
-                <img src={editImage.image.url} alt="art" style={{ width: '100%', marginBottom: '20px', borderRadius: '8px' }} />
+
+            {data && (
+                <img
+                    src={data.url}
+                    alt="art"
+                    style={{ width: '100%', marginBottom: '20px', borderRadius: '8px' }}
+                />
             )}
+
             <Form form={form} onFinish={onSuccessfulSubmit} layout="vertical">
-                <FormItem name="title" label="Назва" rules={[{ message: 'Введіть назву' }]}>
+                <FormItem name="title" label="Назва">
                     <Input showCount maxLength={150} />
                 </FormItem>
-                <FormItem name="description" label="Опис" rules={[{ message: 'Введіть опис' }]}>
+
+                <FormItem name="description" label="Опис">
                     <TextArea rows={4} maxLength={400} showCount />
                 </FormItem>
+
                 <div className="button-container">
-                    <Button 
-                        className="save-button" 
-                        loading={loading} 
+                    <Button
+                        className="save-button"
+                        loading={loading}
                         onClick={() => form.submit()}
                     >
                         Зберегти

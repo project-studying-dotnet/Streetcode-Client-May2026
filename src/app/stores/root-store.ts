@@ -35,6 +35,7 @@ import UserLoginStore from './user-login-store';
 
 import ImageTemplateStore from './image-template-store';
 import ArtStore from './art-store';
+import ArtSlideStore from './art-slide-store';
 
 interface Store {
     factsStore: FactsStore,
@@ -74,6 +75,7 @@ export interface ModalDataStore {
     modalStore: ModalStore,
     imageTemplateStore: ImageTemplateStore,
     artStore: ArtStore,
+    artSlideStore: ArtSlideStore,
 }
 
 export const store: Store = {
@@ -114,6 +116,7 @@ export const modalDataStore:ModalDataStore = {
     modalStore: new ModalStore(),
     imageTemplateStore: new ImageTemplateStore(),
     artStore: new ArtStore(),
+    artSlideStore: new ArtSlideStore(),
 };
 
 export const toponymDataStore:ToponymStore = new ToponymStore();

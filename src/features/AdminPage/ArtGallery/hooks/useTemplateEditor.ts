@@ -29,6 +29,8 @@ export const useTemplateEditor = (
         slots: { ...templateSlots },
         templateName:
           imageTemplateStore.activeTemplate?.name || 'Updated',
+        templateId:
+          imageTemplateStore.activeTemplate?.id || 0,
         isSavedToDb: false
       });
 
@@ -39,6 +41,8 @@ export const useTemplateEditor = (
         slots: { ...templateSlots },
         templateName:
           imageTemplateStore.activeTemplate?.name || 'Unnamed',
+           templateId:
+          imageTemplateStore.activeTemplate?.id || 0,
         isSavedToDb: false
       });
     }
@@ -65,3 +69,5 @@ export const useTemplateEditor = (
     saveToDb
   };
 };
+
+

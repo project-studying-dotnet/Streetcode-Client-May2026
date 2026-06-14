@@ -9,7 +9,7 @@ export default class ArtStore {
         makeAutoObservable(this);
     }
 
-    public createArt = async (artData: FormData | Art) => {
+    public createArt = async (artData: { imageId: number; title: string; description: string }) => {
         try {
             const newArt = await ArtsApi.create(artData as any);
 
@@ -33,9 +33,21 @@ export default class ArtStore {
                     this.arts[index] = { ...this.arts[index], ...updatedArt };
                 }
             });
+            return updatedArt;
         } catch (error) {
-            console.error("Ошибка обновления:", error);
+            console.error("Saving error:", error);
             throw error;
+        }
+    };
+
+    public deleteArt = async (id: number) => {
+        try {
+            await ArtsApi.delete(id);
+            runInAction(() => {
+                this.arts = this.arts.filter(a => a.id !== id);
+            });
+        } catch (error) {
+            console.error("Ошибка при удалении арта:", error);
         }
     };
 }

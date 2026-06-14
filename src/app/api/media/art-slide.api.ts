@@ -9,6 +9,9 @@ const ArtSlidesApi = {
     create: (artSlide: CreateArtSlide) => 
         Agent.post<ArtSlide>(`${API_ROUTES.ART_SLIDES.CREATE}`, artSlide),
 
+    createAll: (artSlides: CreateArtSlide[]) => 
+        Agent.post<ArtSlide[]>(`${API_ROUTES.ART_SLIDES.CREATE_ALL}`, artSlides),
+
     update: (artSlide: UpdateArtSlide) => 
         Agent.put<ArtSlide>(`${API_ROUTES.ART_SLIDES.UPDATE}`, artSlide),
 

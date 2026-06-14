@@ -72,12 +72,23 @@ const Agent = {
             .then(responseBody);
     },
 
-    post: async <T> (url: string, body: object, headers?: object) => {
-        axios.defaults.headers.common.Authorization = `Bearer ${UserLoginStore.getToken()}`;
-        return axios.post<T>(url, body, headers)
-            .then(responseBody);
-    },
+ post: async <T> (url: string, body: object, headers?: object) => {
+    // Для отладки: посмотрим, что именно мы отправляем
+    console.log("POST request to:", url);
+    console.log("Request body:", JSON.stringify(body, null, 2));
 
+    axios.defaults.headers.common.Authorization = `Bearer ${UserLoginStore.getToken()}`;
+    
+    return axios.post<T>(url, body, headers)
+        .then(responseBody)
+        .catch(error => {
+            // Удобный вывод ошибок валидации от ASP.NET
+            if (error.response && error.response.status === 400) {
+                console.error("Validation Errors:", error.response.data.errors);
+            }
+            throw error;
+        });
+},
     put: async <T> (url: string, body: object) => {
         axios.defaults.headers.common.Authorization = `Bearer ${UserLoginStore.getToken()}`;
         return axios.put<T>(url, body)
