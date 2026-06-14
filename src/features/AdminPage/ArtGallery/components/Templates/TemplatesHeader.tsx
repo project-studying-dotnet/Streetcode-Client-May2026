@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button } from 'antd';
 import './TemplatesHeader.styles.scss';
 import { TemplateHeaderProps } from '../../types/gallery.types';

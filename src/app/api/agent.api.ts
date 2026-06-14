@@ -35,25 +35,25 @@ axios.interceptors.response.use(
             errorMessage = message;
         }
         switch (response?.status) {
-        case StatusCodes.INTERNAL_SERVER_ERROR:
-            errorMessage = ReasonPhrases.INTERNAL_SERVER_ERROR;
-            break;
-        case StatusCodes.UNAUTHORIZED:
-            errorMessage = ReasonPhrases.UNAUTHORIZED;
-            UserLoginStore.clearUserData();
-            globalThis.location.href = FRONTEND_ROUTES.ADMIN.LOGIN;
-            break;
-        case StatusCodes.NOT_FOUND:
-            errorMessage = ReasonPhrases.NOT_FOUND;
-            break;
-        case StatusCodes.BAD_REQUEST:            
-            errorMessage = getErrorMessage(response?.data) || ReasonPhrases.BAD_REQUEST;
-            break;
-        case StatusCodes.FORBIDDEN:
-            errorMessage = ReasonPhrases.FORBIDDEN;
-            break;
-        default:
-            break;
+            case StatusCodes.INTERNAL_SERVER_ERROR:
+                errorMessage = ReasonPhrases.INTERNAL_SERVER_ERROR;
+                break;
+            case StatusCodes.UNAUTHORIZED:
+                errorMessage = ReasonPhrases.UNAUTHORIZED;
+                UserLoginStore.clearUserData();
+                globalThis.location.href = FRONTEND_ROUTES.ADMIN.LOGIN;
+                break;
+            case StatusCodes.NOT_FOUND:
+                errorMessage = ReasonPhrases.NOT_FOUND;
+                break;
+            case StatusCodes.BAD_REQUEST:
+                errorMessage = getErrorMessage(response?.data) || ReasonPhrases.BAD_REQUEST;
+                break;
+            case StatusCodes.FORBIDDEN:
+                errorMessage = ReasonPhrases.FORBIDDEN;
+                break;
+            default:
+                break;
         }
         if (errorMessage !== '' && process.env.NODE_ENV === 'development') {
             toast.error(errorMessage);
@@ -63,33 +63,22 @@ axios.interceptors.response.use(
     },
 );
 
-const responseBody = <T> (response: AxiosResponse<T>) => response.data;
+const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
 const Agent = {
-    get: async <T> (url: string, params?: URLSearchParams) => {
+    get: async <T>(url: string, params?: URLSearchParams) => {
         axios.defaults.headers.common.Authorization = `Bearer ${UserLoginStore.getToken()}`;
         return axios.get<T>(url, { params })
             .then(responseBody);
     },
 
- post: async <T> (url: string, body: object, headers?: object) => {
-    // Для отладки: посмотрим, что именно мы отправляем
-    console.log("POST request to:", url);
-    console.log("Request body:", JSON.stringify(body, null, 2));
+    post: async <T>(url: string, body: object, headers?: object) => {
+        axios.defaults.headers.common.Authorization = `Bearer ${UserLoginStore.getToken()}`;
+        return axios.post<T>(url, body, headers)
+            .then(responseBody);
+    },
 
-    axios.defaults.headers.common.Authorization = `Bearer ${UserLoginStore.getToken()}`;
-    
-    return axios.post<T>(url, body, headers)
-        .then(responseBody)
-        .catch(error => {
-            // Удобный вывод ошибок валидации от ASP.NET
-            if (error.response && error.response.status === 400) {
-                console.error("Validation Errors:", error.response.data.errors);
-            }
-            throw error;
-        });
-},
-    put: async <T> (url: string, body: object) => {
+    put: async <T>(url: string, body: object) => {
         axios.defaults.headers.common.Authorization = `Bearer ${UserLoginStore.getToken()}`;
         return axios.put<T>(url, body)
             .then(responseBody);

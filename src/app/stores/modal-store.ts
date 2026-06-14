@@ -41,6 +41,7 @@ interface ModalList {
     statistics: ModalState;
     editImage: ModalState;
     deleteImage: ModalState;
+    deleteImageTemplates: ModalState;
     templates: ModalState;
 }
 
@@ -66,6 +67,7 @@ export default class ModalStore {
         statistics: DefaultModalState,
         editImage: DefaultModalState,
         deleteImage: DefaultModalState,
+        deleteImageTemplates: DefaultModalState,
         templates: DefaultModalState,
     };
 

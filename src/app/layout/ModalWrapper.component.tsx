@@ -11,6 +11,7 @@ import RelatedFigureItemModal from '@components/modals/RelatedFigures/RelatedFig
 import RelatedFiguresModal from '@components/modals/RelatedFigures/RelatedFiguresModal.component';
 import SourcesModal from '@components/modals/Sources/SourcesModal.component';
 import DeleteImageModal from '@components/modals/EditImageModal/DeleteImageModal.component';
+import DeleteImageTemplatesModal from '@components/modals/EditImageModal/DeleteImageTemplatesModal.component';
 import EditImageModal from '@components/modals/EditImageModal/EditImageModal.component';
 import TemplatesModal from '@components/modals/EditImageModal/TemplatesModal.component';
 
@@ -30,6 +31,7 @@ const ModalWrapper = () => (
         <StatisticsModal />
         <EditImageModal />
         <DeleteImageModal />
+        <DeleteImageTemplatesModal/>
         <TemplatesModal />
     </>
 );

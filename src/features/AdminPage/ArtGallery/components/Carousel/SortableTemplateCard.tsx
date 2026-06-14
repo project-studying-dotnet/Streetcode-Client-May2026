@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Spin } from 'antd';
 import './SortableTemplateCard.styles.scss';
 
 import { TemplateCard } from './TemplateCard';

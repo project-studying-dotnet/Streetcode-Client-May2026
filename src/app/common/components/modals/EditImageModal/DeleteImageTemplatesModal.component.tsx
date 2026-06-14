@@ -1,24 +1,25 @@
 import { observer } from 'mobx-react-lite';
 import { useModalContext } from '@stores/root-store';
-import { Modal, Button  } from 'antd';
+import { Modal, Button } from 'antd';
 
-const DeleteImageModal = observer(() => {
-    const { modalStore: { setModal, modalsState: { deleteImage } } } = useModalContext();
+const DeleteImageTemplatesModal = observer(() => {
+    const { modalStore: { setModal, modalsState: { deleteImageTemplates } } } = useModalContext();
 
-   const onConfirm = () => {
-        deleteImage.image?.onConfirm?.(); 
-        setModal('deleteImage', undefined, false); 
+    const onConfirm = () => {
+        deleteImageTemplates.image?.onConfirm?.();
+        setModal('deleteImageTemplates', undefined, false);
     };
+
     return (
         <Modal
             title="Видалити"
-            open={deleteImage.isOpen}
+            open={deleteImageTemplates.isOpen}
             onOk={onConfirm}
-            onCancel={() => setModal('deleteImage')}
-             footer={[
+            onCancel={() => setModal('deleteImageTemplates', undefined, false)}
+            footer={[
                 <Button
                     key="back"
-                    onClick={() => setModal('deleteImage', undefined, false)}
+                    onClick={() => setModal('deleteImageTemplates', undefined, false)}
                     className="ant-btn-default"
                 >
                     Скасувати
@@ -34,9 +35,8 @@ const DeleteImageModal = observer(() => {
                 </Button>,
             ]}
         >
-            <p>Ви впевнені?</p>
+            <p>Ви впевнені, що хочете видалити цей елемент?</p>
         </Modal>
     );
 });
-
-export default DeleteImageModal;
+export default DeleteImageTemplatesModal;

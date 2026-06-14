@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { TEMPLATE_CLASS_MAP } from '@constants/template.map';
-import { ArtSlideTemplate, SlotConfig } from '@models/media/art-slide-template.model';
+import { ArtSlideTemplate } from '@models/media/art-slide-template.model';
 import { message } from 'antd';
-import { observer } from 'mobx-react-lite';
 import {
   DndContext,
   DragEndEvent,
@@ -11,8 +10,6 @@ import {
   useSensors,
   PointerSensor
 } from '@dnd-kit/core';
-
-import { arrayMove } from '@dnd-kit/sortable';
 
 import Image from '@models/media/image.model';
 import { useArtGallery } from './hooks/useArtGallery';
@@ -284,29 +281,24 @@ export const ArtGallery: React.FC = () => {
   // REMOVE TEMPLATE
   // -----------------------------
 const handleDeleteTemplate = (id: number) => {
-    // 1. Блокируем удаление, если шаблон сейчас в режиме редактирования
     if (editingTemplateId === String(id)) {
         message.error("Спочатку збережіть або скасуйте редагування цього шаблону");
         return;
     }
 
-    // 2. Находим шаблон перед удалением, чтобы "спасти" картинки
     const template = imageTemplateStore.savedTemplates.find(t => t.id === id);
 
     if (template) {
-        // 3. Возвращаем картинки из слотов обратно в общую галерею
         template.slots.forEach(slot => {
             if (slot.image) {
                 addImageBackToGallery(slot.image);
             }
         });
 
-        // 4. Сбрасываем ID в DND-kit, если этот элемент был "активным" (dragging)
         if (activeId === `tmpl_${id}`) {
             setActiveId(null);
         }
 
-        // 5. Удаляем из стора
         imageTemplateStore.removeTemplate(id);
         
         message.success("Шаблон видалено, картинки повернуто в галерею");
