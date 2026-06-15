@@ -7,9 +7,11 @@ import UserLoginStore from '../stores/user-login-store';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
-axios.defaults.baseURL = isDevelopment
+const defaultApiUrl = isDevelopment
     ? 'https://localhost:5001/api'
     : 'https://app-streetcode-webapi-eu-prop-001-gsbqfwc2fdh6hhaw.polandcentral-01.azurewebsites.net/api';
+
+axios.defaults.baseURL = process.env.REACT_APP_API_URL || defaultApiUrl;
 
 const getErrorMessage = (data: unknown): string | undefined => {
     if (Array.isArray(data)) {

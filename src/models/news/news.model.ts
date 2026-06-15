@@ -24,3 +24,12 @@ export interface NewsWithUrl {
     randomNews: RandomNews;
 
 }
+
+export interface NewsCreateUpdate {
+    id: number;
+    title: string;
+    text: string;
+    imageId: number;
+    url: string;
+    creationDate: string;
+}
