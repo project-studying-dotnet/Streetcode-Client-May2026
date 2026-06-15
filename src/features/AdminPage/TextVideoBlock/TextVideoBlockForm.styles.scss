@@ -1,0 +1,348 @@
+@use "@sass/mixins/_utils.mixins.scss" as mut;
+@use "@assets/sass/variables/_variables.colors.scss" as c;
+@use "@assets/sass/variables/_variables.fonts.scss" as ft;
+@use "@assets/sass/_utils.functions.scss" as f;
+
+@use './components/textEditor/TextVideoBlockForm.editor' as *;
+@use './components/previewModal/TextVideoBlockForm.preview' as *;
+
+
+.text-video-form {
+  padding: 32px 0;
+  background: c.$pure-white-color;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  @media (max-width: 1024px) {
+    max-width: 703px;
+    margin-left: auto;
+    margin-right: 0;
+  }
+
+  @media (max-width: 767px) {
+    max-width: 100%;
+  }
+
+  .mb-24 {
+    margin-top: 24px;
+  }
+
+  .mb-17 {
+    margin-top: 17px;
+  }
+
+  .mb-35 {
+    margin-top: 35px;
+  }
+
+  .mb-48 {
+    margin-bottom: 48px;
+  }
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+  }
+
+  &__label {
+    @include mut.with-font($font-family: ft.$closer-text-font,
+      $font-weight: 500,
+      $font-size: 20px);
+    line-height: 26px;
+    color: c.$lighter-black-color;
+    margin-bottom: 8px;
+
+    &--medium {
+      @include mut.with-font($font-family: ft.$closer-text-font,
+        $font-weight: 600,
+        $font-size: 24px);
+      line-height: 28px;
+      margin-bottom: 4px;
+    }
+  }
+
+
+&__input,  &__select, &__textarea {
+  border: 1px solid c.$slider-base-dot-color;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+  box-sizing: border-box;
+   outline: none !important;
+
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 27px;
+
+  &:hover,
+  &:focus,
+  &.ant-input-focused,
+  &.ant-input-affix-wrapper-focused,
+  &.ant-select-focused .ant-select-selector {
+    border-color: c.$pure-black-color;
+    box-shadow: none !important;
+    outline: none !important;
+  }
+} 
+
+
+  &__input {
+    width: 769px;
+    height: 47px;
+
+    &--title {
+      width: 769px;
+
+      @media (max-width: 1024px) {
+        width: 404px;
+      }
+    }
+
+    &--term {
+      width: 769px;
+
+      @media (max-width: 1024px) {
+        width: 462px;
+      }
+    }
+
+    &--link {
+      width: 769px;
+
+      @media (max-width: 1024px) {
+        width: 100%;
+      }
+    }
+  }
+
+  &__textarea {
+    width: 100%;
+
+    &,
+    &.ant-input,
+    &.ant-input-affix-wrapper,
+    textarea {
+      min-height: 160px !important;
+      resize: none;
+      padding: 12px;
+        padding-bottom: 28px;
+    }
+  }
+.ant-input-textarea-show-count.ant-input-affix-wrapper .ant-input-data-count {
+  bottom: -32px !important;
+}
+
+  &__input-wrapper {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+    width: 100%;
+  }
+
+  &__term-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__counter {
+    color: c.$darkish-gray-color;
+    font-size: 18px;
+    margin-top: 4px;
+  }
+
+  &__meta {
+    width: 100%;
+    text-align: right;
+  }
+
+  &__error {
+    color: c.$accented-red-color;
+    font-size: 12px;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    border-radius: f.pxToRem(8px);
+    transition: background-color .75s ease, border .75s ease;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .streetcode-red-button {
+    @include mut.sized(230px, 48px);
+    background-color: c.$accented-red-color;
+    border: 0.025rem solid c.$dark-red-color;
+    margin-left: f.pxToRem(8px);
+    margin-right: f.pxToRem(8px);
+    @include mut.with-font(ft.$roboto-font, $font-size: 20px, $font-weight: 500);
+
+    >span {
+      @include mut.with-font($font-size: 20px, $font-weight: 500);
+      color: c.$pure-white-color;
+    }
+
+    &:hover {
+      background-color: c.$dark-red-color;
+      transition: 0.5s;
+      border: none;
+    }
+
+    &:focus {
+      outline: none;
+      border: none;
+    }
+  }
+
+  .streetcode-white-button {
+    @include mut.flex-centered();
+    @include mut.full-rounded(11px);
+    @include mut.rem-padded(8px, 10px, 8px, 10px);
+
+    margin-left: f.pxToRem(8px);
+    margin-right: f.pxToRem(8px);
+
+
+    border: 2px solid c.$dark-red-color;
+    @include mut.with-font($font-weight: bold, $font-size: 15px);
+
+    >span {
+      @include mut.with-font($font-size: 20px, $font-weight: 500);
+      color: c.$dark-red-color;
+    }
+
+    &:hover {
+      background-color: c.$accented-red-color;
+      border-color: c.$accented-red-color;
+
+      >span {
+        color: c.$pure-white-color;
+      }
+    }
+
+    &:focus {
+      outline: none;
+      border: none;
+    }
+
+    &.connect-term-button {
+      @include mut.sized(230px, 48px);
+    }
+
+    &.delete-term-button {
+      @include mut.sized(44px, 48px);
+    }
+
+    &.show-text-button {
+      @include mut.sized(207px, 48px);
+    }
+  }
+
+  .delete-button {
+    @include mut.flex-centered();
+    @include mut.full-rounded(11px);
+    @include mut.rem-padded(8px, 10px, 8px, 10px);
+
+    height: f.pxToRem(38px);
+    width: fit-content;
+    margin-left: f.pxToRem(8px);
+    margin-right: f.pxToRem(8px);
+
+    color: c.$dark-red-color;
+    border: 2px solid c.$dark-red-color;
+    @include mut.with-font($font-weight: bold, $font-size: 15px);
+
+    &:hover {
+      color: c.$dark-red-color;
+      border-color: c.$dark-red-color;
+    }
+  }
+
+  .show-text-button {
+    @include mut.flex-centered();
+    @include mut.full-rounded(11px);
+    @include mut.rem-padded(8px, 10px, 8px, 10px);
+
+    height: f.pxToRem(38px);
+    width: fit-content;
+    margin-left: f.pxToRem(8px);
+    margin-right: f.pxToRem(8px);
+
+    color: c.$dark-red-color;
+    border: 2px solid c.$dark-red-color;
+    @include mut.with-font($font-weight: bold, $font-size: 15px);
+
+    &:hover {
+      color: c.$dark-red-color;
+      border-color: c.$dark-red-color;
+    }
+  }
+
+  .ant-form-item-label>label {
+    @include mut.with-font($font-family: ft.$closer-text-font,
+      $font-weight: 500,
+      $font-size: 20px);
+    line-height: 26px;
+    color: c.$lighter-black-color;
+    margin-bottom: 8px;
+  }
+}
+
+.ant-input-textarea-show-count {
+  padding-bottom: 22px;
+}
+
+.ant-input-textarea-show-count::after {
+  margin-top: 8px;
+  color: c.$darkish-gray-color;
+  @include mut.with-font($font-weight: 300, $font-size: 14px);
+}
+
+
+.error-highlight {
+  border-color: c.$accented-red-color;
+  animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-4px);
+  }
+
+  50% {
+    transform: translateX(4px);
+  }
+
+  75% {
+    transform: translateX(-4px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.term-linked {
+  color: c.$accented-red-color;
+  border-bottom: 2px dashed c.$accented-red-color;
+}
+

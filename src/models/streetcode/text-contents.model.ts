@@ -1,8 +1,8 @@
-import IModelState from '@models/interfaces/IModelState';
-import IPersisted from '@models/interfaces/IPersisted';
-import Image, { ImageCreate } from '@models/media/image.model';
+import IModelState from "@models/interfaces/IModelState";
+import IPersisted from "@models/interfaces/IPersisted";
+import Image, { ImageCreate } from "@models/media/image.model";
 
-import Streetcode from './streetcode-types.model';
+import Streetcode from "./streetcode-types.model";
 
 export interface Fact {
   id: number;
@@ -15,7 +15,7 @@ export interface Fact {
   imageDescription?: string;
 }
 export interface FactCreate extends Fact {
-  imageDescription?: string
+  imageDescription?: string;
 }
 
 export interface FactAdminSavePayload {
@@ -26,7 +26,7 @@ export interface FactAdminSavePayload {
 }
 
 export interface FactUpdate extends FactCreate, IModelState, IPersisted {
-    streetcodeId?: number;
+  streetcodeId?: number;
 }
 
 export interface Term {
@@ -35,8 +35,14 @@ export interface Term {
   description?: string | undefined;
 }
 
+export type TermCreate = Omit<Term, 'id'>;
+
 export interface RelatedTerm {
   id: number;
+  word: string;
+  termId: number;
+}
+export interface CreateRelatedTerm {
   word: string;
   termId: number;
 }
