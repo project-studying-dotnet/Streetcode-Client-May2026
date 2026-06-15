@@ -1,6 +1,6 @@
 import Agent from '@api/agent.api';
 import { API_ROUTES } from '@constants/api-routes.constants';
-import News from '@models/news/news.model';
+import News, { NewsCreateUpdate } from '@models/news/news.model';
 import { NewsWithUrl } from '@models/news/news.model';
 
 const NewsApi = {
@@ -14,11 +14,11 @@ const NewsApi = {
 
     getAllSortedNews: () => Agent.get<News[]>(`${API_ROUTES.NEWS.GET_ALL_SORTED}`),
 
-    create: (news: News) => Agent.post<News>(`${API_ROUTES.NEWS.CREATE}`, news),
+    create: (news: NewsCreateUpdate) => Agent.post<News>(`${API_ROUTES.NEWS.CREATE}`, news),
 
     delete: (id: number) => Agent.delete(`${API_ROUTES.NEWS.DELETE}/${id}`),
 
-    update: (news: News) => {
+    update: (news: NewsCreateUpdate) => {
         if (!news.id) {
             throw new Error('News id is required for update');
         }

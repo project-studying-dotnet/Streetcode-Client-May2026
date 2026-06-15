@@ -3,7 +3,7 @@ import './NewsPage.styles.scss';
 import dayjs from 'dayjs';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useMemo, useState } from 'react';
-import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 

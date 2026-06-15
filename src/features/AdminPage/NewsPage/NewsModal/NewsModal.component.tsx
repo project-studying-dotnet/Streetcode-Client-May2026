@@ -15,6 +15,7 @@ import {
     UploadFile,
 } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
+import type { ValidateStatus } from 'antd/es/form/FormItem';
 
 import useMobx from '@stores/root-store';
 import FileUploader from '@/app/common/components/FileUploader/FileUploader.component';
@@ -167,13 +168,19 @@ const NewsModal: React.FC<Props> = observer(({
         };
 
         if (newsItem) {
-            await newsStore.updateNews(newsDto as unknown as News);
+            await newsStore.updateNews(newsDto);
         } else {
-            await newsStore.createNews(newsDto as unknown as News);
+            await newsStore.createNews(newsDto);
         }
 
         closeAndCleanData();
     };
+
+    const hasUploadedImage = Boolean(uploadedImageId);
+    const imageValidationStatus: ValidateStatus | undefined = hasUploadedImage
+        ? undefined
+        : 'error';
+    const imageValidationMessage = hasUploadedImage ? undefined : 'Завантажте фото';
 
     return (
         <Modal
@@ -247,8 +254,8 @@ const NewsModal: React.FC<Props> = observer(({
                     <Form.Item
                         label="Фото"
                         required
-                        validateStatus={!uploadedImageId ? 'error' : undefined}
-                        help={!uploadedImageId ? 'Завантажте фото' : undefined}
+                        validateStatus={imageValidationStatus}
+                        help={imageValidationMessage}
                     >
                         <FileUploader
                             className="news-photo-uploader"
