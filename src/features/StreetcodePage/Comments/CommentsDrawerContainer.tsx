@@ -1,36 +1,39 @@
+/* eslint-disable import/extensions */
 /* eslint-disable max-len */
-import "./CommentDrawerContainer.styles.scss";
+import "./CommentsDrawerContainer.styles.scss";
 
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import CommentInput from "@components/Comments/CommentInput";
+import CommentItem from "@components/Comments/CommentItem";
+import useMobx from "@stores/root-store";
 
-import { Drawer, Grid } from "antd";
-
-const { useBreakpoint } = Grid;
+import { Drawer, List } from "antd";
 
 const CommentsDrawerContainer: React.FC = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const screens = useBreakpoint();
-  const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+  const { id: streetcodeId } = useParams<{ id: string }>();
+  const { commentsStore } = useMobx();
 
-  useEffect(() => {
-    setIsOpen(location.pathname.endsWith("/comments"));
-  }, [location.pathname]);
+  const isOpen = location.pathname.endsWith("/comments");
 
   const handleClose = () => {
-    setIsOpen(false);
-    const currentBaseUrl = location.pathname.replace(/\/comments\/?$/, "");
-    navigate(currentBaseUrl || "/");
+    navigate("../", { relative: "path" });
   };
 
-  const drawerWidth = screens.md ? 500 : "100%";
-
   return (
-    <Drawer title="Коментарі" placement="right" onClose={handleClose} width={drawerWidth} maskClosable mask={false} open={isOpen} zIndex={10000}>
-      <div className="comments-shell-content">
-        <p style={{ color: "#bfbfbf", textAlign: "center", marginTop: "20px" }}>Тут скоро з&apos;являться коментарі...</p>
+    <Drawer title="Коментарі" placement="right" onClose={handleClose} open={isOpen} width={400} rootClassName="comments-drawer">
+      <div className="comments-drawer-list-area">
+        <List
+          itemLayout="horizontal"
+          loading={commentsStore.isLoading}
+          dataSource={commentsStore.comments}
+          renderItem={(item) => <CommentItem item={item} />}
+        />
       </div>
+
+      <CommentInput streetcodeId={streetcodeId} />
     </Drawer>
   );
 };
