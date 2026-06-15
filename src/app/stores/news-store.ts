@@ -73,6 +73,7 @@ export default class NewsStore {
     public createNews = async (news: News) => {
         try {
             await newsApi.create(news).then((created) => this.setItem(created));
+            this.fetchNewsAll();
         } catch (error: unknown) {
             console.log(error);
         }
@@ -81,6 +82,7 @@ export default class NewsStore {
     public updateNews = async (news: News) => {
         try {
             await newsApi.update(news).then((updated) => this.setItem(updated));
+            this.fetchNewsAll();
         } catch (error: unknown) {
             console.log(error);
         }

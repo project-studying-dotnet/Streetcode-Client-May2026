@@ -83,6 +83,14 @@ const Partners: React.FC = observer(() => {
             'confirmation',
             () => handleDeletePartner(partner.id),
             'Ви впевнені, що хочете видалити цього партнера?',
+            true,
+            undefined,
+            {
+                title: '',
+                okText: 'Підтвердити',
+                cancelText: 'Скасувати',
+                className: 'admin-confirmation-modal',
+            },
         );
     };
 
@@ -198,7 +206,7 @@ const Partners: React.FC = observer(() => {
                     />
 
                     <Button
-                        className="partners-page-add-button partners-page-add-button"
+                        className=" admin-page-add-button"
                         onClick={() => setModalAddOpened(true)}
                     >
                         Додати партнера

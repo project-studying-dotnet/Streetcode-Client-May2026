@@ -18,7 +18,13 @@ const NewsApi = {
 
     delete: (id: number) => Agent.delete(`${API_ROUTES.NEWS.DELETE}/${id}`),
 
-    update: (news: News) => Agent.put<News>(`${API_ROUTES.NEWS.UPDATE}`, news),
+    update: (news: News) => {
+        if (!news.id) {
+            throw new Error('News id is required for update');
+        }
+
+        return Agent.put<News>(`${API_ROUTES.NEWS.UPDATE}/${news.id}`, news);
+    },
 };
 
 export default NewsApi;

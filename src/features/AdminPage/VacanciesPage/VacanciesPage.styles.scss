@@ -28,17 +28,6 @@ $newAccentColor: #891f16;
     width: 120px;
 }
 
-.vacancies-add-button {
-    background-color: $newAccentColor;
-    color: c.$pure-white-color;
-    border: none;
-
-    &:hover {
-        background-color: #c9362a !important;
-        color: c.$pure-white-color !important;
-    }
-}
-
 .vacancy-status-select {
     width: 120px;
 }

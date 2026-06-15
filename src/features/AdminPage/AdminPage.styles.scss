@@ -1,5 +1,6 @@
 @use "@sass/_utils.functions.scss" as f;
 @use "@sass/mixins/_utils.mixins.scss" as mut;
+@use "@sass/variables/_variables.colors.scss" as c;
 
 $newAccentColor: #891f16;
 
@@ -107,4 +108,91 @@ $newAccentColor: #891f16;
     min-width: 0;
     padding: f.pxToRem(24px) f.pxToRem(32px);
     overflow-x: auto;
+}
+
+.admin-confirmation-modal {
+    .ant-modal-content {
+        padding: 0;
+        border-radius: 8px;
+    }
+
+    .ant-modal-header {
+        display: none;
+    }
+
+    .ant-modal-body {
+        padding: 32px 36px 24px;
+        text-align: center;
+
+        p {
+            margin: 0 0 24px;
+            font-size: 18px;
+            font-weight: 700;
+            color: c.$dark-text-color;
+        }
+    }
+
+    .ant-modal-footer {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        margin-top: 0;
+        padding: 0 36px 32px;
+        border-top: none;
+    }
+
+    .ant-btn {
+        min-width: 112px;
+        height: 44px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    .ant-btn-primary {
+        min-width: 132px;
+        border-color: #ef4136;
+        background-color: #ef4136;
+
+        &:hover,
+        &:focus {
+            border-color: #d93a30 !important;
+            background-color: #d93a30 !important;
+        }
+    }
+
+    .ant-modal-close {
+        top: -28px;
+        right: -28px;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background-color: c.$pure-white-color;
+        box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+    }
+
+    .ant-modal-close-x {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 56px;
+        height: 56px;
+        color: #c8c8c8;
+        font-size: 30px;
+    }
+}
+
+.admin-page-add-button {
+    min-height: f.pxToRem(34px);
+    min-width: f.pxToRem(160px);
+    border: none;
+    border-radius: f.pxToRem(4px);
+    font-weight: 500;
+    background-color: c.$accented-red-color;
+    color: c.$pure-white-color;
+
+    &:hover {
+        background-color: $newAccentColor !important;
+        color: c.$pure-white-color !important;
+    }
 }

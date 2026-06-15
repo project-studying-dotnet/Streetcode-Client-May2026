@@ -24,20 +24,20 @@ $newAccentColor: #891f16;
     width: f.pxToRem(360px);
 }
 
-.team-page-add-button {
-    min-height: f.pxToRem(34px);
-    min-width: f.pxToRem(160px);
-    border: none;
-    border-radius: f.pxToRem(4px);
-    font-weight: 500;
-    background-color: $newAccentColor;
-    color: c.$pure-white-color;
+// .team-page-add-button {
+//     min-height: f.pxToRem(34px);
+//     min-width: f.pxToRem(160px);
+//     border: none;
+//     border-radius: f.pxToRem(4px);
+//     font-weight: 500;
+//     background-color: $newAccentColor;
+//     color: c.$pure-white-color;
 
-    &:hover {
-        background-color: #c9362a !important;
-        color: c.$pure-white-color !important;
-    }
-}
+//     &:hover {
+//         background-color: #c9362a !important;
+//         color: c.$pure-white-color !important;
+//     }
+// }
 
 .team-table {
     .ant-table-thead > tr > th {

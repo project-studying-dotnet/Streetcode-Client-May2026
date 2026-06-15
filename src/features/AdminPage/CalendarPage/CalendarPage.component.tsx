@@ -122,7 +122,7 @@ const CalendarPage = () => {
                         ]}
                     />
 
-                    <Button className="calendar-add-button">
+                    <Button className="admin-page-add-button">
                         Додати подію
                     </Button>
                 </div>

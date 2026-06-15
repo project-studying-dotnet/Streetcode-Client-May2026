@@ -94,7 +94,7 @@ const VacanciesPage = () => {
                         ]}
                     />
 
-                    <Button className="vacancies-add-button">
+                    <Button className="admin-page-add-button">
                         Додати вакансію
                     </Button>
                 </div>

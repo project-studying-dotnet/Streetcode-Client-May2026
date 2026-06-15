@@ -1,0 +1,72 @@
+@use "@sass/_utils.functions.scss" as f;
+@use "@sass/variables/_variables.colors.scss" as c;
+
+.news-page {
+    width: 100%;
+    padding: 32px;
+
+    .news-page-container {
+        width: 100%;
+    }
+
+    .news-page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        gap: 24px;
+    }
+
+    .news-search-input {
+        max-width: 420px;
+        height: 38px;
+    }
+
+    .news-page-add-button {
+        height: 38px;
+        background-color: #e5574f;
+        color: #ffffff;
+        border: none;
+        font-weight: 600;
+
+        &:hover {
+            background-color: #d94d45;
+            color: #ffffff;
+        }
+    }
+
+    .news-title {
+        font-weight: 500;
+    }
+
+    .news-table-image {
+        width: 44px;
+        height: 44px;
+        object-fit: cover;
+    }
+
+    .news-date {
+        display: flex;
+        flex-direction: column;
+
+        span:first-child {
+            font-weight: 600;
+        }
+
+        span:last-child {
+            color: #b5b5b5;
+            margin-top: 2px;
+        }
+    }
+
+    .news-page-actions {
+        display: flex;
+        gap: 12px;
+
+        .actionButton {
+            color: #e5574f;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    }
+}
