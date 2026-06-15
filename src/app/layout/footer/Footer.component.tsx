@@ -14,9 +14,11 @@ import FRONTEND_ROUTES from '@/app/common/constants/frontend-routes.constants';
 
 const Footer = () => {
     const windowSize = useWindowSize();
-    useEffect(() => {
-        console.log('Build info:', BUILD_INFO);
-    }, []);
+    const buildInfoParts = [
+        BUILD_INFO.environment,
+        BUILD_INFO.buildNumber && `Build #${BUILD_INFO.buildNumber}`,
+        BUILD_INFO.sha,
+    ].filter(Boolean);
     return (
         <>
             {windowSize.width > 1024 && (
@@ -69,6 +71,13 @@ const Footer = () => {
                                 </a>
                             </li>
                         </ul>
+                        {
+                            buildInfoParts.length > 0 && (
+                                <div className="buildInfo">
+                                    {buildInfoParts.join(' | ')}
+                                </div>
+                            )
+                        }
                     </div>
                 </div>
             )}
