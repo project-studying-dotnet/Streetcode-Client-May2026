@@ -1,11 +1,12 @@
 import './Footer.styles.scss';
-
+import React, { useEffect } from 'react';
 import FaceBook from '@images/footer/Facebook.png';
 import Instagram from '@images/footer/Instagram.png';
 import StreetcodeFooter from '@images/footer/streetcode-footer.png';
 import TikTok from '@images/footer/TikTok.png';
 import Twitter from '@images/footer/Twitter.png';
 import Youtube from '@images/footer/Youtube.png';
+import { BUILD_INFO } from '@/app/common/constants/build-info.constants';
 
 import useWindowSize from '@hooks/stateful/useWindowSize.hook';
 
@@ -13,6 +14,9 @@ import FRONTEND_ROUTES from '@/app/common/constants/frontend-routes.constants';
 
 const Footer = () => {
     const windowSize = useWindowSize();
+    useEffect(() => {
+        console.log('Build info:', BUILD_INFO);
+    }, []);
     return (
         <>
             {windowSize.width > 1024 && (
