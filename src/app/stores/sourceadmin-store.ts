@@ -18,10 +18,15 @@ export default class SourcesAdminStore {
     }
 
     public setSource = (srcCategory: SourceCategoryAdmin) => {
+        if (!srcCategory.id) {
+            return;
+        }
+
         this.srcSourcesMap.set(srcCategory.id, srcCategory);
     };
 
     public setInternalSourceCategories(src: SourceCategoryAdmin[]) {
+        this.srcSourcesMap.clear();
         src.forEach(this.setSource);
     }
 
@@ -31,7 +36,8 @@ export default class SourcesAdminStore {
 
     public fetchSourceCategories = async () => {
         try {
-            this.setInternalSourceCategories(await sourcesApi.getAllCategories());
+            const categories = await sourcesApi.getAllCategories();
+            this.setInternalSourceCategories(categories);
         } catch (error: unknown) {
             console.log(error);
         }
@@ -39,7 +45,7 @@ export default class SourcesAdminStore {
 
     public deleteSourceCategory = async (srcId: number) => {
         try {
-            await sourcesApi.delete(srcId);
+            await sourcesApi.deleteCategory(srcId);
             runInAction(() => {
                 this.srcSourcesMap.delete(srcId);
             });
@@ -50,18 +56,17 @@ export default class SourcesAdminStore {
 
     public addSourceCategory = async (sourceItem: SourceCategoryAdmin) => {
         try {
-            await sourcesApi.create(sourceItem).then((created) => {
-                this.setSource(created);
-            });
+            await sourcesApi.createCategory(sourceItem);
+            await this.fetchSourceCategories();
         } catch (e: unknown) {
             console.log(e);
         }
     };
 
     public updateSourceCategory = async (sourceItem: SourceCategoryAdmin) => {
-        this.srcSourcesMap.set(sourceItem.id, sourceItem);
         try {
-            await sourcesApi.update(sourceItem);
+            await sourcesApi.updateCategory(sourceItem);
+            await this.fetchSourceCategories();
         } catch (e: unknown) {
             console.log(e);
         }

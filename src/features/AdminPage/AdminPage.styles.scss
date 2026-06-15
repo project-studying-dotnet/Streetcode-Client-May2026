@@ -1,33 +1,198 @@
-@use "@sass/_utils.functions.scss" as *;
-@use "@sass/variables/_variables.colors.scss" as c;
-@use "@sass/mixins/_utils.mixins.scss" as mut;
 @use "@sass/_utils.functions.scss" as f;
+@use "@sass/mixins/_utils.mixins.scss" as mut;
+@use "@sass/variables/_variables.colors.scss" as c;
+
+$newAccentColor: #891f16;
 
 .adminPageContainer {
-    margin-top: f.pxToRem(100px);
     display: flex;
-    flex-direction: column;
-    float: left;
+    flex-direction: row;
     width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+    background-color: #f5f5f5;
+
     @include mut.with-font();
+
     .dimmed {
         @include mut.sized(100%);
     }
-}
 
-.MainBlockContainer {
+    .ant-table-thead > tr > th.ant-table-column-has-sorters {
+        .ant-table-column-sorters {
+          justify-content: flex-start !important;
 
-    .ant-switch-checked {
-        background-color: c.$dark-red-color;
+          .ant-table-column-title {
+            margin-right: f.pxToRem(2px) !important;
+            flex: 0 0 auto !important;
+            width: auto !important;
+          }
+
+          svg path {
+            transition: fill 0.3s ease-in-out;
+          }
+        }
     }
 
-    .person-event-switch {
-        margin: 0 5px;
+    .ant-table-pagination.ant-pagination {
+            margin-top: f.pxToRem(30px) !important;
+            justify-content: left !important;
+
+        .ant-pagination-item {
+            border: none;
+            border-radius: 5px;
+            background-color: transparent;
+
+            a {
+                color: $newAccentColor;
+                font-weight: 500;
+            }
+        }
+
+        // Активна сторінка
+        .ant-pagination-item-active {
+                background-color: transparent;
+                border: 1px solid $newAccentColor !important;
+                transition: background-color 0.2s;
+
+                a {
+                    color: $newAccentColor !important;
+                }
+
+                &:hover {
+                    background-color: $newAccentColor !important;
+                    border-color: $newAccentColor !important;
+
+                a {
+                        color: #fff !important;
+                    }
+                }
+            }
+
+            .ant-pagination-prev,
+            .ant-pagination-next {
+                .ant-pagination-item-link {
+                    border: none;
+                    background-color: transparent;
+                    color: $newAccentColor;
+                }
+
+                &.ant-pagination-disabled .ant-pagination-item-link {
+                    color: #bfbfbf;
+                    background-color: transparent;
+                }
+            }
+
+            .ant-pagination-jump-prev,
+            .ant-pagination-jump-next {
+                .ant-pagination-item-container {
+                .ant-pagination-item-ellipsis {
+                    color: $newAccentColor;
+                }
+
+                    .ant-pagination-item-link-icon {
+                        color: $newAccentColor;
+                    }
+                }
+            }
+        }
+    
+    .ant-select:hover .ant-select-selector,
+    .ant-select-focused .ant-select-selector {
+        border-color: #e04031 !important;
     }
 }
 
-.adminPageContainer {
-    @include mut.sized(100%);
-    min-height: 400px;
-    overflow: hidden;
+.adminPageContent {
+    flex: 1;
+    min-width: 0;
+    padding: f.pxToRem(24px) f.pxToRem(32px);
+    overflow-x: auto;
+}
+
+.admin-confirmation-modal {
+    .ant-modal-content {
+        padding: 0;
+        border-radius: 8px;
+    }
+
+    .ant-modal-header {
+        display: none;
+    }
+
+    .ant-modal-body {
+        padding: 32px 36px 24px;
+        text-align: center;
+
+        p {
+            margin: 0 0 24px;
+            font-size: 18px;
+            font-weight: 700;
+            color: c.$dark-text-color;
+        }
+    }
+
+    .ant-modal-footer {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        margin-top: 0;
+        padding: 0 36px 32px;
+        border-top: none;
+    }
+
+    .ant-btn {
+        min-width: 112px;
+        height: 44px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    .ant-btn-primary {
+        min-width: 132px;
+        border-color: #ef4136;
+        background-color: #ef4136;
+
+        &:hover,
+        &:focus {
+            border-color: #d93a30 !important;
+            background-color: #d93a30 !important;
+        }
+    }
+
+    .ant-modal-close {
+        top: -28px;
+        right: -28px;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background-color: c.$pure-white-color;
+        box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+    }
+
+    .ant-modal-close-x {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 56px;
+        height: 56px;
+        color: #c8c8c8;
+        font-size: 30px;
+    }
+}
+
+.admin-page-add-button {
+    min-height: f.pxToRem(34px);
+    min-width: f.pxToRem(160px);
+    border: none;
+    border-radius: f.pxToRem(4px);
+    font-weight: 500;
+    background-color: c.$accented-red-color;
+    color: c.$pure-white-color;
+
+    &:hover {
+        background-color: $newAccentColor !important;
+        color: c.$pure-white-color !important;
+    }
 }

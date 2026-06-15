@@ -30,14 +30,14 @@ export default class SourcesStore {
 
     public createSourceCategory = async (srcCategory: SourceCategory) => {
         try {
-            await sourcesApi.create(srcCategory);
+            await sourcesApi.createCategory(srcCategory);
             this.setCategoryItem(srcCategory);
         } catch (error: unknown) {}
     };
 
     public updateSourceCategory = async (srcCategory: SourceCategory) => {
         try {
-            await sourcesApi.update(srcCategory);
+            await sourcesApi.updateCategory(srcCategory);
             runInAction(() => {
                 const updatedSourceCategory = {
                     ...srcCategory,
@@ -49,7 +49,7 @@ export default class SourcesStore {
 
     public deleteSourceCategory = async (SourceCategoryId: number) => {
         try {
-            await sourcesApi.delete(SourceCategoryId);
+            await sourcesApi.deleteCategory(SourceCategoryId);
             runInAction(() => {
                 this.srcCategoriesMap.delete(SourceCategoryId);
             });

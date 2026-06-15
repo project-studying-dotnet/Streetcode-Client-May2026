@@ -42,9 +42,19 @@
         }
     }
 
-    .streetcode-create-page__button {
+    .streetcode-create-page__forFans__header {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        gap: 8px;
+    }
+
+    .streetcode-create-page__forFans__plus {
+        color: #d13f35;
+        border: 1px solid #d13f35;
+        border-radius: 50%;
+    }
+
+    .streetcode-create-page__forFans__list {
+        margin-top: 16px;
     }
 }

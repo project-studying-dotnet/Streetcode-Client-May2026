@@ -1,14 +1,14 @@
 import './StreetcodeCreate.styles.scss';
 
 import {
-    Button, DatePicker, Form, Input, InputNumber, Divider, Select, Switch, Space, Tooltip,
+    Button, Card, DatePicker, Form, Input, InputNumber, Divider, Select, Switch, Space, Tooltip,
 } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import Radio from 'antd/es/radio/radio';
 import { observer } from 'mobx-react-lite';
 import React, { useState, useEffect } from 'react';
 import useMobx from '../../../../app/stores/root-store';
-import { BulbOutlined } from '@ant-design/icons';
+import { BulbOutlined, PlusOutlined } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import Streetcode from '../../../../models/streetcode/streetcode-types.model';
 import StreetcodesApi from '../../../../app/api/streetcode/streetcodes.api';
@@ -16,6 +16,12 @@ import dayjs from 'dayjs';
 import TagItem from '../../../../app/common/components/Tag/TagItem.component';
 import Tag, { StreetcodeTag } from '../../../../models/additional-content/tag.model';
 import FRONTEND_ROUTES from '@/app/common/constants/frontend-routes.constants';
+import sourcesApi from '@api/sources/sources.api';
+import SourcesAdminModal from '../../SourcesAdminBlock/SourcesAdminModal.component';
+import {
+    SourceCategoryName,
+    StreetcodeCategoryContent,
+} from '@models/sources/sources.model';
 
 const StreetcodeCreate: React.FC = observer(() => {
     const [form] = Form.useForm();
@@ -30,16 +36,30 @@ const StreetcodeCreate: React.FC = observer(() => {
     const { id } = useParams();
     const [currentStreetcode, setCurrentStreetcode] = useState<Streetcode>();
     const [selectedTags, setSelectedTags] = useState<StreetcodeTag[]>([]);
+    const [forFansModalOpen, setForFansModalOpen] = useState(false);
+    const [forFansItems, setForFansItems] = useState<StreetcodeCategoryContent[]>([]);
+    const [sourceCategories, setSourceCategories] = useState<SourceCategoryName[]>([]);
     const navigate = useNavigate();
 
     const onTagSelect = (value: string) => {
         const selectedTag = tagsStore?.Tags.find((tag) => tag.title === value);
-        setSelectedTags((prev) => [...prev, selectedTag]);
+
+        if (selectedTag) {
+            setSelectedTags((prev) => [...prev, selectedTag as StreetcodeTag]);
+        }
     };
 
     const onTagDeselect = (value: string) => {
         setSelectedTags((prev) => prev.filter((tag: Tag) => tag.title !== value));
     };
+
+    useEffect(() => {
+    sourcesApi.getAllNames()
+        .then(setSourceCategories)
+        .catch((error) => {
+            console.error('Failed to load source categories:', error);
+        });
+        }, []);
 
     useEffect(() => {
         if (id) {
@@ -83,7 +103,7 @@ const StreetcodeCreate: React.FC = observer(() => {
             teaser: values.teaser,
         };
 
-        if (currentStreetcode?.id) {
+       if (currentStreetcode?.id) {
             StreetcodesApi.update(streetcode).then((res) => res).catch((err) => err);
             navigate(`${FRONTEND_ROUTES.ADMIN.STREETCODES}`);
         } else {
@@ -112,6 +132,12 @@ const StreetcodeCreate: React.FC = observer(() => {
     const pickerMap = {
         date: 'date',
         month: 'month',
+    };
+    const getPlainTextPreview = (html = '', limit = 300) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    return (doc.body.textContent ?? '').trim().slice(0, limit);
     };
 
     return (
@@ -320,6 +346,28 @@ const StreetcodeCreate: React.FC = observer(() => {
                 </div>
                 <Divider />
 
+                <div className="streetcode-create-page__forFans">
+                    <div className="streetcode-create-page__forFans__header">
+                        <Button
+                            icon={<PlusOutlined />}
+                            type="text"
+                            className="streetcode-create-page__forFans__plus"
+                            onClick={() => setForFansModalOpen(true)}
+                        />
+
+                        <h2>Для фанатів</h2>
+                    </div>
+
+                    <div className="streetcode-create-page__forFans__list">
+                        {forFansItems.map((item, index) => (
+                            <Card key={`${item.sourceLinkCategoryId}-${index}`}>
+                                <p>{getPlainTextPreview(item.text)}</p>
+                            </Card>
+                        ))}
+                    </div>
+                </div>
+                <Divider />
+
                 <div className="streetcode-create-page__button">
                     <Button className="">
                         Зберегти як чернетку
@@ -328,6 +376,18 @@ const StreetcodeCreate: React.FC = observer(() => {
                         Опублікувати
                     </Button>
                 </div>
+
+                <SourcesAdminModal
+                    open={forFansModalOpen}
+                    streetcodeId={0}
+                    categories={sourceCategories}
+                    initialContent={null}
+                    onCancel={() => setForFansModalOpen(false)}
+                    onSave={(content: StreetcodeCategoryContent) => {
+                        setForFansItems((prev) => [...prev, content]);
+                        setForFansModalOpen(false);
+                    }}
+                />
             </Form>
         </div>
     );

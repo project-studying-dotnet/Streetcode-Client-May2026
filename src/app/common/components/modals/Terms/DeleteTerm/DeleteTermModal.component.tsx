@@ -37,6 +37,8 @@ const DeleteTermModal = () => {
       closeIcon={<CancelBtn />}
       open={deleteTerm.isOpen}
       onCancel={() => setModal("deleteTerm")}
+      okText="Підтвердити"
+      cancelText="Скасувати"
       onOk={handleDelete}
     >
       <h2>Ви впевнені, що хочете видалити це визначення?</h2>

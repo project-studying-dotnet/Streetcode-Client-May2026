@@ -1,13 +1,16 @@
 import './AdminPage.styles.scss';
 
-import StreetcodeCatalogComponent from '@features/StreetcodeCatalogPage/StreetcodeCatalog.component';
+import { Outlet } from 'react-router-dom';
 
 import AdminBar from './AdminBar.component';
 
 const AdminPage = () => (
     <div className="adminPageContainer">
         <AdminBar />
-        <StreetcodeCatalogComponent showAdminActions />
+
+        <main className="adminPageContent">
+            <Outlet />
+        </main>
     </div>
 );
 

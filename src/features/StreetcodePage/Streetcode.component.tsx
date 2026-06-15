@@ -85,6 +85,46 @@ const StreetcodeContent = () => {
     setCurrentStreetcodeId(streetcodeUrl.current).then((val) => setStreetcode(val));
   }, [setCurrentStreetcodeId]);
 
+    return (
+        <div className="streetcodeContainer">
+            {!pageLoadercontext.isPageLoaded && (
+                <div className="loader-container">
+                    <img
+                        className="spinner"
+                        alt=""
+                        src={isMobile ? LogoAnimationWeb : LogoAnimationMob}
+                    />
+                </div>
+            )}
+            <ProgressBar>
+                <MainBlock
+                    streetcode={streetcode}
+                    setActiveTagId={setActiveTagId}
+                    setActiveBlock={setActiveBlock}
+                />
+                <TextBlockComponent />
+                <InterestingFactsComponent />
+                <TimelineBlockComponent />
+                <ArtGalleryBlockComponent />
+                <RelatedFiguresComponent setActiveTagId={setActiveTagId} />
+                <SourcesBlock />
+            </ProgressBar>
+            <QRBlock />
+            <PartnersComponent />
+            <div className="sticky">
+                <div className="sticky-content">
+                    <ScrollToTopBtn />
+                    <DonateBtn />
+                </div>
+            </div>
+            <TickerBlock />
+            <TagsModalComponent
+                activeTagId={activeTagId}
+                setActiveTagId={setActiveTagId}
+                activeTagBlock={activeBlock}
+            />
+        </div>
+    );
   return (
     <div className="streetcodeContainer">
       {!pageLoadercontext.isPageLoaded && (
