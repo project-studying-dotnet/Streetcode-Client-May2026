@@ -28,17 +28,6 @@ $newAccentColor: #891f16;
     width: 110px;
 }
 
-.calendar-add-button {
-    background-color: #891f16;
-    color: c.$pure-white-color;
-    border: none;
-
-    &:hover {
-        background-color: #c9362a !important;
-        color: c.$pure-white-color !important;
-    }
-}
-
 .calendar-related-codes {
     display: flex;
     flex-direction: column;

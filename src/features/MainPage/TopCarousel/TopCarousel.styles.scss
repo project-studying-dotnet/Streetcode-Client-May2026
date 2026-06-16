@@ -4,36 +4,72 @@
 @use "@sass/_utils.functions.scss" as f;
 @use "@sass/mixins/_vendor.mixins.scss" as vnd;
 
-.top-carousel {
-  @include mut.rem-padded($top: 82px);
+.ant-carousel {
+  .slick-slider,
+  .slick-list,
+  .slick-track,
+  .slick-slide {
+    outline: none !important;
+    box-shadow: none !important;
 
-  .carousel-image {
-      width: 100%;
-      height: f.pxToRem(737px);
+    &:focus,
+    &:active,
+    &:focus-visible,
+    &:focus-within {
+      outline: none !important;
+      box-shadow: none !important;
+    }
   }
 
-  .slick-dots li button {
-    @include mut.sized(12px, 12px);
-  }
+  .slick-slide {
+    div,
+    img,
+    a {
+      outline: none !important;
+      box-shadow: none !important;
 
-  .slick-dots {
-    bottom: f.pxToRem(30px);;
-    top: auto;
-  }
-
-  .slick-dots li {
-    margin: 0 f.pxToRem(8px);
-  }
-
-  @media screen and (min-width: 1800px) {
-    .carousel-image {
-      height: f.pxToRem(830px);
+      &:focus,
+      &:active,
+      &:focus-visible {
+        outline: none !important;
+        box-shadow: none !important;
+      }
     }
   }
 }
 
-@media screen and (max-width: 1024px) {
-  .top-carousel {
-    @include mut.rem-padded($top: 64px);
+.top-carousel {
+  @include mut.rem-padded($top: 82px);
+
+  .carousel-image {
+    width: 100%;
+    object-fit: scale-down;
+    margin: auto;
+    overflow: hidden;
+
+    .slick-dots li button {
+      @include mut.sized(12px, 12px);
+    }
+
+    .slick-dots {
+      bottom: f.pxToRem(30px);
+      top: auto;
+    }
+
+    .slick-dots li {
+      margin: 0 f.pxToRem(8px);
+    }
+
+    @media screen and (min-width: 1800px) {
+      .carousel-image {
+        height: f.pxToRem(830px);
+      }
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    .top-carousel {
+      @include mut.rem-padded($top: 64px);
+    }
   }
 }

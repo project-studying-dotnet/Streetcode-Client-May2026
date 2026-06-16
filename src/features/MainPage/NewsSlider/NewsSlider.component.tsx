@@ -24,6 +24,7 @@ const NewsSlider = () => {
                 const response = await NewsApi.getAllSortedNews();
                 setNews(response);
             } catch (error) {
+                console.error('Error fetching news:', error);
             }
         };
         fetchNewsAll();

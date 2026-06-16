@@ -1,9 +1,13 @@
 import { makeAutoObservable } from "mobx";
 
 interface ConfirmationProps {
-  onSubmit?: () => void;
+  onSubmit?: () => void | Promise<void>;
   onCancel?: () => void;
   text?: string;
+  title?: string;
+  okText?: string;
+  cancelText?: string;
+  className?: string;
 }
 
 type ModalState = {
@@ -96,15 +100,21 @@ export default class ModalStore {
  
   public setConfirmationModal = (
     modalName: keyof ModalList,
-    onSubmit?: () => void,
+    onSubmit?: () => void | Promise<void>,
     text?: string,
     opened?: boolean,
     onCancel?: () => void,
+    options?: Omit<ConfirmationProps, 'onSubmit' | 'text' | 'onCancel'>,
   ) => {
     this.modalsState[modalName] = {
       ...this.modalsState[modalName],
       isOpen: opened ?? !this.modalsState[modalName].isOpen,
-      confirmationProps: { onSubmit, text, onCancel },
+      confirmationProps: {
+        onSubmit,
+        text,
+        onCancel,
+        ...options,
+      },
     };
   };
 }
