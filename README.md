@@ -209,3 +209,8 @@ Visit our <a href="https://streetcode.com.ua" target="_blank">*site*</a>, we wil
 
 - **[MIT license](http://opensource.org/licenses/mit-license.php)**
 - Copyright 2022 © <a href="https://softserve.academy/" target="_blank"> SoftServe IT Academy</a>.
+
+---
+## Create .env file in repository root example
+---
+GoogleAuth__ClientId=123721973387-7i3rs06c8iui5lrb805f22o0k2s6gk1o.apps.googleusercontent.com

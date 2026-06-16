@@ -1,9 +1,10 @@
 import './LoginPage.styles.scss';
+import { GoogleLogin } from '@react-oauth/google';
 
 import { useState } from 'react';
 import { Button, Checkbox, Form, Input, message } from 'antd';
 import { observer } from 'mobx-react-lite';
-import { Navigate,useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import UserLoginStore from '@/app/stores/user-login-store';
 
 import UserApi from '@api/user/user.api';
@@ -100,9 +101,25 @@ const LoginPage = () => {
                         <span className="dividerLine" />
                     </div>
 
-                    <Button className="googleLoginBtn" disabled>
-                        Google
-                    </Button>
+                    <GoogleLogin
+                        onSuccess={async (credentialResponse) => {
+                            try {
+                                setIsLoading(true);
+                                const response = await UserApi.googleLogin({
+                                    idToken: credentialResponse.credential as string
+                                });
+                                userLoginStore.setUserLoginResponce(response, userLoginStore.refreshToken);
+                                navigate(FRONTEND_ROUTES.ADMIN.BASE);
+                            } catch (e) {
+                                message.error('Помилка авторизації через Google');
+                            } finally {
+                                setIsLoading(false);
+                            }
+                        }}
+                        onError={() => {
+                            message.error('Не вдалося увійти через Google');
+                        }}
+                    />
                 </Form>
             </div>
         </div>
