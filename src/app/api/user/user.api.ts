@@ -25,6 +25,12 @@ import {
                 loginParams,
             ),
 
+        googleLogin: (body: { idToken: string }) =>
+        Agent.post<UserLoginResponce>(
+            API_ROUTES.ADMIN_AUTHORIZATION.GOOGLE_LOGIN,
+            body,
+        ),
+
         adminRefreshToken: (token: RefreshTokenRequest) =>
             Agent.post<RefreshTokenResponce>(
                 API_ROUTES.ADMIN_AUTHORIZATION.REFRESH_TOKEN,

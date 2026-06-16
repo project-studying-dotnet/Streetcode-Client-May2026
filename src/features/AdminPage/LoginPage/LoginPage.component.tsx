@@ -1,9 +1,10 @@
 import './LoginPage.styles.scss';
+import { GoogleLogin } from '@react-oauth/google';
 
 import { useState } from 'react';
 import { Button, Checkbox, Form, Input, message } from 'antd';
 import { observer } from 'mobx-react-lite';
-import { Navigate,useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import UserLoginStore from '@/app/stores/user-login-store';
 
 import UserApi from '@api/user/user.api';
@@ -37,6 +38,24 @@ const LoginPage = () => {
     if (UserLoginStore.isLoggedIn) {
         return <Navigate to={FRONTEND_ROUTES.ADMIN.BASE} replace />;
     }
+
+    // const googleLogin = useGoogleLogin({
+    //     onSuccess: async (tokenResponse) => {
+    //         console.log('Google Auth Response:', tokenResponse);
+    //         try {
+    //             setIsLoading(true);
+    //             const response = await UserApi.googleLogin({ token: tokenResponse.access_token });
+
+    //             userLoginStore.setUserLoginResponce(response, userLoginStore.refreshToken);
+    //             navigate(FRONTEND_ROUTES.ADMIN.BASE);
+    //         } catch (e) {
+    //             message.error('Помилка входу через Google');
+    //         } finally {
+    //             setIsLoading(false);
+    //         }
+    //     },
+    //     onError: () => message.error('Не вдалося увійти через Google'),
+    // });
 
     return (
         <div className="loginPage">
@@ -100,9 +119,30 @@ const LoginPage = () => {
                         <span className="dividerLine" />
                     </div>
 
-                    <Button className="googleLoginBtn" disabled>
-                        Google
-                    </Button>
+                    <GoogleLogin
+    onSuccess={async (credentialResponse) => {
+        try {
+            setIsLoading(true);
+            // Отправляем ID Token на сервер
+            const response = await UserApi.googleLogin({ 
+                idToken: credentialResponse.credential as string 
+            });
+
+            // Сохраняем полученные от вашего сервера токены
+            userLoginStore.setUserLoginResponce(response, userLoginStore.refreshToken);
+            
+            // Перенаправляем
+            navigate(FRONTEND_ROUTES.ADMIN.BASE);
+        } catch (e) {
+            message.error('Помилка авторизації через Google');
+        } finally {
+            setIsLoading(false);
+        }
+    }}
+    onError={() => {
+        message.error('Не вдалося увійти через Google');
+    }}
+/>
                 </Form>
             </div>
         </div>

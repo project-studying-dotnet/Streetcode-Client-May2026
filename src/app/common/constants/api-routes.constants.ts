@@ -237,6 +237,7 @@ export const API_ROUTES = {
     },
     ADMIN_AUTHORIZATION: {
         LOGIN: 'auth/login',
+        GOOGLE_LOGIN: 'auth/google-login',
         REFRESH_TOKEN: 'auth/refresh-token',
         LOGOUT: 'auth/logout'
     },
