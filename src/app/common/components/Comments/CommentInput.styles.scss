@@ -1,0 +1,29 @@
+.comment-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 0;
+  border-top: 1px solid #f0f0f0;
+
+  .comment-textarea {
+    padding: 8px 12px;
+    border-radius: 4px;
+    resize: none;
+
+    &:focus,
+    &:focus-within {
+      border-color: #1890ff;
+    }
+  }
+
+  .comment-actions-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+
+    .submit-btn {
+      padding: 4px 16px;
+      font-size: 14px;
+    }
+  }
+}

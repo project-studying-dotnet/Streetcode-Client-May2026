@@ -1,69 +1,178 @@
+/* eslint-disable max-len */
 import { makeAutoObservable, runInAction } from "mobx";
+import CommentApi from "@api/comments/comment.api";
+import { Comment, CommentCreate, CommentUpdate } from "@models/comments/comment.model";
 
-import { SpinProps } from "antd/es/spin";
+const logError = (operation: string, error: unknown) => {
+  if (process.env.NODE_ENV === "development") {
+    // eslint-disable-next-line no-console
+    console.error(`[CommentStore] ${operation}`, error);
+  }
+};
 
-import { Comment, CommentCreate } from "@/models/comments/comment.model";
+const toErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return "Сталася невідома помилка";
+};
 
 class CommentStore {
   public comments: Comment[] = [];
 
   public isLoading = false;
 
-  static readonly isLoading: boolean | SpinProps | undefined;
+  public isSaving = false;
+
+  public lastError: string | null = null;
+
+  public editingCommentId: number | null = null;
+
+  public replyingToCommentId: number | null = null;
 
   constructor() {
     makeAutoObservable(this);
-    this.loadMockComments();
   }
 
-  private loadMockComments() {
-    this.comments = Array.from({ length: 12 }).map((_, index) => ({
-      id: index,
-      text:
-        index % 2 === 0
-          ? "Чудовий стріткод! Дуже інформативно та цікаво дізнатися про історію цієї локації."
-          : "Підтримую! Хотілося б бачити більше таких інтерактивних елементів на сторінці.",
-      createdAt: "10.06.2026",
-      userId: `user-${index}`,
-      username: `Користувач ${index + 1}`,
-      avatarUrl: `https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`,
-      streetcodeId: 1,
-    }));
-  }
+  public clearError = () => {
+    this.lastError = null;
+  };
 
-  public createComment = async (comment: CommentCreate) => {
+  public getCommentsByStreetcodeId = async (streetcodeId: number): Promise<Comment[]> => {
     this.isLoading = true;
+    this.lastError = null;
+
     try {
-      await new Promise((resolve) => {
-        setTimeout(resolve, 500);
-      });
-
-      const newComment: Comment = {
-        id: Math.random(),
-        text: comment.text,
-        createdAt: "10.06.2026",
-        userId: "current-user",
-        username: "Поточний Користувач",
-        avatarUrl: "https://api.dicebear.com/7.x/miniavs/svg?seed=current",
-        streetcodeId: comment.streetcodeId,
-        parentId: comment.parentId,
-      };
-
+      const comments = await CommentApi.getByStreetcodeId(streetcodeId);
       runInAction(() => {
-        this.comments.unshift(newComment);
-        this.isLoading = false;
+        this.comments = comments;
       });
-    } catch (error) {
+      return comments;
+    } catch (error: unknown) {
+      logError("getCommentsByStreetcodeId", error);
+      runInAction(() => {
+        this.lastError = toErrorMessage(error);
+      });
+      return [];
+    } finally {
       runInAction(() => {
         this.isLoading = false;
       });
-      console.error("Помилка при створенні коментаря:", error);
     }
   };
 
-  public deleteComment = async (id: number) => {
-    this.comments = this.comments.filter((c) => c.id !== id);
+  public createComment = async (comment: CommentCreate): Promise<Comment | null> => {
+    if (!comment.userId) {
+      runInAction(() => {
+        this.lastError = "Користувач не авторизований";
+      });
+      return null;
+    }
+
+    this.isSaving = true;
+    this.lastError = null;
+
+    try {
+      const created = await CommentApi.create(comment);
+      runInAction(() => {
+        this.comments.unshift(created);
+        this.replyingToCommentId = null;
+      });
+      return created;
+    } catch (error: unknown) {
+      logError("createComment", error);
+      runInAction(() => {
+        this.lastError = toErrorMessage(error);
+      });
+      return null;
+    } finally {
+      runInAction(() => {
+        this.isSaving = false;
+      });
+    }
   };
+
+  public updateComment = async (
+    id: number,
+    update: Omit<CommentUpdate, "id">,
+  ): Promise<Comment | null> => {
+    if (!update.userId) {
+      runInAction(() => {
+        this.lastError = "Користувач не авторизований";
+      });
+      return null;
+    }
+
+    this.isSaving = true;
+    this.lastError = null;
+
+    try {
+      const comment = this.comments.find((c) => c.id === id);
+      if (!comment) {
+        throw new Error("Коментар не знайдено");
+      }
+
+      const updatePayload: CommentUpdate = {
+        id,
+        ...update,
+      };
+
+      const updated = await CommentApi.update(updatePayload);
+      runInAction(() => {
+        const index = this.comments.findIndex((c) => c.id === id);
+        if (index !== -1) {
+          this.comments[index] = updated;
+        }
+        this.editingCommentId = null;
+      });
+      return updated;
+    } catch (error: unknown) {
+      logError("updateComment", error);
+      runInAction(() => {
+        this.lastError = toErrorMessage(error);
+      });
+      return null;
+    } finally {
+      runInAction(() => {
+        this.isSaving = false;
+      });
+    }
+  };
+
+  public deleteComment = async (id: number): Promise<boolean> => {
+    this.isSaving = true;
+    this.lastError = null;
+
+    try {
+      await CommentApi.delete(id);
+      runInAction(() => {
+        this.comments = this.comments.filter((c) => c.id !== id);
+      });
+      return true;
+    } catch (error: unknown) {
+      logError("deleteComment", error);
+      runInAction(() => {
+        this.lastError = toErrorMessage(error);
+      });
+      return false;
+    } finally {
+      runInAction(() => {
+        this.isSaving = false;
+      });
+    }
+  };
+
+  public setEditingCommentId = (id: number | null) => {
+    this.editingCommentId = id;
+  };
+
+  public setReplyingToCommentId = (id: number | null) => {
+    this.replyingToCommentId = id;
+  };
+
+  public getCommentReplies = (parentId: number): Comment[] => this.comments.filter((c) => c.parentCommentId === parentId);
+
+  public getMainComments = (): Comment[] => this.comments.filter((c) => !c.parentCommentId);
 }
 
 export default CommentStore;
