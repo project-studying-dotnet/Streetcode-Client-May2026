@@ -96,16 +96,18 @@ export const SavedTemplatesCarousel = observer(
             }
         };
 
+        const handlePaginationClick = (templateId: string | number) => {
+            const index = savedTemplates.findIndex((t: { id: string | number}) => t.id === templateId);
+            scrollToIndex(index);
+        };
+
         const pagination = useMemo(() => {
             return savedTemplates.map((template: any) => (
                 <button
                     key={template.id}
                     className={`splide__pagination__page ${template.id === savedTemplates[activeIndex]?.id ? 'is-active' : ''
                         }`}
-                    onClick={() => {
-                        const index = savedTemplates.findIndex((t: { id: string | number }) => t.id === template.id);
-                        scrollToIndex(index);
-                    }}
+                    onClick={() => handlePaginationClick(template.id)}
                 />
             ));
         }, [savedTemplates, activeIndex, scrollToIndex]);

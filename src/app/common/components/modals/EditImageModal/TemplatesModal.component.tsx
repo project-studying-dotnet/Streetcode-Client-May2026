@@ -35,8 +35,6 @@ const TemplatesModal = observer(() => {
                         key={item.id}
                         className="template-item"
                         onClick={() => handleSelect(item)}
-                        role="button"
-                        tabIndex={0}
                         aria-label={`Select template ${item.id}`}
                         onKeyDown={(e) => handleKeyDown(e, item)}
                     >

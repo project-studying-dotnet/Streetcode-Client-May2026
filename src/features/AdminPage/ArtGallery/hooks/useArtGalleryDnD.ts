@@ -12,12 +12,63 @@ export const useArtGalleryDnD = (
     moveImageToTemplate: (id: number) => void;
     moveImageBackToGallery: (img: Image) => void;
   },
-  setActiveId: React.Dispatch<React.SetStateAction<string | null>> // если используешь
+  setActiveId: React.Dispatch<React.SetStateAction<string | null>>
 ) => {
+
+  const handleTemplateReorder = (activeId: string, overId: string) => {
+    const rawActive = activeId.replace('tmpl_', '');
+    const rawOver = overId.replace('tmpl_', '');
+
+    const oldIndex = imageTemplateStore.savedTemplates.findIndex((t: any) => String(t.id) === rawActive);
+    const newIndex = imageTemplateStore.savedTemplates.findIndex((t: any) => String(t.id) === rawOver);
+
+    if (oldIndex !== -1 && newIndex !== -1 && oldIndex !== newIndex) {
+      imageTemplateStore.reorderTemplates(oldIndex, newIndex);
+    }
+  };
+
+  const handleImageReorder = (activeId: string, overId: string) => {
+    const oldIndex = images.findIndex(i => `img_${i.id}` === activeId);
+    const newIndex = images.findIndex(i => `img_${i.id}` === overId);
+
+    if (oldIndex !== -1 && newIndex !== -1) {
+      actions.reorderImages(oldIndex, newIndex);
+    }
+  };
+
+  const handleImagePlacement = (activeId: string, overId: string) => {
+    const rawActiveId = activeId.replace('img_', '');
+    const templateName = imageTemplateStore.activeTemplate?.name;
+    const config = templateName ? TEMPLATE_CLASS_MAP[templateName] : null;
+    const slots = imageTemplateStore.activeTemplate?.slots || config?.slots || [];
+    
+    const isSlot = slots.some((s: any) => String(s.id) === overId);
+
+    if (isSlot) {
+      const dragged = images.find(i => String(i.id) === rawActiveId);
+      if (dragged && !templateSlots[overId]) {
+        setTemplateSlots(prev => ({ ...prev, [overId]: dragged }));
+        actions.moveImageToTemplate(dragged.id);
+      } else if (templateSlots[overId]) {
+        console.log('The slot is already occupied!');
+      }
+    } else if (overId === 'gallery') {
+      const imgInSlot = Object.values(templateSlots).find(i => String(i?.id) === rawActiveId);
+      if (imgInSlot) {
+        setTemplateSlots(prev => {
+          const copy = { ...prev };
+          Object.keys(copy).forEach(k => {
+            if (copy[k]?.id === imgInSlot.id) copy[k] = null;
+          });
+          return copy;
+        });
+        actions.moveImageBackToGallery(imgInSlot);
+      }
+    }
+  };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-
     setActiveId?.(null);
 
     if (!over || !active) return;
@@ -25,110 +76,12 @@ export const useArtGalleryDnD = (
     const activeId = String(active.id);
     const overId = String(over.id);
 
-    const templateName = imageTemplateStore.activeTemplate?.name;
-
-    const config = templateName
-      ? TEMPLATE_CLASS_MAP[templateName]
-      : null;
-
-    const slotsToCheck =
-      imageTemplateStore.activeTemplate?.slots ||
-      config?.slots ||
-      [];
-
-    const isSlot = slotsToCheck.some(
-      (s: any) => String(s.id) === overId
-    );
-
-    // -------------------------
-    // reorder templates
-    // -------------------------
     if (activeId.startsWith('tmpl_') && overId.startsWith('tmpl_')) {
-      const rawActive = activeId.replace('tmpl_', '');
-      const rawOver = overId.replace('tmpl_', '');
-
-      const oldIndex = imageTemplateStore.savedTemplates.findIndex(
-        (t: any) => String(t.id) === rawActive
-      );
-
-      const newIndex = imageTemplateStore.savedTemplates.findIndex(
-        (t: any) => String(t.id) === rawOver
-      );
-
-      if (oldIndex !== -1 && newIndex !== -1 && oldIndex !== newIndex) {
-        imageTemplateStore.reorderTemplates(oldIndex, newIndex);
-      }
-      return;
-    }
-
-    // -------------------------
-    // reorder images in gallery
-    // -------------------------
-    if (activeId.startsWith('img_') && overId.startsWith('img_')) {
-      const oldIndex = images.findIndex(
-        i => `img_${i.id}` === activeId
-      );
-
-      const newIndex = images.findIndex(
-        i => `img_${i.id}` === overId
-      );
-
-      if (oldIndex !== -1 && newIndex !== -1) {
-        actions.reorderImages(oldIndex, newIndex);
-      }
-      return;
-    }
-
-    // -------------------------
-    // drag image → slot
-    // -------------------------
-    if (activeId.startsWith('img_')) {
-      const rawActiveId = activeId.replace('img_', '');
-
-      const dragged = images.find(
-        i => String(i.id) === rawActiveId
-      );
-
-      if (isSlot && dragged) {
-        if (templateSlots[overId]) {
-          console.log('The slot is already occupied!');
-          return;
-        }
-
-        setTemplateSlots(prev => ({
-          ...prev,
-          [overId]: dragged
-        }));
-
-        actions.moveImageToTemplate(dragged.id);
-
-        return;
-      }
-
-      // -------------------------
-      // return image from slot to gallery
-      // -------------------------
-      if (overId === 'gallery') {
-        const imgInSlot = Object.values(templateSlots).find(
-          i => String(i?.id) === rawActiveId
-        );
-
-        if (imgInSlot) {
-          setTemplateSlots(prev => {
-            const copy = { ...prev };
-
-            Object.keys(copy).forEach(k => {
-              if (copy[k]?.id === imgInSlot.id) {
-                copy[k] = null;
-              }
-            });
-
-            return copy;
-          });
-
-          actions.moveImageBackToGallery(imgInSlot);
-        }
-      }
+      handleTemplateReorder(activeId, overId);
+    } else if (activeId.startsWith('img_') && overId.startsWith('img_')) {
+      handleImageReorder(activeId, overId);
+    } else if (activeId.startsWith('img_')) {
+      handleImagePlacement(activeId, overId);
     }
   };
 
