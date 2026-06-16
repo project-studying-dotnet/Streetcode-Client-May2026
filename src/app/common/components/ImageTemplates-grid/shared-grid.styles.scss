@@ -61,7 +61,10 @@
 }
 
 .preview-grid.carousel-preview {
-  .preview-slot { border-radius: 30px; }
+  .preview-slot { 
+    border-radius: 30px;
+    background: transparent;
+   }
 
   /* 1 слот */
   &.template-single-large { grid-template-columns: 380px; grid-template-rows: 305px; }

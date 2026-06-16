@@ -7,7 +7,7 @@ import BlockHeading from '@streetcode/HeadingBlock/BlockHeading.component';
 import './SavedTemplatesCarousel.styles.scss';
 
 export const SavedTemplatesCarousel = observer(
-    ({ savedTemplates, onEdit,onDelete, editingTemplateId, onSaveToDb }: any) => {
+    ({ savedTemplates, onEdit, onDelete, editingTemplateId, onSaveToDb }: any) => {
         const rowRef = useRef<HTMLDivElement>(null);
         const [activeIndex, setActiveIndex] = useState(0);
         const [isScrollable, setIsScrollable] = useState(false);
@@ -97,15 +97,18 @@ export const SavedTemplatesCarousel = observer(
         };
 
         const pagination = useMemo(() => {
-            return savedTemplates.map((_: any, i: number) => (
+            return savedTemplates.map((template: any) => (
                 <button
-                    key={i}
-                    className={`splide__pagination__page ${i === activeIndex ? 'is-active' : ''
+                    key={template.id}
+                    className={`splide__pagination__page ${template.id === savedTemplates[activeIndex]?.id ? 'is-active' : ''
                         }`}
-                    onClick={() => scrollToIndex(i)}
+                    onClick={() => {
+                        const index = savedTemplates.findIndex((t: { id: string | number }) => t.id === template.id);
+                        scrollToIndex(index);
+                    }}
                 />
             ));
-        }, [savedTemplates, activeIndex]);
+        }, [savedTemplates, activeIndex, scrollToIndex]);
 
 
         console.log("++++savedTemplates", savedTemplates);

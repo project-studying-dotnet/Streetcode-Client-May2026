@@ -31,7 +31,7 @@ const TemplatesModal = observer(() => {
         >
             <div className="templates-grid">
                 {imageTemplateStore.templates.map((item) => (
-                    <div
+                    <button
                         key={item.id}
                         className="template-item"
                         onClick={() => handleSelect(item)}
@@ -44,7 +44,7 @@ const TemplatesModal = observer(() => {
                             template={item} 
                             renderSlot={() => null}
                         />
-                    </div>
+                    </button>
                 ))}
             </div>
         </Modal>

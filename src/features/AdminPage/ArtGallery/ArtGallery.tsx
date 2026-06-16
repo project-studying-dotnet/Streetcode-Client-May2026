@@ -339,7 +339,7 @@ const handleDeleteTemplate = (id: number) => {
             console.log("<<<<<<<<<ART", art);
             return {
               artId: art ? art.id : 0,
-              index: parseInt(String(slot.id).replace('mid', '')) || 0
+              index: Number.parseInt(String(slot.id).replace('mid', '')) || 0
             };
           })
         }));
