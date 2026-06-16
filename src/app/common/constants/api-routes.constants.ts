@@ -1,4 +1,5 @@
 // eslint-disable-next-line import/prefer-default-export
+const SOURCES_BASE = 'Sources';
 export const API_ROUTES = {
   BASE: "/",
   HISTORICAL_CONTEXT: {
@@ -17,7 +18,7 @@ export const API_ROUTES = {
     GET: "news/getById",
     GET_BY_URL: "news/getByUrl",
     GET_NEWS_AND_LINKS_BY_URL: "news/getNewsAndLinksByUrl",
-    GET_ALL_SORTED: "news/sortedNewsByDateTime",
+    GET_ALL_SORTED: "News/GetSortedByDateTime/sorted",
     CREATE: "news/create",
     DELETE: "news/delete",
     UPDATE: "news/update",

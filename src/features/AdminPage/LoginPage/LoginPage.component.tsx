@@ -3,7 +3,8 @@ import './LoginPage.styles.scss';
 import { useState } from 'react';
 import { Button, Checkbox, Form, Input, message } from 'antd';
 import { observer } from 'mobx-react-lite';
-import { useNavigate } from 'react-router-dom';
+import { Navigate,useNavigate } from 'react-router-dom';
+import UserLoginStore from '@/app/stores/user-login-store';
 
 import UserApi from '@api/user/user.api';
 import FRONTEND_ROUTES from '@constants/frontend-routes.constants';
@@ -33,10 +34,14 @@ const LoginPage = () => {
         }
     };
 
+    if (UserLoginStore.isLoggedIn) {
+        return <Navigate to={FRONTEND_ROUTES.ADMIN.BASE} replace />;
+    }
+
     return (
         <div className="loginPage">
             <div className="loginCard">
-                <h1>Вхід</h1>
+                <h1 className="loginTitle">Вхід</h1>
                 <p className="loginSubtitle">Введіть свої дані для входу</p>
 
                 <Form
@@ -86,11 +91,13 @@ const LoginPage = () => {
                     </div>
 
                     <div className="loginDivider">
-                        <span></span>
-                            <span className="dividerText">
-                                або продовжити через
-                            </span>
-                        <span></span>
+                        <span className="dividerLine" />
+
+                        <span className="dividerText">
+                            або продовжити через
+                        </span>
+
+                        <span className="dividerLine" />
                     </div>
 
                     <Button className="googleLoginBtn" disabled>

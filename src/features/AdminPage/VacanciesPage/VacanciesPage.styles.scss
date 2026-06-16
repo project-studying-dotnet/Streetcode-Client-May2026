@@ -1,0 +1,39 @@
+@use "@sass/variables/_variables.colors.scss" as c;
+@use "@sass/_utils.functions.scss" as f;
+
+$newAccentColor: #891f16;
+
+.vacancies-page {
+    width: 100%;
+}
+
+.vacancies-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.vacancies-search-input {
+    width: 360px;
+}
+
+.vacancies-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.vacancies-status-filter {
+    width: 120px;
+}
+
+.vacancy-status-select {
+    width: 120px;
+}
+
+.vacancy-actions {
+    display: flex;
+    gap: 12px;
+    color: $newAccentColor;
+}

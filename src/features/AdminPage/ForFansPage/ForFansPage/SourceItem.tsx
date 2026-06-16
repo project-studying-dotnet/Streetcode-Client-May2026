@@ -2,7 +2,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import ImagesApi from '@api/media/images.api';
-import FileUploader from '@components/FileUploader/FileUploader.component';
 import Image from '@models/media/image.model';
 import { SourceCategoryAdmin } from '@models/sources/sources.model';
 import useMobx from '@stores/root-store';
@@ -13,6 +12,8 @@ import {
 } from 'antd';
 
 import PreviewFileModal from '@/app/common/components/PreviewFileModal/PreviewFileModal.component';
+
+import SourcesImageUploader from './SourcesGrayscaleImageUploader.component';
 
 interface Props {
     srcCategory: SourceCategoryAdmin;
@@ -28,6 +29,7 @@ const SourceItem = ({ srcCategory }: Props) => {
     const [previewOpen, setPreviewOpen] = useState(false);
     const [filePreview, setFilePreview] = useState<UploadFile | null>(null);
     const imageId = useRef<number>(srcCategory.imageId);
+
     const handlePreview = async (file: UploadFile) => {
         setFilePreview(file);
         setPreviewOpen(true);
@@ -44,10 +46,13 @@ const SourceItem = ({ srcCategory }: Props) => {
     };
 
     const handleEditOk = () => {
-        srcCategory.title = title;
-        srcCategory.image = image;
-        if (imageId.current === 0) srcCategory.imageId = null;
-        updateSourceCategory(srcCategory);
+        const updatedCategory: SourceCategoryAdmin = {
+            id: srcCategory.id,
+            title,
+            imageId: imageId.current || srcCategory.imageId,
+        };
+
+        updateSourceCategory(updatedCategory);
         setIsModalEditVisible(false);
     };
 
@@ -58,8 +63,14 @@ const SourceItem = ({ srcCategory }: Props) => {
 
     const handleDeleteOk = () => {
         setIsModalDeleteVisible(false);
-        deleteSourceCategory(srcCategory.id);
-        ImagesApi.delete(srcCategory.imageId);
+
+        if (srcCategory.id) {
+            deleteSourceCategory(srcCategory.id);
+        }
+
+        if (srcCategory.imageId) {
+            ImagesApi.delete(srcCategory.imageId);
+        }
     };
 
     const handleDeleteCancel = () => {
@@ -71,8 +82,16 @@ const SourceItem = ({ srcCategory }: Props) => {
     };
 
     useEffect(() => {
-        Promise.all([ImagesApi.getById(imageId.current)]).then((r) => setImage(r.at(0)));
+        if (!imageId.current) return;
+
+        ImagesApi.getById(imageId.current)
+            .then((image) => setImage(image))
+            .catch((error) => {
+                console.error('Failed to load image by id:', error);
+                setImage(undefined);
+            });
     }, []);
+
     return (
         <div
             className="sourcesSliderItem"
@@ -84,11 +103,16 @@ const SourceItem = ({ srcCategory }: Props) => {
                 <Button icon={<DeleteOutlined />} onClick={handleDelete} />
             </div>
             <Modal
-                title="Ви впевнені, що хочете видалити дану категорію?"
+                title="Видалити категорію?"
                 open={isModalDeleteVisible}
                 onOk={handleDeleteOk}
                 onCancel={handleDeleteCancel}
-            />
+                okText="Видалити"
+                cancelText="Скасувати"
+                okButtonProps={{ danger: true }}
+            >
+                <p>Ви впевнені, що хочете видалити дану категорію?</p>
+            </Modal>
             <Modal
                 title="Редагувати категорію"
                 open={isModalEditVisible}
@@ -97,34 +121,38 @@ const SourceItem = ({ srcCategory }: Props) => {
             >
                 <Space direction="vertical" size="middle">
                     <Input placeholder="Title" value={title} onChange={handleChangeTitle} />
-                    <FileUploader
+                    <SourcesImageUploader
                         multiple={false}
                         accept=".jpeg,.png,.jpg"
                         listType="picture-card"
                         maxCount={1}
                         onPreview={handlePreview}
-                        uploadTo="image"
-                        onSuccessUpload={(image: Image) => {
-                            imageId.current = image.id;
-                            setImage(image);
+                        onSuccessUpload={(uploadedImage: Image) => {
+                            imageId.current = uploadedImage.id;
+                            setImage(uploadedImage);
                         }}
-                        onRemove={(img) => {
-                            setImage(undefined);
+                        onRemove={() => {
+                            if (imageId.current) {
+                                ImagesApi.delete(imageId.current);
+                            }
+
                             imageId.current = 0;
+                            setImage(undefined);
                         }}
-                        defaultFileList={(srcCategory)
-                            ? [{ name: '',
-                                 thumbUrl: base64ToUrl(srcCategory.image?.base64, srcCategory.image?.mimeType),
-                                 uid: srcCategory.image?.id.toString(),
-                                 status: 'done' }]
-                            : []}
+                        defaultFileList={srcCategory.image ? [{
+                            name: '',
+                            thumbUrl: base64ToUrl(srcCategory.image.base64, srcCategory.image.mimeType),
+                            uid: String(srcCategory.image.id),
+                            status: 'done',
+                        }] : []}
                     >
                         <p>Виберіть чи перетягніть файл</p>
-                    </FileUploader>
+                    </SourcesImageUploader>
                     <PreviewFileModal opened={previewOpen} setOpened={setPreviewOpen} file={filePreview} />
                 </Space>
             </Modal>
         </div>
     );
 };
+
 export default SourceItem;

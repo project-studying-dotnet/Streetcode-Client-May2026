@@ -89,7 +89,7 @@ const StreetcodeContent = () => {
     <div className="streetcodeContainer">
       {!pageLoadercontext.isPageLoaded && (
         <div className="loader-container">
-          <img className="spinner" alt="Streetcode Loader" src={isMobile ? logoAnimationWeb : logoAnimationMob} />
+          <img className="spinner" alt="" src={isMobile ? logoAnimationWeb : logoAnimationMob} />
         </div>
       )}
       <ProgressBar>
@@ -97,7 +97,6 @@ const StreetcodeContent = () => {
         <TextBlockComponent />
         <InterestingFactsComponent />
         <TimelineBlockComponent />
-        {/* <MapBlock /> */}
         <ArtGalleryBlockComponent />
         <RelatedFiguresComponent setActiveTagId={setActiveTagId} />
         <SourcesBlock />

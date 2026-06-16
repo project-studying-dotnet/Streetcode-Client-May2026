@@ -1,6 +1,6 @@
 import { action, makeAutoObservable, observable, runInAction } from 'mobx';
 import newsApi from '@api/news/news.api';
-import News from '@models/news/news.model';
+import News, { NewsCreateUpdate } from '@models/news/news.model';
 
 export default class NewsStore {
     public NewsMap = new Map<number, News>();
@@ -70,17 +70,19 @@ export default class NewsStore {
         }
     };
 
-    public createNews = async (news: News) => {
+    public createNews = async (news: NewsCreateUpdate) => {
         try {
             await newsApi.create(news).then((created) => this.setItem(created));
+            this.fetchNewsAll();
         } catch (error: unknown) {
             console.log(error);
         }
     };
 
-    public updateNews = async (news: News) => {
+    public updateNews = async (news: NewsCreateUpdate) => {
         try {
             await newsApi.update(news).then((updated) => this.setItem(updated));
+            this.fetchNewsAll();
         } catch (error: unknown) {
             console.log(error);
         }

@@ -15,7 +15,7 @@
     background-color: #fff;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
 
-    h1 {
+    .loginTitle {
         margin-bottom: 8px;
         text-align: center;
         font-size: 24px;
@@ -82,12 +82,20 @@
     margin: 28px 0 20px;
     color: #999;
     font-size: 14px;
+}
 
-    span {
-        flex: 1;
-        height: 1px;
-        background-color: #e0e0e0;
-    }
+.dividerLine {
+    flex: 1;
+    height: 1px;
+    background-color: #e0e0e0;
+}
+
+.dividerText {
+    flex: 0 0 auto;
+    height: auto;
+    background-color: transparent;
+    text-align: center;
+    line-height: 18px;
 }
 
 .googleLoginBtn {
