@@ -39,24 +39,6 @@ const LoginPage = () => {
         return <Navigate to={FRONTEND_ROUTES.ADMIN.BASE} replace />;
     }
 
-    // const googleLogin = useGoogleLogin({
-    //     onSuccess: async (tokenResponse) => {
-    //         console.log('Google Auth Response:', tokenResponse);
-    //         try {
-    //             setIsLoading(true);
-    //             const response = await UserApi.googleLogin({ token: tokenResponse.access_token });
-
-    //             userLoginStore.setUserLoginResponce(response, userLoginStore.refreshToken);
-    //             navigate(FRONTEND_ROUTES.ADMIN.BASE);
-    //         } catch (e) {
-    //             message.error('Помилка входу через Google');
-    //         } finally {
-    //             setIsLoading(false);
-    //         }
-    //     },
-    //     onError: () => message.error('Не вдалося увійти через Google'),
-    // });
-
     return (
         <div className="loginPage">
             <div className="loginCard">
@@ -120,29 +102,24 @@ const LoginPage = () => {
                     </div>
 
                     <GoogleLogin
-    onSuccess={async (credentialResponse) => {
-        try {
-            setIsLoading(true);
-            // Отправляем ID Token на сервер
-            const response = await UserApi.googleLogin({ 
-                idToken: credentialResponse.credential as string 
-            });
-
-            // Сохраняем полученные от вашего сервера токены
-            userLoginStore.setUserLoginResponce(response, userLoginStore.refreshToken);
-            
-            // Перенаправляем
-            navigate(FRONTEND_ROUTES.ADMIN.BASE);
-        } catch (e) {
-            message.error('Помилка авторизації через Google');
-        } finally {
-            setIsLoading(false);
-        }
-    }}
-    onError={() => {
-        message.error('Не вдалося увійти через Google');
-    }}
-/>
+                        onSuccess={async (credentialResponse) => {
+                            try {
+                                setIsLoading(true);
+                                const response = await UserApi.googleLogin({
+                                    idToken: credentialResponse.credential as string
+                                });
+                                userLoginStore.setUserLoginResponce(response, userLoginStore.refreshToken);
+                                navigate(FRONTEND_ROUTES.ADMIN.BASE);
+                            } catch (e) {
+                                message.error('Помилка авторизації через Google');
+                            } finally {
+                                setIsLoading(false);
+                            }
+                        }}
+                        onError={() => {
+                            message.error('Не вдалося увійти через Google');
+                        }}
+                    />
                 </Form>
             </div>
         </div>
