@@ -16,7 +16,6 @@ export const ImageCard: React.FC<ImageCardProps> = observer(({
 
   return (
     <div className={`image-card ${isMissingData ? 'card-incomplete' : ''}`}
-      onDragStart={(e) => e.preventDefault()}
     >
       {isMissingData && <div className="warning-badge">!</div>}
 

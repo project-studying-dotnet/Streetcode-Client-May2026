@@ -56,7 +56,7 @@ export default class ImageTemplateStore {
         runInAction(() => {
             const updateFunction = (template: ArtSlideTemplate) => {
                 template.slots.forEach((slot: any) => {
-                    if (slot.image && slot.image.id === imageId) {
+                    if (slot.image?.id === imageId) {
                         slot.artId = art.id;
                         slot.art = art;
                     }

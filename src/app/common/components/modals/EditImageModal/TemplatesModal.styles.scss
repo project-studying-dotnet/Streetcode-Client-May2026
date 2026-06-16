@@ -1,8 +1,12 @@
 
 .templates-modal {
   .ant-modal-content {
-    width: 837px;
-    height: 520px;
+    width: 100%; 
+    min-width: 837px;
+    
+    height: auto;
+    min-height: 520px; 
+    max-height: 70vh;
     border-radius: 30px;
     overflow: hidden; 
     padding: 0;

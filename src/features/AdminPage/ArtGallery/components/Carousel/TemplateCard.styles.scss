@@ -6,8 +6,6 @@
     border-radius: 30px;
     transition: all 0.3s ease;
     border: 2px solid transparent;
-    position: relative;
-
 
     &.template-active {
         opacity: 0.4;
@@ -27,6 +25,7 @@
     }
 
     .controls-overlay__item {
+        display: none;
         position: absolute;
         top: 50%;
         left: 50%;

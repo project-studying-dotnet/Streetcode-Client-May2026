@@ -7,18 +7,19 @@ interface AddButtonCardProps {
   onUpload: (file: File) => void;
 }
 export const AddButtonCard: React.FC<AddButtonCardProps> = ({ onUpload }) => {
-  const { 
-    fileInputRef, 
-    isDragging, 
-    openFilePicker, 
-    handleFileChange, 
-    handleDragOver, 
-    handleDragLeave, 
-    handleDrop 
+  const {
+    fileInputRef,
+    isDragging,
+    openFilePicker,
+    handleFileChange,
+    handleDragOver,
+    handleDragLeave,
+    handleDrop
   } = useFileUpload(onUpload);
 
   return (
-    <div 
+    <button
+      type="button"
       className={`add-button-card ${isDragging ? 'dragging' : ''}`}
       onClick={openFilePicker}
       onDragOver={handleDragOver}
@@ -36,6 +37,6 @@ export const AddButtonCard: React.FC<AddButtonCardProps> = ({ onUpload }) => {
         <span>☁️</span>
         <p>Перетягніть файл або натисніть</p>
       </div>
-    </div>
+    </button>
   );
 };

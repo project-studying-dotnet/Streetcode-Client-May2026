@@ -32,7 +32,7 @@ export default class ImageStore {
             .then((im) => {
                 image = im;
             })
-            .catch((error) => {});
+            .catch((error) => { });
         return image;
     }
 
@@ -41,13 +41,13 @@ export default class ImageStore {
 
     public fetchImage = async (id: number) => {
         if (!id || id <= 0) return;
-        
+
         try {
             const image = await imagesApi.getById(id);
             runInAction(() => {
                 this.setItem(this.transformToImage(image));
             });
-        } catch (error: unknown) {}
+        } catch (error: unknown) { }
     };
 
     public fetchImageByStreetcodeId = async (streetcodeId: number) => {
@@ -56,7 +56,7 @@ export default class ImageStore {
             runInAction(() => {
                 this.setInternalMap(image.map(this.transformToImage));
             });
-        } catch (error: unknown) {}
+        } catch (error: unknown) { }
     };
 
     public createImage = async (image: ImageCreate, localUrl?: string) => {
@@ -66,7 +66,7 @@ export default class ImageStore {
                 const newImage = { ...this.transformToImage(resp), url: localUrl ?? '' };
                 this.setItem(newImage);
             });
-        } catch (error: unknown) {}
+        } catch (error: unknown) { }
     };
 
     public updateImage = async (image: Image) => {
@@ -79,7 +79,7 @@ export default class ImageStore {
                 };
                 this.setItem(updatedImage as Image);
             });
-        } catch (error: unknown) {}
+        } catch (error: unknown) { }
     };
 
     public deleteImage = async (imageId: number) => {
@@ -88,7 +88,7 @@ export default class ImageStore {
             runInAction(() => {
                 this.ImageMap.delete(imageId);
             });
-        } catch (error: unknown) {}
+        } catch (error: unknown) { }
     };
 
     public fetchAll = async () => {
@@ -97,7 +97,9 @@ export default class ImageStore {
             runInAction(() => {
                 rawImages.forEach(img => this.setItem(this.transformToImage(img)));
             });
-        } catch (error) {}
+        } catch (error) {
+            console.error("Error loading images:", error);
+        }
     };
 
     public reorderImages = (oldIndex: number, newIndex: number) => {
@@ -121,7 +123,7 @@ export default class ImageStore {
         runInAction(() => this.setItem(image));
     };
 
-    private transformToImage = (image: Image): Image => {
+    private readonly transformToImage = (image: Image): Image => {
         return {
             ...image,
             url: image.url ?? `/static-files/${image.id}.png`,

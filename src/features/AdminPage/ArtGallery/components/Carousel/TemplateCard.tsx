@@ -11,7 +11,7 @@ export const TemplateCard = ({ template, attributes, isActive, listeners, onEdit
 
     console.log("template", template)
     return (
-        <div
+        <button
             className={`template-card ${isActive ? 'template-active' : ''}`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
@@ -74,6 +74,6 @@ export const TemplateCard = ({ template, attributes, isActive, listeners, onEdit
                     }}
                 />
             </div>
-        </div>
+        </button>
     );
 };

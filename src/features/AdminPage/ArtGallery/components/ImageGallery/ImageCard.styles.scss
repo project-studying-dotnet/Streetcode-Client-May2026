@@ -4,19 +4,20 @@
   position: relative;
   width: 146px;
   height: 152px;
-  border: 1px solid #e0e0e0;
+  border: 2px solid #e0e0e0;
   padding: 16px;
   border-radius: 8px;
   margin-top: 31px;
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   background-color: transparent;
   cursor: pointer;
-  border: 2px solid transparent;
   transition: border-color 0.3s;
+
+  -webkit-user-drag: none;
+  user-select: none;
 
   &.is-deleting {
     border: 2px solid c.$accented-red-color !important;
@@ -30,8 +31,8 @@
     position: absolute;
     top: 5px;
     right: 5px;
-    background: #ff4d4f;
-    color: white;
+    background: c.$ant-menu-color;
+    color: c.$pure-white-color;
     width: 20px;
     height: 20px;
     border-radius: 50%;
@@ -72,7 +73,7 @@
     button {
       background: none;
       border: none;
-      color: white;
+      color: c.$pure-white-color;
       cursor: pointer;
 
       &:hover {

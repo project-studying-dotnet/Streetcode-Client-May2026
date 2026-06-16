@@ -35,13 +35,6 @@ export interface ImageCreateUpdate extends IModelState {
     imageDetails?: ImageDetails;
 }
 
-
-// export interface ArtImage extends Image {
-//     id: number; 
-//     url: string; 
-//     isPublished: boolean;
-// }
-
 export interface GalleryListProps {
     images: Image[];
     onUpload: (file: File) => void;

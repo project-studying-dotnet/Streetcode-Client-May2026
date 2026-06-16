@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { TEMPLATE_CLASS_MAP } from '@constants/template.map';
 import { ArtSlideTemplate } from '@models/media/art-slide-template.model';
-import { message } from 'antd';
+
+import { Spin, message } from 'antd';
 import {
   DndContext,
   DragEndEvent,
@@ -382,6 +383,7 @@ const handleDeleteTemplate = (id: number) => {
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}
     >
+      <Spin spinning={loading} tip="Збереження даних...">
       <div className="art-gallery-container">
 
         <GalleryList
@@ -418,6 +420,7 @@ const handleDeleteTemplate = (id: number) => {
           onDelete={handleDeleteTemplate}
         />
       </div>
+      </Spin>
     </DndContext>
   );
 };
