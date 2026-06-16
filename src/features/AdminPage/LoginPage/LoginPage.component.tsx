@@ -111,6 +111,7 @@ const LoginPage = () => {
                                 userLoginStore.setUserLoginResponce(response, userLoginStore.refreshToken);
                                 navigate(FRONTEND_ROUTES.ADMIN.BASE);
                             } catch (e) {
+                                console.error('Google Auth Error:', e);
                                 message.error('Помилка авторизації через Google');
                             } finally {
                                 setIsLoading(false);
