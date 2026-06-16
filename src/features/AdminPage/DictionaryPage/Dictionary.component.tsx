@@ -98,7 +98,7 @@ export const Dictionary = () => {
             onChange={(e) => setSearchText(e.target.value)}
           />
           <Button
-            className="streetcode-custom-button dictionary-page-add-button"
+            className="admin-page-add-button"
             onClick={() => {
               modalStore.setModal("addTerm", undefined, true);
             }}

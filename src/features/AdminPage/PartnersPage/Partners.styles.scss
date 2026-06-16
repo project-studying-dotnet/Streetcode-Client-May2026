@@ -29,17 +29,6 @@
             border-radius: f.pxToRem(4px);
             padding: f.pxToRem(8px) f.pxToRem(12px);
         }
-
-        .partners-page-add-button {
-                min-height: f.pxToRem(34px);
-                min-width: f.pxToRem(120px);
-                border: none;
-                border-radius: f.pxToRem(4px);
-                font-weight: 500;
-                transition: background-color 0.3s;
-                background-color: #E04031;
-                color: c.$pure-white-color;
-            }
         
         .partners-table-logo{
             height: f.pxToRem(40px);

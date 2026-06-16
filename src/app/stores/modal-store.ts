@@ -1,17 +1,21 @@
 import { makeAutoObservable } from "mobx";
 
 interface ConfirmationProps {
-  onSubmit?: () => void;
+  onSubmit?: () => void | Promise<void>;
   onCancel?: () => void;
   text?: string;
+  title?: string;
+  okText?: string;
+  cancelText?: string;
+  className?: string;
 }
 
 type ModalState = {
   isOpen: boolean;
   fromCardId?: number;
   confirmationProps?: ConfirmationProps;
-  image?: any; 
-  data?: any;  
+  image?: any;
+  data?: any;
 };
 
 const DefaultModalState: ModalState = {
@@ -83,28 +87,32 @@ export default class ModalStore {
     this.isPageDimmed = dimmed ?? !this.isPageDimmed;
   };
 
-
   public setModal = (modalName: keyof ModalList, fromId?: number, opened?: boolean, data?: any) => {
     this.modalsState[modalName] = {
-      ...this.modalsState[modalName], 
+      ...this.modalsState[modalName],
       isOpen: opened ?? !this.modalsState[modalName].isOpen,
       fromCardId: fromId,
-      image: data, 
+      image: data,
     };
   };
 
- 
   public setConfirmationModal = (
     modalName: keyof ModalList,
-    onSubmit?: () => void,
+    onSubmit?: () => void | Promise<void>,
     text?: string,
     opened?: boolean,
     onCancel?: () => void,
+    options?: Omit<ConfirmationProps, 'onSubmit' | 'text' | 'onCancel'>,
   ) => {
     this.modalsState[modalName] = {
       ...this.modalsState[modalName],
       isOpen: opened ?? !this.modalsState[modalName].isOpen,
-      confirmationProps: { onSubmit, text, onCancel },
+      confirmationProps: {
+        onSubmit,
+        text,
+        onCancel,
+        ...options,
+      },
     };
   };
 }
