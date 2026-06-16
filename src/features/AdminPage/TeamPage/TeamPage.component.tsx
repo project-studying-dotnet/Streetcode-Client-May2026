@@ -200,7 +200,7 @@ const TeamPage = () => {
                     />
 
                     <Button
-                        className="team-page-add-button"
+                        className="admin-page-add-button"
                         onClick={() => setModalAddOpened(true)}
                     >
                         Додати члена команди

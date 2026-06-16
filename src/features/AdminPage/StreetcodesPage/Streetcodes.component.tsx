@@ -40,17 +40,22 @@ const Streetcodes:React.FC = observer(() => {
     const modalHandler = (streetcode: Streetcode) => {
         modalStore.setConfirmationModal(
             'confirmation',
-            () => {
-                StreetcodesApi.delete(streetcode.id)
-                    .then(() => {
-                        streetcodeCatalogStore.streetcodesMap.delete(streetcode.id);
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
-                modalStore.setConfirmationModal('confirmation');
+            async () => {
+                try {
+                    await StreetcodesApi.delete(streetcode.id);
+                    streetcodeCatalogStore.streetcodesMap.delete(streetcode.id);
+                } catch (error) {
+                    console.error(error);
+                }
             },
-            'Ви впевнені, що хочете видалити цей стріткод?',
+            'Ви впевнені, що хочете видалити цей history-код?',
+            true,
+            undefined,
+            {
+                okText: 'Підтвердити',
+                cancelText: 'Скасувати',
+                className: 'admin-confirmation-modal',
+            },
         );
     };
 
@@ -180,6 +185,7 @@ const Streetcodes:React.FC = observer(() => {
                     />
 
                     <DeleteOutlined
+                        key={`${streetcode.id}${index}delete`}
                         className="actionButton"
                         onClick={() => modalHandler(streetcode)}
                     />
@@ -223,7 +229,7 @@ const Streetcodes:React.FC = observer(() => {
                             ]}
                         />
                         <Button
-                            className="streetcode-custome-button add-button"
+                            className="streetcode-custome-button admin-page-add-button"
                             onClick={() => navigate(`${FRONTEND_ROUTES.ADMIN.NEW_STREETCODE}`)}
                         >
                             Додати History-код

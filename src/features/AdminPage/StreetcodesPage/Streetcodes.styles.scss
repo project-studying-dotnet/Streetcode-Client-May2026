@@ -50,16 +50,16 @@ $newAccentColor: #891f16;
             }
         }       
         
-        .streetcodes-page-actions{
+        .streetcodes-page-actions {
             @include mut.flexed(row, start,space-between);
         }
-        .streetcodes-table{
+        .streetcodes-table {
             margin-top: f.pxToRem(20px);
         }
-        .streetcodes-table-item-name{
+        .streetcodes-table-item-name {
             @include mut.flexed(row, start,flex-start, wrap, 4px);
         }
-        .site-link{
+        .site-link {
             word-break: break-all
         }
     }
