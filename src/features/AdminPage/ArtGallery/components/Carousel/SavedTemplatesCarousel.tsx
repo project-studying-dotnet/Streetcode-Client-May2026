@@ -111,7 +111,11 @@ export const SavedTemplatesCarousel = observer(
         }, [savedTemplates, activeIndex, scrollToIndex]);
 
 
-        console.log("++++savedTemplates", savedTemplates);
+        console.log("<<<<<<savedTemplates", savedTemplates);
+        console.log(
+            '>>>>>carousel order',
+            savedTemplates.map((t: any) => t.id)
+        );
         return (
             <div className="templates-list-container">
                 {savedTemplates && savedTemplates.length > 0 && (
@@ -136,15 +140,15 @@ export const SavedTemplatesCarousel = observer(
                         >
                             <div className="templates-list-carousel">
                                 {savedTemplates.map((template: any) => (
-                                    <div className="template-slide" key={template.id}>
-                                        <SortableTemplateCard
-                                            template={template}
-                                            editingTemplateId={editingTemplateId}
-                                            onSaveToDb={onSaveToDb}
-                                            onEdit={onEdit}
-                                            onDelete={onDelete}
-                                        />
-                                    </div>
+                                    <SortableTemplateCard
+                                        key={`tmpl_${template.id}`}
+                                        id={`tmpl_${template.id}`}
+                                        template={template}
+                                        editingTemplateId={editingTemplateId}
+                                        onSaveToDb={onSaveToDb}
+                                        onEdit={onEdit}
+                                        onDelete={onDelete}
+                                    />
                                 ))}
                             </div>
                         </SortableContext>

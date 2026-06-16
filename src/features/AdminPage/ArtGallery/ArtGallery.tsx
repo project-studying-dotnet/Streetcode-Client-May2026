@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { TEMPLATE_CLASS_MAP } from '@constants/template.map';
 import { ArtSlideTemplate } from '@models/media/art-slide-template.model';
 
 import { Spin, message } from 'antd';
 import {
   DndContext,
-  DragEndEvent,
   closestCenter,
   useSensor,
   useSensors,
@@ -14,6 +12,7 @@ import {
 
 import Image from '@models/media/image.model';
 import { useArtGallery } from './hooks/useArtGallery';
+import { useArtGalleryDnD } from './hooks/useArtGalleryDnD';
 
 import { GalleryList } from './components/ImageGallery/GalleryList';
 import { TemplateGrid } from './components/TemplateGrid/TemplateGrid';
@@ -30,6 +29,7 @@ export const ArtGallery: React.FC = () => {
     moveImageBackToGallery,
     moveImageToTemplate,
     reorderImages } = useArtGallery();
+
 
   const { imagesStore } = useMobx();
   const { modalStore, imageTemplateStore, artSlideStore } = useModalContext();
@@ -48,10 +48,24 @@ export const ArtGallery: React.FC = () => {
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
-      activationConstraint: { distance: 1 }
+      activationConstraint: { distance: 8 }
     })
   );
+  const actions = React.useMemo(() => ({
+    reorderImages,
+    moveImageToTemplate,
+    moveImageBackToGallery
+  }), [reorderImages, moveImageToTemplate, moveImageBackToGallery]);
 
+
+  const { handleDragEnd } = useArtGalleryDnD(
+    imageTemplateStore,
+    imagesStore.getImageArray,
+    templateSlots,
+    setTemplateSlots,
+    actions,
+    setActiveId
+  );
 
 
 
@@ -92,120 +106,6 @@ export const ArtGallery: React.FC = () => {
       return newSlots;
     });
   };
-
-
-  // -----------------------------
-  // DRAG END
-  // -----------------------------
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    setActiveId(null);
-
-    if (!over || !active) return;
-
-    const activeId = String(active.id);
-    const overId = String(over.id);
-
-    const templateName = imageTemplateStore.activeTemplate?.name;
-
-    const config = templateName ? TEMPLATE_CLASS_MAP[templateName] : null;
-
-    const slotsToCheck = imageTemplateStore.activeTemplate?.slots || config?.slots || [];
-
-    const isSlot = slotsToCheck.some((s: any) => String(s.id) === overId);
-
-    // -------------------------
-    // reorder templates
-    // -------------------------
-    if (activeId.startsWith('tmpl_') && overId.startsWith('tmpl_')) {
-      const rawActive = activeId.replace('tmpl_', '');
-      const rawOver = overId.replace('tmpl_', '');
-
-      const oldIndex = imageTemplateStore.savedTemplates.findIndex(
-        t => String(t.id) === rawActive
-      );
-
-      const newIndex = imageTemplateStore.savedTemplates.findIndex(
-        t => String(t.id) === rawOver
-      );
-
-      if (oldIndex !== -1 && newIndex !== -1 && oldIndex !== newIndex) {
-        imageTemplateStore.reorderTemplates(oldIndex, newIndex);
-      }
-      return;
-    }
-
-    // -------------------------
-    // reorder images in gallery
-    // -------------------------
-    if (activeId.startsWith('img_') && overId.startsWith('img_')) {
-      const oldIndex = images.findIndex(
-        i => `img_${i.id}` === activeId
-      );
-
-      const newIndex = images.findIndex(
-        i => `img_${i.id}` === overId
-      );
-
-      if (oldIndex !== -1 && newIndex !== -1) {
-        reorderImages(oldIndex, newIndex);
-      }
-      return;
-    }
-
-    // -------------------------
-    // drag image → slot
-    // -------------------------
-    if (activeId.startsWith('img_')) {
-      const rawActiveId = activeId.replace('img_', '');
-
-      const dragged = images.find(
-        i => String(i.id) === rawActiveId
-      );
-
-      if (isSlot && dragged) {
-        if (templateSlots[overId]) {
-          console.log('The slot is already occupied!');
-          return;
-        }
-
-        setTemplateSlots(prev => ({
-          ...prev,
-          [overId]: dragged
-        }));
-
-        moveImageToTemplate(dragged.id);
-
-        return;
-      }
-
-      // -------------------------
-      // return image from slot to gallery
-      // -------------------------
-      if (overId === 'gallery') {
-        const imgInSlot = Object.values(templateSlots).find(
-          i => String(i?.id) === rawActiveId
-        );
-
-        if (imgInSlot) {
-          setTemplateSlots(prev => {
-            const copy = { ...prev };
-
-            Object.keys(copy).forEach(k => {
-              if (copy[k]?.id === imgInSlot.id) {
-                copy[k] = null;
-              }
-            });
-
-            return copy;
-          });
-
-          moveImageBackToGallery(imgInSlot);
-        }
-      }
-    }
-  };
-
 
 
   // -----------------------------
@@ -281,30 +181,30 @@ export const ArtGallery: React.FC = () => {
   // -----------------------------
   // REMOVE TEMPLATE
   // -----------------------------
-const handleDeleteTemplate = (id: number) => {
+  const handleDeleteTemplate = (id: number) => {
     if (editingTemplateId === String(id)) {
-        message.error("Спочатку збережіть або скасуйте редагування цього шаблону");
-        return;
+      message.error("Спочатку збережіть або скасуйте редагування цього шаблону");
+      return;
     }
 
     const template = imageTemplateStore.savedTemplates.find(t => t.id === id);
 
     if (template) {
-        template.slots.forEach(slot => {
-            if (slot.image) {
-                addImageBackToGallery(slot.image);
-            }
-        });
-
-        if (activeId === `tmpl_${id}`) {
-            setActiveId(null);
+      template.slots.forEach(slot => {
+        if (slot.image) {
+          addImageBackToGallery(slot.image);
         }
+      });
 
-        imageTemplateStore.removeTemplate(id);
-        
-        message.success("Шаблон видалено, картинки повернуто в галерею");
+      if (activeId === `tmpl_${id}`) {
+        setActiveId(null);
+      }
+
+      imageTemplateStore.removeTemplate(id);
+
+      message.success("Шаблон видалено, картинки повернуто в галерею");
     }
-};
+  };
 
   // -----------------------------
   // SAVE TO DB
@@ -384,42 +284,42 @@ const handleDeleteTemplate = (id: number) => {
       onDragEnd={handleDragEnd}
     >
       <Spin spinning={loading} tip="Збереження даних...">
-      <div className="art-gallery-container">
+        <div className="art-gallery-container">
 
-        <GalleryList
-          images={images}
-          onUpload={addImage}
-          onDelete={removeImage}
-          onEdit={console.log}
-        />
+          <GalleryList
+            images={images}
+            onUpload={addImage}
+            onDelete={removeImage}
+            onEdit={console.log}
+          />
 
-        <section className="gallery-section">
-          <TemplatesHeader
-            onOpenTemplates={() =>
-              modalStore.setModal('templates', undefined, true)
+          <section className="gallery-section">
+            <TemplatesHeader
+              onOpenTemplates={() =>
+                modalStore.setModal('templates', undefined, true)
+              }
+            />
+
+            <TemplateGrid
+              slots={templateSlots}
+              setSlots={setTemplateSlots}
+              onClearAll={clearAllSlots}
+              onSave={handleSave}
+              onRemoveSlot={removeImageFromSlot}
+            />
+          </section>
+
+          <SavedTemplatesCarousel
+            savedTemplates={imageTemplateStore.savedTemplates}
+            reorderTemplates={(oldIdx: number, newIdx: number) =>
+              imageTemplateStore.reorderTemplates(oldIdx, newIdx)
             }
+            editingTemplateId={editingTemplateId}
+            onSaveToDb={saveToDb}
+            onEdit={handleEditTemplate}
+            onDelete={handleDeleteTemplate}
           />
-
-          <TemplateGrid
-            slots={templateSlots}
-            setSlots={setTemplateSlots}
-            onClearAll={clearAllSlots}
-            onSave={handleSave}
-            onRemoveSlot={removeImageFromSlot}
-          />
-        </section>
-
-        <SavedTemplatesCarousel
-          savedTemplates={imageTemplateStore.savedTemplates}
-          reorderTemplates={(oldIdx: number, newIdx: number) =>
-            imageTemplateStore.reorderTemplates(oldIdx, newIdx)
-          }
-          editingTemplateId={editingTemplateId}
-          onSaveToDb={saveToDb}
-          onEdit={handleEditTemplate}
-          onDelete={handleDeleteTemplate}
-        />
-      </div>
+        </div>
       </Spin>
     </DndContext>
   );
