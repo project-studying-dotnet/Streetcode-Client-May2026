@@ -1,0 +1,47 @@
+@use "@assets/sass/_utils.functions.scss" as f;
+@use "@assets/sass/variables/_variables.fonts.scss" as ft;
+@use "@assets/sass/variables/_variables.colors.scss" as c;
+@use "@assets/sass/mixins/_utils.mixins.scss" as mut;
+@use "@assets/sass/mixins/_vendor.mixins.scss" as vnd;
+
+.ant-modal.modalContainer {
+  .ant-modal-content {
+    width: 500px !important;
+    max-width: 500px !important;
+    padding: f.pxToRem(40px) f.pxToRem(24px);
+    border-radius: f.pxToRem(30px) !important;
+
+    .ant-modal-close {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      @include mut.positioned-as(absolute, $left: 90%, $top: -10px);
+      @include mut.circular(60px, c.$pure-white-color);
+      filter: drop-shadow(0px 4px 0px rgba(0, 0, 0, 0.252));
+      border: none !important;
+
+      &:hover {
+        background-color: c.$modal-hover-color;
+      }
+    }
+
+    .ant-form-item-required {
+      font-size: 16px;
+      font-weight: normal;
+      font-family: ft.$roboto-light !important;
+    }
+
+    .modal-title {
+      font-family: ft.$roboto-font;
+      font-size: 28px !important;
+    }
+
+    .description-input {
+      height: 173px;
+    }
+
+    .ant-input-data-count {
+      bottom: -26px;
+    }
+  }
+}

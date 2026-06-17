@@ -1,0 +1,71 @@
+@use "sass:color"; // Додано імпорт модуля кольорів
+@use "@sass/mixins/_utils.mixins.scss" as mut;
+@use "@sass/variables/_variables.fonts.scss" as ft;
+@use "@sass/variables/_variables.colors.scss" as c;
+@use "@sass/_utils.functions.scss" as f;
+
+$newAccentColor: #891f16;
+
+.dictionary-page {
+  width: 100%;
+
+  .dictionary-page-container {
+
+    .dictionary-header-container {
+      @include mut.flexed(row, center, space-between);
+      padding: f.pxToRem(15px) f.pxToRem(20px);
+      margin-bottom: f.pxToRem(20px);
+
+      .dictionary-search-input {
+        width: f.pxToRem(300px);
+        border-radius: f.pxToRem(4px);
+      }
+
+      .dictionary-page-add-button {
+        min-height: f.pxToRem(40px);
+        min-width: f.pxToRem(120px);
+        border: none;
+        border-radius: f.pxToRem(4px);
+        font-weight: 500;
+        transition: background-color 0.3s;
+      }
+    }
+
+    .dictionaries-table {
+      margin-top: f.pxToRem(20px);
+
+      .ant-table-thead > tr > th {
+        font-weight: 600;
+        background-color: transparent;
+        user-select: none;
+      }
+
+      .dictionary-table-item-name {
+        @include mut.flexed(row, center, flex-start, wrap, 4px);
+        p {
+          margin: 0;
+        }
+      }
+
+      .dictionary-table-item-description {
+        margin: 0;
+      }
+
+      .dictionary-page-actions {
+        @include mut.flexed(row, center, flex-start);
+        gap: f.pxToRem(15px);
+
+        .actionButton {
+          color: #e33939;
+          font-size: f.pxToRem(18px);
+          cursor: pointer;
+          transition: color 0.3s;
+
+          &:hover {
+            color: color.adjust(#e33939, $lightness: -15%);
+          }
+        }
+      }
+    }
+  }
+}

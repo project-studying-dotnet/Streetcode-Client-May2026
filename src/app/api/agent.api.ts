@@ -1,4 +1,3 @@
-import { redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
@@ -6,8 +5,29 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import FRONTEND_ROUTES from '../common/constants/frontend-routes.constants';
 import UserLoginStore from '../stores/user-login-store';
 
-axios.defaults.baseURL = process.env.NODE_ENV === 'development'
-    ? 'https://localhost:5001/api' : 'https://app-streetcode-webapi-eu-prop-001-gsbqfwc2fdh6hhaw.polandcentral-01.azurewebsites.net/api';
+const isDevelopment = process.env.NODE_ENV === 'development';
+
+axios.defaults.baseURL =
+    process.env.REACT_APP_API_URL ??
+    (isDevelopment
+        ? 'https://localhost:5001/api'
+        : 'https://streetcode-webapp-backend-cabzg9e0dzg5atgf.polandcentral-01.azurewebsites.net/api');
+
+const getErrorMessage = (data: unknown): string | undefined => {
+    if (Array.isArray(data)) {
+        return data[0]?.message;
+    }
+
+    if (
+        typeof data === 'object'
+        && data !== null
+        && 'message' in data
+    ) {
+        return String(data['message']);
+    }
+
+    return undefined;
+};
 
 axios.interceptors.response.use(
     async (response) => response,
@@ -22,13 +42,14 @@ axios.interceptors.response.use(
             break;
         case StatusCodes.UNAUTHORIZED:
             errorMessage = ReasonPhrases.UNAUTHORIZED;
-            redirect(FRONTEND_ROUTES.ADMIN.LOGIN);
+            UserLoginStore.clearUserData();
+            globalThis.location.href = FRONTEND_ROUTES.ADMIN.LOGIN;
             break;
         case StatusCodes.NOT_FOUND:
             errorMessage = ReasonPhrases.NOT_FOUND;
             break;
-        case StatusCodes.BAD_REQUEST:
-            errorMessage = ReasonPhrases.BAD_REQUEST;
+        case StatusCodes.BAD_REQUEST:            
+            errorMessage = getErrorMessage(response?.data) || ReasonPhrases.BAD_REQUEST;
             break;
         case StatusCodes.FORBIDDEN:
             errorMessage = ReasonPhrases.FORBIDDEN;
@@ -40,7 +61,7 @@ axios.interceptors.response.use(
             toast.error(errorMessage);
         }
 
-        return Promise.reject(message);
+        return Promise.reject(response?.data || message);
     },
 );
 

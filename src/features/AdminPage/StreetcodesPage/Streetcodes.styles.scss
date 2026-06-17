@@ -1,0 +1,91 @@
+@use "@sass/mixins/_utils.mixins.scss" as mut;
+@use "@sass/variables/_variables.fonts.scss" as ft;
+@use "@sass/variables/_variables.colors.scss" as c;
+@use "@sass/_utils.functions.scss" as f;
+
+$newAccentColor: #891f16;
+
+.streetcodes-page{
+    width: 100%;
+    .container-justify-end{
+        display: flex;
+        justify-content: end;
+    }
+    .streetcodes-page-container {
+        @include mut.sized(100%);
+        .streetcodes-page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: f.pxToRem(20px);
+
+            .streetcodes-search-input {
+                width: f.pxToRem(620px);
+                border-radius: f.pxToRem(4px);
+                padding: f.pxToRem(8px) f.pxToRem(12px);
+            }
+
+            .streetcode-custome-button {
+                min-height: f.pxToRem(24px);
+                min-width: f.pxToRem(120px);
+                border: none;
+                border-radius: f.pxToRem(4px);
+                font-weight: 500;
+                transition: background-color 0.3s;
+                background-color: $newAccentColor;
+                color: c.$pure-white-color;
+            }
+
+            .streetcodes-page-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 24px;
+            }
+
+            .streetcodes-header-actions {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+            }
+        }       
+        
+        .streetcodes-page-actions {
+            @include mut.flexed(row, start,space-between);
+        }
+        .streetcodes-table {
+            margin-top: f.pxToRem(20px);
+        }
+        .streetcodes-table-item-name {
+            @include mut.flexed(row, start,flex-start, wrap, 4px);
+        }
+        .site-link {
+            word-break: break-all
+        }
+    }
+}
+
+.streetcode-history-date {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.history-date {
+    color: #1f1f1f;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+}
+
+.history-time {
+    color: #bfbfbf;
+    font-size: 14px;
+    line-height: 16px;
+}
+
+.streetcode-page-actions {
+    display: flex;
+    gap: 12px;
+    color: $newAccentColor;
+}

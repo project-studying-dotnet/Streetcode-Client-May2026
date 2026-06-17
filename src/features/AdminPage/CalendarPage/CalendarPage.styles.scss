@@ -1,0 +1,52 @@
+@use "@sass/_utils.functions.scss" as f;
+@use "@sass/variables/_variables.colors.scss" as c;
+
+$newAccentColor: #891f16;
+
+.calendar-page {
+    width: 100%;
+}
+
+.calendar-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.calendar-search-input {
+    width: 360px;
+}
+
+.calendar-header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.calendar-type-select {
+    width: 110px;
+}
+
+.calendar-related-codes {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-start;
+}
+
+.calendar-code-tag {
+    color: #891f16;
+    border-color: #ff8a80;
+    background: c.$pure-white-color;
+}
+
+.calendar-status-select {
+    width: 150px;
+}
+
+.calendar-actions {
+    display: flex;
+    gap: 12px;
+    color: #891f16;
+}

@@ -1,0 +1,68 @@
+.chronologyAdminBlock {
+    margin: 48px;
+}
+
+.chronologyAdminHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+
+    h2 {
+        margin: 0 auto;
+        font-size: 28px;
+        font-weight: 500;
+    }
+
+    .ant-btn {
+        min-width: 3rem;
+    }
+}
+
+.chronologyAdminList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.chronologyAdminItem {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 18px 20px;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.chronologyAdminItemContent {
+    flex: 1;
+}
+
+.chronologyAdminDate {
+    margin: 0 0 6px;
+    font-weight: 700;
+}
+
+.chronologyAdminTitle {
+    margin: 0 0 6px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.chronologyAdminDescription {
+    margin: 0 0 8px;
+    line-height: 1.4;
+}
+
+.chronologyAdminContext {
+    margin: 0;
+    color: #7a7a7a;
+}
+
+.chronologyAdminActions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}

@@ -1,3 +1,4 @@
+import { VideoCreateDto } from '@/models/media/video.model';
 import Agent from '@api/agent.api';
 import { API_ROUTES } from '@constants/api-routes.constants';
 import Video from '@models/media/video.model';
@@ -11,7 +12,7 @@ const VideosApi = {
         `${API_ROUTES.VIDEOS.GET_BY_STREETCODE_ID}/${streetcodeId}`,
     ),
 
-    create: (video: Video) => Agent.post<Video>(`${API_ROUTES.VIDEOS.CREATE}`, video),
+    create: (video: VideoCreateDto) => Agent.post<Video>(`${API_ROUTES.VIDEOS.CREATE}`, video),
 
     update: (video: Video) => Agent.post<Video>(`${API_ROUTES.VIDEOS.UPDATE}`, video),
 

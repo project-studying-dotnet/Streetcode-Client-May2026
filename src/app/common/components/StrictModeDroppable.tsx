@@ -7,7 +7,6 @@ const StrictModeDroppable = ({ children, ...props }: DroppableProps) => {
         const animation = requestAnimationFrame(() => setEnabled(true));
         return () => {
             cancelAnimationFrame(animation);
-            setEnabled(false);
         };
     }, []);
     if (!enabled) {

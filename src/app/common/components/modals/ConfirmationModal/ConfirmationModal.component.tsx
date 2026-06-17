@@ -2,29 +2,45 @@ import { observer } from 'mobx-react-lite';
 
 import { Modal } from 'antd';
 
-import useMobx, { useModalContext } from '@/app/stores/root-store';
+import { useModalContext } from '@/app/stores/root-store';
 
 const ConfirmationModal = () => {
-    const { modalStore: { setConfirmationModal, modalsState: { confirmation } } } = useModalContext();
+    const {
+        modalStore: {
+            setConfirmationModal,
+            modalsState: { confirmation },
+        },
+    } = useModalContext();
+
+    const confirmationProps = confirmation.confirmationProps;
+
     return (
         <Modal
-            title="Підтведження"
+            title={confirmationProps?.title ?? 'Підтвердження'}
             open={confirmation.isOpen}
-            onOk={() => {
-                if (confirmation.confirmationProps?.onSubmit) {
-                    confirmation.confirmationProps.onSubmit();
+            okText={confirmationProps?.okText ?? 'OK'}
+            cancelText={confirmationProps?.cancelText ?? 'Cancel'}
+            className={confirmationProps?.className}
+            onOk={async () => {
+                try {
+                    await confirmationProps?.onSubmit?.();
+                } finally {
+                    setConfirmationModal('confirmation', undefined, undefined, false);
                 }
             }}
             onCancel={() => {
-                if (confirmation.confirmationProps?.onCancel) {
-                    confirmation.confirmationProps?.onCancel();
+                if (confirmationProps?.onCancel) {
+                    confirmationProps.onCancel();
+                } else {
+                    setConfirmationModal('confirmation', undefined, undefined, false);
                 }
-                setConfirmationModal('confirmation');
             }}
         >
-            {(confirmation.confirmationProps?.text)
-                ? <p>{confirmation.confirmationProps.text}</p> : <p>Ви впевнені, що хочете видалити цей елемент?</p>}
+            {confirmationProps?.text
+                ? <p>{confirmationProps.text}</p>
+                : <p>Ви впевнені, що хочете видалити цей елемент?</p>}
         </Modal>
     );
 };
+
 export default observer(ConfirmationModal);

@@ -1,3 +1,4 @@
+import { TextCreateUpdate } from '@/models/streetcode/text-contents.model';
 import Agent from '@api/agent.api';
 import { API_ROUTES } from '@constants/api-routes.constants';
 import { Text } from '@models/streetcode/text-contents.model';
@@ -11,7 +12,7 @@ const TextsApi = {
         `${API_ROUTES.TEXTS.GET_BY_STREETCODE_ID}/${streetcodeId}`,
     ),
 
-    create: (text: Text) => Agent.post<Text>(`${API_ROUTES.TEXTS.CREATE}`, text),
+    create: (text: TextCreateUpdate) => Agent.post<Text>(`${API_ROUTES.TEXTS.CREATE}`, text),
 
     update: (text: Text) => Agent.put<Text>(`${API_ROUTES.TEXTS.UPDATE}`, text),
 

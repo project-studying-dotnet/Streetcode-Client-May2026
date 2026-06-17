@@ -21,6 +21,7 @@ module.exports = {
         'plugin:react-hooks/recommended',
     ],
     rules: {
+        '@typescript-eslint/quotes': 'off',
         'jsx-a11y/click-events-have-key-events': 'off',
         'jsx-a11y/no-noninteractive-element-interactions': 'off',
         'jsx-a11y/no-static-element-interactions': 'off',
@@ -30,7 +31,6 @@ module.exports = {
         'import/no-cycle': 'off',
         'react/jsx-indent': 'off',
         'no-nested-ternary': 'off',
-        '@typescript-eslint/indent': 'off',
         'consistent-return': 'off',
         'react/react-in-jsx-scope': 'off',
         'react/require-default-props': 'off',

@@ -1,40 +1,46 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable } from "mobx";
 
 type ModalState = {
-    isOpen: boolean;
-    fromCardId?: number;
-    confirmationProps?:ConfirmationProps;
+  isOpen: boolean;
+  fromCardId?: number;
+  confirmationProps?: ConfirmationProps;
 };
+
 interface ConfirmationProps {
- onSubmit?:()=>void,
- onCancel?:()=>void,
- text?:string
+  onSubmit?: () => void | Promise<void>;
+  onCancel?: () => void;
+  text?: string;
+  title?: string;
+  okText?: string;
+  cancelText?: string;
+  className?: string;
 }
 
 const DefaultModalState: ModalState = {
-    isOpen: false,
-    fromCardId: undefined,
-    confirmationProps: undefined,
+  isOpen: false,
+  fromCardId: undefined,
+  confirmationProps: undefined,
 };
 
 interface ModalList {
-    relatedFigures: ModalState;
-    relatedFigureItem: ModalState;
-    sources: ModalState;
-    facts: ModalState;
-    audio: ModalState;
-    donates: ModalState;
-    login: ModalState;
-    artGallery: ModalState;
-    partners: ModalState;
-    tagsList: ModalState;
-    addTerm: ModalState;
-    editTerm: ModalState;
-    deleteTerm: ModalState;
-    deleteStreetcode: ModalState;
-    confirmation: ModalState;
-    adminFacts: ModalState;
-    statistics: ModalState;
+  relatedFigures: ModalState;
+  relatedFigureItem: ModalState;
+  sources: ModalState;
+  facts: ModalState;
+  audio: ModalState;
+  donates: ModalState;
+  login: ModalState;
+  artGallery: ModalState;
+  partners: ModalState;
+  tagsList: ModalState;
+  addTerm: ModalState;
+  editTerm: ModalState;
+  deleteTerm: ModalState;
+  deleteStreetcode: ModalState;
+  confirmation: ModalState;
+  adminFacts: ModalState;
+  adminChronology: ModalState;
+  statistics: ModalState;
 }
 
 export default class ModalStore {
@@ -55,36 +61,47 @@ export default class ModalStore {
         deleteStreetcode: DefaultModalState,
         confirmation: DefaultModalState,
         adminFacts: DefaultModalState,
+        adminChronology: DefaultModalState,
         statistics: DefaultModalState,
     };
 
-    public isPageDimmed = false;
+  public isPageDimmed = false;
 
-    public constructor() {
-        makeAutoObservable(this);
-    }
+  public constructor() {
+    makeAutoObservable(this);
+  }
 
-    public setIsPageDimmed = (dimmed?: boolean) => {
-        this.isPageDimmed = dimmed ?? !this.isPageDimmed;
+  public setIsPageDimmed = (dimmed?: boolean) => {
+    this.isPageDimmed = dimmed ?? !this.isPageDimmed;
+  };
+
+  public setModal = (
+    modalName: keyof ModalList,
+    fromId?: number,
+    opened?: boolean,
+  ) => {
+    this.modalsState[modalName] = {
+      isOpen: opened ?? !this.modalsState[modalName].isOpen,
+      fromCardId: fromId,
     };
+  };
 
-    public setModal = (modalName: keyof ModalList, fromId?: number, opened?: boolean) => {
-        this.modalsState[modalName] = {
-            isOpen: opened ?? !this.modalsState[modalName].isOpen,
-            fromCardId: fromId,
-        };
+  public setConfirmationModal = (
+    modalName: keyof ModalList,
+    onSubmit?: () => void | Promise<void>,
+    text?: string,
+    opened?: boolean,
+    onCancel?: () => void,
+    options?: Omit<ConfirmationProps, 'onSubmit' | 'text' | 'onCancel'>,
+  ) => {
+    this.modalsState[modalName] = {
+      isOpen: opened ?? !this.modalsState[modalName].isOpen,
+      confirmationProps: {
+        onSubmit,
+        text,
+        onCancel,
+        ...options,
+      },
     };
-
-    public setConfirmationModal = (
-        modalName: keyof ModalList,
-        onSubmit?:()=>void,
-        text?:string,
-        opened?: boolean,
-        onCancel?:()=>void,
-    ) => {
-        this.modalsState[modalName] = {
-            isOpen: opened ?? !this.modalsState[modalName].isOpen,
-            confirmationProps: { onSubmit, text, onCancel },
-        };
-    };
+  };
 }
