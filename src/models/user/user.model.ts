@@ -35,3 +35,12 @@ export enum UserRole {
     Administrator,
     Moderator,
 }
+export interface ResetPasswordRequest {
+    email: string;
+    token: string;
+    newPassword: string;
+}
+export interface ForgotPasswordRequest {
+    email: string;
+}
+

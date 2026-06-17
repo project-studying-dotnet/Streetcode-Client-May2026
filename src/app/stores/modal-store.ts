@@ -41,6 +41,7 @@ interface ModalList {
   adminFacts: ModalState;
   adminChronology: ModalState;
   statistics: ModalState;
+  forgotPassword: ModalState;
 }
 
 export default class ModalStore {
@@ -63,6 +64,7 @@ export default class ModalStore {
         adminFacts: DefaultModalState,
         adminChronology: DefaultModalState,
         statistics: DefaultModalState,
+        forgotPassword: DefaultModalState, 
     };
 
   public isPageDimmed = false;
