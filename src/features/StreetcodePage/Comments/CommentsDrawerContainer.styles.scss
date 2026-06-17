@@ -1,42 +1,64 @@
+@use "@assets/sass/variables/_variables.colors.scss" as c;
+@use "@assets/sass/_utils.functions.scss" as *;
+
 .comments-drawer {
+  .ant-drawer-content-wrapper {
+    width: 400px !important;
+  }
+
+  .ant-drawer-header {
+    border-bottom: 1px solid c.$light-border-color;
+
+    .ant-drawer-title {
+      font-weight: 600;
+    }
+  }
+
   .ant-drawer-body {
     display: flex;
     flex-direction: column;
     height: 100%;
-    padding: 16px;
+    padding: pxToRem(16px);
     overflow: hidden;
   }
 
   &-list-area {
     flex: 1;
     overflow-y: auto;
-    padding-right: 4px;
-    margin-bottom: 8px;
+    padding-right: pxToRem(4px);
+    margin-bottom: pxToRem(8px);
 
     &::-webkit-scrollbar {
       width: 4px;
     }
+
     &::-webkit-scrollbar-thumb {
-      background-color: #d9d9d9;
+      background-color: c.$text-light-gray-color;
       border-radius: 4px;
     }
+  }
+
+  &-footer {
+    padding-top: pxToRem(12px);
+    border-top: 1px solid c.$light-border-color;
   }
 }
 
 .comment-replies-container {
-  margin-left: 40px;
-  margin-top: 8px;
-  padding-left: 12px;
-  border-left: 2px solid #f0f0f0;
+  margin-left: pxToRem(40px);
+  margin-top: pxToRem(8px);
+  padding-left: pxToRem(12px);
+  border-left: 2px solid c.$light-border-color;
 
   .toggle-replies-btn {
     background: none;
     border: none;
-    color: #1890ff;
+    color: c.$accented-red-color;
     cursor: pointer;
     padding: 0;
-    font-size: 12px;
-    margin-bottom: 8px;
+    font-size: pxToRem(12px);
+    font-weight: 500;
+    margin-bottom: pxToRem(8px);
 
     &:hover {
       text-decoration: underline;
@@ -44,32 +66,35 @@
   }
 
   .reply-item {
-    margin-bottom: 8px;
+    margin-bottom: pxToRem(4px);
   }
 }
 
 .reply-input-wrapper {
-  margin-left: 40px;
-  margin-top: 8px;
-  padding-left: 12px;
-  border-left: 2px solid #ffc069;
+  margin-left: pxToRem(40px);
+  margin-top: pxToRem(8px);
+  padding-left: pxToRem(12px);
+  border-left: 2px solid c.$accented-red-color;
 
-  .ant-typography {
-    margin-bottom: 8px;
+  .reply-to-label {
     display: block;
+    margin-bottom: pxToRem(6px);
+    font-size: pxToRem(12px);
+    color: c.$normal-gray-color;
   }
 }
 
-.main-comment-input-area,
-.editing-notice {
-  margin-bottom: 8px;
+.comment-login-btn {
+  height: pxToRem(40px);
+  border-radius: pxToRem(6px);
+  border: 1px solid c.$accented-red-color;
+  color: c.$accented-red-color;
+  font-weight: 600;
 
-  .ant-typography {
-    font-size: 12px;
+  &:hover,
+  &:focus {
+    background-color: c.$accented-red-color;
+    color: c.$pure-white-color;
+    border-color: c.$accented-red-color;
   }
-}
-
-.editing-notice {
-  color: #faad14;
-  font-weight: 500;
 }

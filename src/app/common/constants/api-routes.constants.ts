@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/prefer-default-export
-const SOURCES_BASE = 'Sources';
+/* eslint-disable import/prefer-default-export */
 export const API_ROUTES = {
   BASE: "/",
   HISTORICAL_CONTEXT: {

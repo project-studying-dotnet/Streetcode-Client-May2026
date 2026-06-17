@@ -1,29 +1,70 @@
+@use "@assets/sass/variables/_variables.colors.scss" as c;
+@use "@assets/sass/_utils.functions.scss" as *;
+
 .comment-input-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 12px 0;
-  border-top: 1px solid #f0f0f0;
-
-  .comment-textarea {
-    padding: 8px 12px;
-    border-radius: 4px;
-    resize: none;
-
-    &:focus,
-    &:focus-within {
-      border-color: #1890ff;
-    }
-  }
-
-  .comment-actions-container {
     display: flex;
-    justify-content: flex-end;
-    gap: 8px;
+    flex-direction: column;
+    gap: pxToRem(8px);
+    padding: pxToRem(12px) 0;
 
-    .submit-btn {
-      padding: 4px 16px;
-      font-size: 14px;
+    .comment-textarea {
+        padding: pxToRem(8px) pxToRem(12px);
+        border-radius: pxToRem(4px);
+        resize: none;
+        border-color: c.$light-border-color;
+
+        &:hover {
+            border-color: c.$accented-red-color;
+        }
+
+        &:focus,
+        &:focus-within {
+            border-color: c.$accented-red-color;
+            box-shadow: none !important;
+        }
     }
-  }
+
+    .comment-actions-container {
+        display: flex;
+        justify-content: flex-end;
+        gap: pxToRem(8px);
+
+        .cancel-btn {
+            height: pxToRem(36px);
+            padding: 0 pxToRem(16px);
+            font-size: pxToRem(14px);
+            border-radius: pxToRem(6px);
+            border: 1px solid c.$light-border-color;
+            color: c.$darker-gray-color;
+            background: transparent;
+
+            &:hover,
+            &:focus {
+                border-color: c.$accented-red-color;
+                color: c.$accented-red-color;
+            }
+        }
+
+        .submit-btn {
+            height: pxToRem(36px);
+            padding: 0 pxToRem(16px);
+            font-size: pxToRem(14px);
+            font-weight: 600;
+            border: none;
+            border-radius: pxToRem(6px);
+            background-color: c.$accented-red-color;
+            color: c.$pure-white-color;
+
+            &:hover,
+            &:focus {
+                background-color: c.$dark-red-color;
+                color: c.$pure-white-color;
+            }
+
+            &:disabled {
+                background-color: c.$text-light-gray-color;
+                color: c.$normal-gray-color;
+            }
+        }
+    }
 }

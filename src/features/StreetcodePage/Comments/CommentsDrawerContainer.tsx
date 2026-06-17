@@ -3,22 +3,29 @@
 /* eslint-disable max-len */
 import "./CommentsDrawerContainer.styles.scss";
 
+import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import CommentInput from "@components/Comments/CommentInput";
 import CommentItem from "@components/Comments/CommentItem";
+import FRONTEND_ROUTES from "@constants/frontend-routes.constants";
 import { Comment } from "@models/comments/comment.model";
-import useMobx from "@stores/root-store";
+import useMobx, { useStreetcodeDataContext } from "@stores/root-store";
+import UserLoginStore from "@stores/user-login-store";
 
-import { Divider, Drawer, Empty, List, Typography } from "antd";
+import { Button, Divider, Drawer, Empty, List, Typography } from "antd";
 
 const { Text } = Typography;
 
 const CommentsDrawerContainer: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { id: streetcodeId } = useParams<{ id: string }>();
-  const { commentsStore } = useMobx();
+  const { streetcodeStore } = useStreetcodeDataContext();
+  const { commentsStore, userLoginStore } = useMobx();
+
+  const streetcodeId = streetcodeStore.getStreetCodeId;
+  const { isLoggedIn } = UserLoginStore;
+  const currentUserId = userLoginStore.userId;
 
   const [editingComment, setEditingComment] = useState<Comment | null>(null);
   const [expandedReplies, setExpandedReplies] = useState<Set<number>>(new Set());
@@ -26,18 +33,23 @@ const CommentsDrawerContainer: React.FC = () => {
   const isOpen = location.pathname.endsWith("/comments");
 
   useEffect(() => {
-    if (isOpen && streetcodeId) {
-      commentsStore.getCommentsByStreetcodeId(Number.parseInt(streetcodeId, 10));
+    if (isOpen && streetcodeId > 0) {
+      commentsStore.getCommentsByStreetcodeId(streetcodeId);
     }
   }, [isOpen, streetcodeId, commentsStore]);
 
   const handleClose = () => {
-    navigate("../", { relative: "path" });
+    navigate(location.pathname.replace(/\/comments$/, ""));
     setEditingComment(null);
+    commentsStore.setEditingCommentId(null);
     commentsStore.setReplyingToCommentId(null);
   };
 
   const handleReplyClick = (parentId: number) => {
+    if (!isLoggedIn) {
+      navigate(FRONTEND_ROUTES.ADMIN.LOGIN);
+      return;
+    }
     commentsStore.setReplyingToCommentId(parentId);
   };
 
@@ -52,19 +64,22 @@ const CommentsDrawerContainer: React.FC = () => {
   };
 
   const toggleRepliesExpanded = (parentId: number) => {
-    const newExpanded = new Set(expandedReplies);
-    if (newExpanded.has(parentId)) {
-      newExpanded.delete(parentId);
-    } else {
-      newExpanded.add(parentId);
-    }
-    setExpandedReplies(newExpanded);
+    setExpandedReplies((prev) => {
+      const next = new Set(prev);
+      if (next.has(parentId)) {
+        next.delete(parentId);
+      } else {
+        next.add(parentId);
+      }
+      return next;
+    });
   };
 
   const mainComments = commentsStore.getMainComments();
+  const { replyingToCommentId } = commentsStore;
 
   return (
-    <Drawer title="Коментарі" placement="right" onClose={handleClose} open={isOpen} width={400} rootClassName="comments-drawer">
+    <Drawer title="Коментарі" placement="right" onClose={handleClose} open={isOpen} width={600} rootClassName="comments-drawer">
       <div className="comments-drawer-list-area">
         {mainComments.length === 0 && !commentsStore.isLoading ? (
           <Empty description="Немає коментарів" />
@@ -73,100 +88,81 @@ const CommentsDrawerContainer: React.FC = () => {
             itemLayout="horizontal"
             loading={commentsStore.isLoading}
             dataSource={mainComments}
-            renderItem={(mainComment) => (
-              <div key={mainComment.id}>
-                <CommentItem
-                  item={mainComment}
-                  onReplyClick={handleReplyClick}
-                  onEditClick={handleEditClick}
-                  onRepliesCountChange={() => setExpandedReplies(new Set())}
-                />
+            renderItem={(mainComment) => {
+              const replies = commentsStore.getCommentReplies(mainComment.id);
+              const replyingToReply = replies.find((r) => r.id === replyingToCommentId);
+              const isReplying = replyingToCommentId === mainComment.id || replyingToReply !== undefined;
+              const replyTargetUsername = replyingToReply ? replyingToReply.username : mainComment.username;
 
-                {/* Replies section */}
-                {commentsStore.getCommentReplies(mainComment.id).length > 0 && (
-                  <div className="comment-replies-container">
-                    <button type="button" className="toggle-replies-btn" onClick={() => toggleRepliesExpanded(mainComment.id)}>
-                      {expandedReplies.has(mainComment.id)
-                        ? `Сховати відповіді (${commentsStore.getCommentReplies(mainComment.id).length})`
-                        : `Показати відповіді (${commentsStore.getCommentReplies(mainComment.id).length})`}
-                    </button>
+              return (
+                <div key={mainComment.id}>
+                  <CommentItem
+                    item={mainComment}
+                    currentUserId={currentUserId}
+                    onReplyClick={handleReplyClick}
+                    onEditClick={handleEditClick}
+                    onRepliesCountChange={() => setExpandedReplies(new Set())}
+                  />
 
-                    {expandedReplies.has(mainComment.id) && (
-                      <List
-                        itemLayout="horizontal"
-                        dataSource={commentsStore.getCommentReplies(mainComment.id)}
-                        renderItem={(reply) => (
-                          <div key={reply.id} className="reply-item">
-                            <CommentItem
-                              item={reply}
-                              onReplyClick={handleReplyClick}
-                              onEditClick={handleEditClick}
-                              onRepliesCountChange={() => setExpandedReplies(new Set())}
-                            />
-                          </div>
-                        )}
-                      />
-                    )}
+                  {replies.length > 0 && (
+                    <div className="comment-replies-container">
+                      <button type="button" className="toggle-replies-btn" onClick={() => toggleRepliesExpanded(mainComment.id)}>
+                        {expandedReplies.has(mainComment.id) ? `Сховати відповіді (${replies.length})` : `Показати відповіді (${replies.length})`}
+                      </button>
 
-                    {/* Reply input */}
-                    {commentsStore.replyingToCommentId === mainComment.id && (
-                      <div className="reply-input-wrapper">
-                        <Text type="secondary">
-                          Відповідь на коментар
-                          {mainComment.username}
-                        </Text>
-                        <CommentInput
-                          streetcodeId={streetcodeId}
-                          parentCommentId={mainComment.id}
-                          onCommentCreated={() => {
-                            commentsStore.setReplyingToCommentId(null);
-                            setExpandedReplies(new Set([...expandedReplies, mainComment.id]));
-                          }}
+                      {expandedReplies.has(mainComment.id) && (
+                        <List
+                          itemLayout="horizontal"
+                          dataSource={replies}
+                          renderItem={(reply) => (
+                            <div key={reply.id} className="reply-item">
+                              <CommentItem
+                                item={reply}
+                                currentUserId={currentUserId}
+                                onReplyClick={handleReplyClick}
+                                onEditClick={handleEditClick}
+                                onRepliesCountChange={() => setExpandedReplies(new Set())}
+                              />
+                            </div>
+                          )}
                         />
-                      </div>
-                    )}
-                  </div>
-                )}
+                      )}
+                    </div>
+                  )}
 
-                {/* Reply input for new reply */}
-                {commentsStore.replyingToCommentId === mainComment.id && commentsStore.getCommentReplies(mainComment.id).length === 0 && (
-                  <div className="reply-input-wrapper">
-                    <Text type="secondary">
-                      Відповідь на коментар
-                      {mainComment.username}
-                    </Text>
-                    <CommentInput
-                      streetcodeId={streetcodeId}
-                      parentCommentId={mainComment.id}
-                      onCommentCreated={() => {
-                        commentsStore.setReplyingToCommentId(null);
-                        setExpandedReplies(new Set([...expandedReplies, mainComment.id]));
-                      }}
-                    />
-                  </div>
-                )}
+                  {isReplying && (
+                    <div className="reply-input-wrapper">
+                      <Text className="reply-to-label">{`Відповідь на коментар ${replyTargetUsername}`}</Text>
+                      <CommentInput
+                        streetcodeId={streetcodeId}
+                        parentCommentId={mainComment.id}
+                        onCommentCreated={() => {
+                          commentsStore.setReplyingToCommentId(null);
+                          setExpandedReplies((prev) => new Set([...prev, mainComment.id]));
+                        }}
+                      />
+                    </div>
+                  )}
 
-                <Divider />
-              </div>
-            )}
+                  <Divider />
+                </div>
+              );
+            }}
           />
         )}
       </div>
 
-      {/* Main comment input area */}
-      {editingComment && (
-        <div className="editing-notice">
-          <Text type="secondary">Редагування коментаря</Text>
-        </div>
-      )}
-      {commentsStore.replyingToCommentId === null && !editingComment && (
-        <div className="main-comment-input-area">
-          <Text type="secondary">Новий коментар</Text>
-        </div>
-      )}
-      <CommentInput streetcodeId={streetcodeId} editingComment={editingComment} onEditCancel={handleEditCancel} />
+      <div className="comments-drawer-footer">
+        {isLoggedIn ? (
+          <CommentInput streetcodeId={streetcodeId} editingComment={editingComment} onEditCancel={handleEditCancel} />
+        ) : (
+          <Button className="comment-login-btn" block onClick={() => navigate(FRONTEND_ROUTES.ADMIN.LOGIN)}>
+            Авторизуватися
+          </Button>
+        )}
+      </div>
     </Drawer>
   );
 };
 
-export default CommentsDrawerContainer;
+export default observer(CommentsDrawerContainer);

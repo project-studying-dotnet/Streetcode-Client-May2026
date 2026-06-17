@@ -14,7 +14,22 @@ const toErrorMessage = (error: unknown): string => {
   if (error instanceof Error) {
     return error.message;
   }
+  if (typeof error === 'string' && error) {
+    return error;
+  }
   return "Сталася невідома помилка";
+};
+
+const flattenComments = (comments: Comment[]): Comment[] => {
+  const result: Comment[] = [];
+  for (const comment of comments) {
+    const { replies, ...rest } = comment;
+    result.push(rest);
+    if (replies?.length) {
+      result.push(...flattenComments(replies));
+    }
+  }
+  return result;
 };
 
 class CommentStore {
@@ -45,7 +60,7 @@ class CommentStore {
     try {
       const comments = await CommentApi.getByStreetcodeId(streetcodeId);
       runInAction(() => {
-        this.comments = comments;
+        this.comments = flattenComments(comments);
       });
       return comments;
     } catch (error: unknown) {

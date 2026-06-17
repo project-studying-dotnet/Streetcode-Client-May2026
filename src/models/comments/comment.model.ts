@@ -8,6 +8,7 @@ export interface Comment {
   avatarUrl?: string;
   streetcodeId: number;
   parentCommentId?: number;
+  replies?: Comment[];
 }
 
 export interface CommentCreate {

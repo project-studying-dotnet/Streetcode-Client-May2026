@@ -2,7 +2,7 @@
 /* eslint-disable max-len */
 import "./CommentInput.styles.scss";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SendOutlined } from "@ant-design/icons";
 import { Comment } from "@models/comments/comment.model";
 import useMobx from "@stores/root-store";
@@ -12,7 +12,7 @@ import { Button, Input, message } from "antd";
 const { TextArea } = Input;
 
 interface CommentInputProps {
-  streetcodeId?: string;
+  streetcodeId?: number;
   onCommentCreated?: (comment: Comment) => void;
   parentCommentId?: number;
   editingComment?: Comment | null;
@@ -29,22 +29,30 @@ const CommentInput: React.FC<CommentInputProps> = ({
   const [value, setValue] = useState(editingComment?.text ?? "");
   const { commentsStore, userLoginStore } = useMobx();
 
+  useEffect(() => {
+    setValue(editingComment?.text ?? "");
+  }, [editingComment]);
+
   const handleSubmit = async () => {
     if (!value.trim() || !streetcodeId) {
       message.warning("Будь ласка, напишіть коментар");
       return;
     }
 
-    const userId = userLoginStore.userLoginResponce?.user.id;
+    const { userId } = userLoginStore;
     if (!userId) {
       message.error("Ви не авторизовані. Будь ласка, увійдіть в систему.");
       return;
     }
 
     if (editingComment) {
+      if (value.trim() === editingComment.text.trim()) {
+        onEditCancel?.();
+        return;
+      }
       const success = await commentsStore.updateComment(editingComment.id, {
         text: value,
-        streetcodeId: Number.parseInt(streetcodeId, 10),
+        streetcodeId,
         userId,
         parentCommentId: editingComment.parentCommentId,
       });
@@ -58,7 +66,7 @@ const CommentInput: React.FC<CommentInputProps> = ({
     } else {
       const created = await commentsStore.createComment({
         text: value,
-        streetcodeId: Number.parseInt(streetcodeId, 10),
+        streetcodeId,
         userId,
         parentCommentId,
       });
@@ -89,7 +97,7 @@ const CommentInput: React.FC<CommentInputProps> = ({
       />
       <div className="comment-actions-container">
         {editingComment && (
-          <Button onClick={handleCancel} disabled={commentsStore.isSaving}>
+          <Button className="cancel-btn" onClick={handleCancel} disabled={commentsStore.isSaving}>
             Скасувати
           </Button>
         )}
