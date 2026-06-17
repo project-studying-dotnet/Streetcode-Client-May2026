@@ -49,6 +49,10 @@ const adminNavItems = [
         title: 'Словник',
         to: FRONTEND_ROUTES.ADMIN.DICTIONARY,
     },
+    {
+        title: 'Налаштування',
+        to: FRONTEND_ROUTES.ADMIN.SETTINGS,
+    },
 ];
 
 const AdminBar = () => {

@@ -35,3 +35,9 @@ export enum UserRole {
     Administrator,
     Moderator,
 }
+
+export interface ChangePasswordDto {
+    currentPassword: string;
+    newPassword: string;
+    confirmNewPassword: string;
+}

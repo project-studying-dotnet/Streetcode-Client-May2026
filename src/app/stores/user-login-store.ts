@@ -1,5 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import UserApi from '@api/user/user.api';
+import {ChangePasswordDto }from '@models/user/user.model';
 
 import { RefreshTokenResponce, UserLoginResponce } from '@/models/user/user.model';
 
@@ -14,17 +15,17 @@ export default class UserLoginStore {
 
     public userLoginResponce?: UserLoginResponce;
 
-    private callback?:()=>void;
+    private callback?: () => void;
 
     public constructor() {
         makeAutoObservable(this);
     }
 
-    private static getExpiredDate():number {
+    private static getExpiredDate(): number {
         return Number(localStorage.getItem(UserLoginStore.dateStorageName)!);
     }
 
-    private static setExpiredDate(date: string):void {
+    private static setExpiredDate(date: string): void {
         localStorage.setItem(UserLoginStore.dateStorageName, date);
     }
 
@@ -32,7 +33,7 @@ export default class UserLoginStore {
         return localStorage.getItem(UserLoginStore.tokenStorageName);
     }
 
-    public static setToken(newToken:string) {
+    public static setToken(newToken: string) {
         return localStorage.setItem(UserLoginStore.tokenStorageName, newToken);
     }
 
@@ -52,11 +53,11 @@ export default class UserLoginStore {
         localStorage.removeItem(UserLoginStore.refreshTokenStorageName);
     }
 
-    public setCallback(func:()=>void) {
+    public setCallback(func: () => void) {
         this.callback = func;
     }
 
-    public static get isLoggedIn():boolean {
+    public static get isLoggedIn(): boolean {
         return UserLoginStore.getExpiredDate() > new Date(Date.now()).getTime();
     }
 
@@ -67,14 +68,14 @@ export default class UserLoginStore {
     }
 
     public logout() {
-            if (this.timeoutHandler) {
+        if (this.timeoutHandler) {
             clearTimeout(this.timeoutHandler);
         }
 
         UserLoginStore.clearUserData();
     }
 
-    public setUserLoginResponce(user:UserLoginResponce, func:()=>void) {
+    public setUserLoginResponce(user: UserLoginResponce, func: () => void) {
         try {
             const timeNumber = (new Date(user.expireAt)).getTime();
             UserLoginStore.setExpiredDate(timeNumber.toString());
@@ -95,8 +96,8 @@ export default class UserLoginStore {
         }
     }
 
-    public refreshToken = ():Promise<RefreshTokenResponce> => (
-        UserApi.refreshToken({ 
+    public refreshToken = (): Promise<RefreshTokenResponce> => (
+        UserApi.refreshToken({
             token: UserLoginStore.getToken() ?? '',
             refreshToken: UserLoginStore.getRefreshToken() ?? ''
         })
@@ -112,4 +113,13 @@ export default class UserLoginStore {
                 UserLoginStore.setRefreshToken(refreshToken.refreshToken);
                 return refreshToken;
             }));
+
+    public changePassword = async (data: ChangePasswordDto) => {
+        try {
+            await UserApi.changePassword(data);
+            return { success: true };
+        } catch (error) {
+            return { success: false, error };
+        }
+    };
 }
