@@ -112,6 +112,26 @@ const StreetcodeCreate: React.FC = observer(() => {
         }
     };
 
+    const updateYears = () => {
+        const startDate = form.getFieldValue('eventStartOrPersonBirthDate');
+        const endDate = form.getFieldValue('eventEndOrPersonDeathDate');
+
+        const startString = startDate
+            ? dayjs(startDate).format(typeStartDateFormat)
+            : '';
+
+        const endString = endDate
+            ? dayjs(endDate).format(typeEndDateFormat)
+            : '';
+
+        form.setFieldValue(
+            'dateString',
+            endString
+                ? `${startString} - ${endString}`
+                : startString
+        );
+    };
+
     const typeDiapason = [{
         value: 'year',
         label: 'рік',
@@ -167,31 +187,33 @@ const StreetcodeCreate: React.FC = observer(() => {
                         >
                             <Space>
                                 <div>Постать</div>
-                                <Switch onClick={() => setIsVisible(!isVisible)} />
+                                <Switch onChange={() => setIsVisible(!isVisible)} />
                                 <div>Подія</div>
                             </Space>
                         </Form.Item>
                     </div>
 
-                    <div className="streetcode-create-page__mainblock__person" hidden={!isVisible}>
-                        <Form.Item
-                            className="person__item"
-                            name="firstName"
-                            label="Ім'я"
-                            rules={[{ message: "Введіть ім'я:" }]}
-                        >
-                            <Input maxLength={50} showCount />
-                        </Form.Item>
+                    {isVisible && (
+                        <div className="streetcode-create-page__mainblock__person" hidden={!isVisible}>
+                            <Form.Item
+                                className="person__item"
+                                name="firstName"
+                                label="Ім'я"
+                                rules={[{ message: "Введіть ім'я:" }]}
+                            >
+                                <Input maxLength={50} showCount />
+                            </Form.Item>
 
-                        <Form.Item
-                            className="person__item"
-                            name="lastName"
-                            label="Прізвище"
-                            rules={[{ message: 'Введіть прізвище:' }]}
-                        >
-                            <Input maxLength={50} showCount />
-                        </Form.Item>
-                    </div>
+                            <Form.Item
+                                className="person__item"
+                                name="lastName"
+                                label="Прізвище"
+                                rules={[{ message: 'Введіть прізвище:' }]}
+                            >
+                                <Input maxLength={50} showCount />
+                            </Form.Item>
+                        </div>
+                    )}
 
                     <Form.Item
                         name="title"
@@ -262,7 +284,7 @@ const StreetcodeCreate: React.FC = observer(() => {
                                     className="years__item"
                                     picker={pickerMap[startDateType] || 'year'}
                                     format={typeStartDateFormat}
-                                    onChange={(date, dateString) => setYears(dateString.toString())}
+                                    onChange={updateYears}
                                 />
                             </Form.Item>
 
@@ -274,8 +296,7 @@ const StreetcodeCreate: React.FC = observer(() => {
                                     className="years__item"
                                     picker={pickerMap[endDateType] || 'year'}
                                     format={typeEndDateFormat}
-                                    onChange={(date, dateString) =>
-                                        setYears((prev) => `${prev} - ${dateString.toString()}`)}
+                                    onChange={updateYears}
                                 />
                             </Form.Item>
                         </Space>
@@ -285,7 +306,7 @@ const StreetcodeCreate: React.FC = observer(() => {
                         name="dateString"
                         label="Роки"
                     >
-                        <Input value={years} maxLength={100} />
+                        <Input maxLength={100} />
                     </Form.Item>
                 </div>
                 <Divider />

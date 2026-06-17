@@ -21,6 +21,7 @@ import Streetcodes from "@/features/AdminPage/StreetcodesPage/Streetcodes.compon
 import TeamPage from "@/features/AdminPage/TeamPage/TeamPage.component";
 import VacanciesPage from "@/features/AdminPage/VacanciesPage/VacanciesPage.component";
 import StreetcodeCatalog from "@/features/StreetcodeCatalogPage/StreetcodeCatalog.component";
+import StreetcodeCreate from "../../features/AdminPage/StreetcodesPage/StreetcodeCreate/StreetcodeCreate.component";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -39,7 +40,8 @@ const router = createBrowserRouter(
           <Route path="news" element={<AdminNewsPage />} />
           <Route path="vacancies" element={<VacanciesPage />} />
 
-          <Route path={FRONTEND_ROUTES.ADMIN.NEW_STREETCODE} element={<EditPge />} />
+          <Route path={FRONTEND_ROUTES.ADMIN.NEW_STREETCODE} element={<StreetcodeCreate />} />
+          <Route path={`${FRONTEND_ROUTES.ADMIN.EDIT_STREETCODE}/:id`} element={<StreetcodeCreate />} />
         </Route>
       </Route>
 
