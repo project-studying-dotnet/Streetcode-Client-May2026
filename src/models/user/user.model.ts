@@ -1,39 +1,39 @@
 export default interface User {
-    id:number;
-    name:string;
-    surname:string;
-    email:string;
-    login:string;
-    password:string;
-    userRole:UserRole;
+  id: number;
+  name: string;
+  surname: string;
+  email: string;
+  login: string;
+  password: string;
+  userRole: UserRole;
 }
 
 export interface UserLoginRequest {
-    login:string;
-    password:string;
+  login: string;
+  password: string;
 }
 export interface UserLoginResponce {
-    user:User;
-    token:string;
-    refreshToken: string;
-    expireAt:Date;
+  user: User;
+  token: string;
+  refreshToken: string;
+  expireAt: Date;
 }
 
 export interface RefreshTokenRequest {
-    token:string;
-    refreshToken: string;
+  token: string;
+  refreshToken: string;
 }
 
 export interface RefreshTokenResponce {
-    token:string;
-    refreshToken: string;
-    expireAt:Date;
+  token: string;
+  refreshToken: string;
+  expireAt: Date;
 }
 
 export enum UserRole {
-    MainAdministrator,
-    Administrator,
-    Moderator,
+  MainAdministrator,
+  Administrator,
+  Moderator,
 }
 
 export interface ChangePasswordDto {

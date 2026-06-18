@@ -1,0 +1,89 @@
+@use "@assets/sass/variables/_variables.colors.scss" as c;
+
+.image-card {
+  position: relative;
+  width: 146px;
+  height: 152px;
+  border: 2px solid #e0e0e0;
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 31px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: transparent;
+  cursor: pointer;
+  transition: border-color 0.3s;
+
+  -webkit-user-drag: none;
+  user-select: none;
+
+  &.is-deleting {
+    border: 2px solid c.$accented-red-color !important;
+  }
+
+  &.card-incomplete {
+    border-color: c.$accented-red-color;
+  }
+
+  .warning-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: c.$ant-menu-color;
+    color: c.$pure-white-color;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    text-align: center;
+    font-weight: bold;
+    z-index: 10;
+  }
+
+  img {
+    width: 120px;
+    height: 114px;
+    border-radius: 8px;
+    position: relative;
+    object-fit: fill;
+  }
+
+  .controls-overlay__item {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 83px;
+    height: 39px;
+    background: rgba(29, 31, 35, 0.8);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 10;
+    pointer-events: none;
+
+
+    button {
+      background: none;
+      border: none;
+      color: c.$pure-white-color;
+      cursor: pointer;
+
+      &:hover {
+        color: c.$accented-red-color;
+      }
+    }
+  }
+
+  &:hover .controls-overlay__item {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}

@@ -9,6 +9,13 @@ module.exports = {
         open: true,
         port: "3000",
         historyApiFallback: true,
+        client: {
+            // Показывать оверлеем только ошибки, без потока предупреждений.
+            overlay: {
+                errors: true,
+                warnings: false,
+            },
+        },
     },
     module: {
         rules: require('./webpack.rules'),

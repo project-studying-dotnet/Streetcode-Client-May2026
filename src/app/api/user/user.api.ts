@@ -14,6 +14,12 @@ const UserApi = {
             loginParams,
         ),
 
+    googleLogin: (body: { idToken: string }) =>
+        Agent.post<UserLoginResponce>(
+            API_ROUTES.ADMIN_AUTHORIZATION.GOOGLE_LOGIN,
+            body,
+        ),
+
     refreshToken: (token: RefreshTokenRequest) =>
         Agent.post<RefreshTokenResponce>(
             API_ROUTES.USERS.REFRESH_TOKEN,
@@ -31,6 +37,7 @@ const UserApi = {
             API_ROUTES.ADMIN_AUTHORIZATION.REFRESH_TOKEN,
             token,
         ),
+
     adminLogout: () =>
         Agent.post<void>(
             API_ROUTES.ADMIN_AUTHORIZATION.LOGOUT, {},

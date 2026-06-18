@@ -18,18 +18,17 @@ const PartnersComponent = () => {
     const [partners, setPartners] = useState<Partner[]>([]);
 
     useAsync(
-        () => {
+        async () => {
             const streetcodeId = getStreetCodeId;
             if (streetcodeId && streetcodeId !== errorStreetCodeId && streetcodeId > 0) {
-                PartnersApi.getByStreetcodeId(getStreetCodeId)
-                    .then((res) => {
-                        Promise.all(res.map((p, index) => ImagesApi.getById(p.logoId)
-                            .then((img) => {
-                                res[index].logo = img;
-                            }))).then(() => {
-                            setPartners(res); streecodePageLoaderContext.addBlockFetched();
-                        });
-                    });
+                const res = await PartnersApi.getByStreetcodeId(streetcodeId);
+                await Promise.allSettled(
+                    res.map(async (p, index) => {
+                        res[index].logo = await ImagesApi.getById(p.logoId);
+                    }),
+                );
+                setPartners(res);
+                streecodePageLoaderContext.addBlockFetched();
             }
         },
         [getStreetCodeId],

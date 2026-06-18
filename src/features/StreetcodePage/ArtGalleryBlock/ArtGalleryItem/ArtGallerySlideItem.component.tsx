@@ -1,9 +1,9 @@
 import './ArtGallerySlideItem.styles.scss';
-
+import { AdminArtControls } from '../../../AdminPage/ArtGallery/components/AdminArtControls/AdminArtControls'; 
 import { IndexedArt } from '@models/media/art.model';
 
 import useWindowSize from '@/app/common/hooks/stateful/useWindowSize.hook';
-import useMobx, { useAdditionalContext, useModalContext } from '@/app/stores/root-store';
+import useMobx, { useModalContext } from '@/app/stores/root-store';
 
 interface Props {
     artGalleryItem: IndexedArt,
@@ -23,6 +23,7 @@ const ArtGallerySlideItem = ({ artGalleryItem, offset, isAdminPage }: Props) => 
                 return 'medium';
             case 4:
                 return 'large';
+            default: return 'small';
         }
     }
 
@@ -31,11 +32,18 @@ const ArtGallerySlideItem = ({ artGalleryItem, offset, isAdminPage }: Props) => 
             : `slideArt ${setStyleByOffset(offset)}`}
         >
             <div className={isAdminPage ? 'artImageWrapperAdmin' : 'artImageWrapper'}>
-                <div className={`artContainer ${setStyleByOffset(offset) }`}>
+                {isAdminPage && (
+                    <AdminArtControls 
+                        onEdit={() => console.log('Редагування', artGalleryItem.id)} 
+                        onDelete={() => console.log('Видалення', artGalleryItem.id)} 
+                    />
+                )}
+                
+                <div className={`artContainer ${setStyleByOffset(offset)}`}>
                     <img
                         className={`imgImg ${setStyleByOffset(offset)}`}
                         src={imageHref}
-                        onClick={isAdminPage ? null : () => setModal('artGallery', sequenceNumber)}
+                        onClick={isAdminPage ? undefined : () => setModal('artGallery', sequenceNumber)}
                         alt=""
                     />
                     {windowsize.width > 1024 && (
