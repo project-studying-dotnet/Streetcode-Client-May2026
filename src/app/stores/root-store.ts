@@ -34,6 +34,10 @@ import TeamStore from "./team-store";
 import ToponymStore from "./toponym-store";
 import UserLoginStore from "./user-login-store";
 
+import ImageTemplateStore from './image-template-store';
+import ArtStore from './art-store';
+import ArtSlideStore from './art-slide-store';
+
 interface Store {
   factsStore: FactsStore;
   subtitlesStore: SubtitlesStore;
@@ -70,7 +74,10 @@ export interface StreetcodeDataStore {
   streetcodeStore: StreetcodeStore;
 }
 export interface ModalDataStore {
-  modalStore: ModalStore;
+    modalStore: ModalStore,
+    imageTemplateStore: ImageTemplateStore,
+    artStore: ArtStore,
+    artSlideStore: ArtSlideStore,
 }
 
 export const store: Store = {
@@ -108,8 +115,11 @@ export const streetcodeDataStore: StreetcodeDataStore = {
   streetcodeStore: new StreetcodeStore(),
 };
 
-export const modalDataStore: ModalDataStore = {
-  modalStore: new ModalStore(),
+export const modalDataStore:ModalDataStore = {
+    modalStore: new ModalStore(),
+    imageTemplateStore: new ImageTemplateStore(),
+    artStore: new ArtStore(),
+    artSlideStore: new ArtSlideStore(),
 };
 
 export const toponymDataStore: ToponymStore = new ToponymStore();

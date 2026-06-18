@@ -42,6 +42,7 @@ axios.interceptors.response.use(
         }
         const failedUrl = response?.config?.url ?? config?.url ?? '';
         switch (response?.status) {
+            
         case StatusCodes.INTERNAL_SERVER_ERROR:
             errorMessage = failedUrl
                 ? `${ReasonPhrases.INTERNAL_SERVER_ERROR}: ${failedUrl}`
@@ -72,22 +73,22 @@ axios.interceptors.response.use(
     },
 );
 
-const responseBody = <T> (response: AxiosResponse<T>) => response.data;
+const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
 const Agent = {
-    get: async <T> (url: string, params?: URLSearchParams) => {
+    get: async <T>(url: string, params?: URLSearchParams) => {
         axios.defaults.headers.common.Authorization = `Bearer ${UserLoginStore.getToken()}`;
         return axios.get<T>(url, { params })
             .then(responseBody);
     },
 
-    post: async <T> (url: string, body: object, headers?: object) => {
+    post: async <T>(url: string, body: object, headers?: object) => {
         axios.defaults.headers.common.Authorization = `Bearer ${UserLoginStore.getToken()}`;
         return axios.post<T>(url, body, headers)
             .then(responseBody);
     },
 
-    put: async <T> (url: string, body: object) => {
+    put: async <T>(url: string, body: object) => {
         axios.defaults.headers.common.Authorization = `Bearer ${UserLoginStore.getToken()}`;
         return axios.put<T>(url, body)
             .then(responseBody);
