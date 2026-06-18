@@ -1,115 +1,120 @@
-import { makeAutoObservable } from 'mobx';
-import UserApi from '@api/user/user.api';
-
-import { RefreshTokenResponce, UserLoginResponce } from '@/models/user/user.model';
+import { makeAutoObservable } from "mobx";
+import UserApi from "@api/user/user.api";
+import { ChangePasswordDto } from "@models/user/user.model";
+import { RefreshTokenResponce, UserLoginResponce } from "@/models/user/user.model";
 
 export default class UserLoginStore {
-    private timeoutHandler: ReturnType<typeof setTimeout> | null = null;
+  private timeoutHandler: ReturnType<typeof setTimeout> | null = null;
+  private static readonly tokenStorageName = "token";
+  private static readonly dateStorageName = "expireAt";
+  private static readonly refreshTokenStorageName = "refreshToken";
+  private static readonly userIdStorageName = "userId";
 
-    private static tokenStorageName = 'token';
+  public userLoginResponce?: UserLoginResponce;
+  private callback?: () => void;
 
-    private static dateStorageName = 'expireAt';
+  public constructor() {
+    makeAutoObservable(this);
+  }
 
-    private static readonly refreshTokenStorageName = 'refreshToken';
+  private static getExpiredDate(): number {
+    return Number(localStorage.getItem(UserLoginStore.dateStorageName)!);
+  }
 
-    public userLoginResponce?: UserLoginResponce;
+  private static setExpiredDate(date: string): void {
+    localStorage.setItem(UserLoginStore.dateStorageName, date);
+  }
 
-    private callback?:()=>void;
+  public static getToken() {
+    return localStorage.getItem(UserLoginStore.tokenStorageName);
+  }
 
-    public constructor() {
-        makeAutoObservable(this);
+  public static setToken(newToken: string) {
+    return localStorage.setItem(UserLoginStore.tokenStorageName, newToken);
+  }
+
+  private static getRefreshToken() {
+    return localStorage.getItem(UserLoginStore.refreshTokenStorageName);
+  }
+
+  private static setRefreshToken(refreshToken: string) {
+    localStorage.setItem(UserLoginStore.refreshTokenStorageName, refreshToken);
+  }
+
+  public setCallback(func: () => void) {
+    this.callback = func;
+  }
+
+  public static get isLoggedIn(): boolean {
+    return UserLoginStore.getExpiredDate() > new Date(Date.now()).getTime();
+  }
+
+  public static clearUserData() {
+    localStorage.removeItem(UserLoginStore.tokenStorageName);
+    localStorage.removeItem(UserLoginStore.refreshTokenStorageName);
+    localStorage.removeItem(UserLoginStore.dateStorageName);
+    localStorage.removeItem(UserLoginStore.userIdStorageName);
+  }
+
+  public logout() {
+    if (this.timeoutHandler) {
+      clearTimeout(this.timeoutHandler);
     }
+    UserLoginStore.clearUserData();
+  }
 
-    private static getExpiredDate():number {
-        return Number(localStorage.getItem(UserLoginStore.dateStorageName)!);
+  public get userId(): number | undefined {
+    if (this.userLoginResponce?.user.id !== undefined) {
+      return this.userLoginResponce.user.id;
     }
+    const stored = localStorage.getItem(UserLoginStore.userIdStorageName);
+    return stored ? Number(stored) : undefined;
+  }
 
-    private static setExpiredDate(date: string):void {
-        localStorage.setItem(UserLoginStore.dateStorageName, date);
+  public setUserLoginResponce(user: UserLoginResponce, func: () => void) {
+    try {
+      const timeNumber = new Date(user.expireAt).getTime();
+      UserLoginStore.setExpiredDate(timeNumber.toString());
+      const expireForSeconds = timeNumber - Date.now();
+      this.setCallback(func);
+      this.userLoginResponce = user;
+      UserLoginStore.setToken(user.token);
+      UserLoginStore.setRefreshToken(user.refreshToken);
+      localStorage.setItem(UserLoginStore.userIdStorageName, String(user.user.id));
+      if (expireForSeconds > 10000) {
+        this.timeoutHandler = setTimeout(() => {
+          if (this.callback) {
+            this.callback();
+          }
+        }, expireForSeconds - 10000);
+      }
+    } catch (e) {
+      console.log(e);
     }
+  }
 
-    public static getToken() {
-        return localStorage.getItem(UserLoginStore.tokenStorageName);
-    }
-
-    public static setToken(newToken:string) {
-        return localStorage.setItem(UserLoginStore.tokenStorageName, newToken);
-    }
-
-    private static clearToken() {
-        localStorage.removeItem(UserLoginStore.tokenStorageName);
-    }
-
-    private static getRefreshToken() {
-        return localStorage.getItem(UserLoginStore.refreshTokenStorageName);
-    }
-
-    private static setRefreshToken(refreshToken: string) {
-        localStorage.setItem(UserLoginStore.refreshTokenStorageName, refreshToken);
-    }
-
-    private static clearRefreshToken() {
-        localStorage.removeItem(UserLoginStore.refreshTokenStorageName);
-    }
-
-    public setCallback(func:()=>void) {
-        this.callback = func;
-    }
-
-    public static get isLoggedIn():boolean {
-        return UserLoginStore.getExpiredDate() > new Date(Date.now()).getTime();
-    }
-
-    public static clearUserData() {
-        localStorage.removeItem(UserLoginStore.tokenStorageName);
-        localStorage.removeItem(UserLoginStore.refreshTokenStorageName);
-        localStorage.removeItem(UserLoginStore.dateStorageName);
-    }
-
-    public logout() {
-            if (this.timeoutHandler) {
-            clearTimeout(this.timeoutHandler);
+  public refreshToken = (): Promise<RefreshTokenResponce> => UserApi.refreshToken({
+      token: UserLoginStore.getToken() ?? "",
+      refreshToken: UserLoginStore.getRefreshToken() ?? "",
+    }).then((refreshToken) => {
+      const expireForSeconds = new Date(refreshToken.expireAt).getTime() - Date.now();
+      this.timeoutHandler = setTimeout(() => {
+        if (this.callback) {
+          this.callback();
         }
+      }, expireForSeconds);
+      UserLoginStore.setExpiredDate(new Date(refreshToken.expireAt).getTime().toString());
+      UserLoginStore.setToken(refreshToken.token);
+      UserLoginStore.setRefreshToken(refreshToken.refreshToken);
+      return refreshToken;
+    });
 
-        UserLoginStore.clearUserData();
+  public changePassword = async (data: ChangePasswordDto) => {
+    try {
+      await UserApi.changePassword(data);
+      return { success: true };
+    } catch (error) {
+      return { success: false, error };
     }
-
-    public setUserLoginResponce(user:UserLoginResponce, func:()=>void) {
-        try {
-            const timeNumber = (new Date(user.expireAt)).getTime();
-            UserLoginStore.setExpiredDate(timeNumber.toString());
-            const expireForSeconds = timeNumber - new Date().getTime();
-            this.setCallback(func);
-            this.userLoginResponce = user;
-            UserLoginStore.setToken(user.token);
-            UserLoginStore.setRefreshToken(user.refreshToken);
-            if (expireForSeconds > 10000) {
-                this.timeoutHandler = setTimeout(() => {
-                    if (this.callback) {
-                        this.callback();
-                    }
-                }, expireForSeconds - 10000);
-            }
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
-    public refreshToken = ():Promise<RefreshTokenResponce> => (
-        UserApi.refreshToken({ 
-            token: UserLoginStore.getToken() ?? '',
-            refreshToken: UserLoginStore.getRefreshToken() ?? ''
-        })
-            .then((refreshToken) => {
-                const expireForSeconds = (new Date(refreshToken.expireAt)).getTime() - new Date().getTime();
-                this.timeoutHandler = setTimeout(() => {
-                    if (this.callback) {
-                        this.callback();
-                    }
-                }, expireForSeconds);
-                UserLoginStore.setExpiredDate((new Date(refreshToken.expireAt)).getTime().toString());
-                UserLoginStore.setToken(refreshToken.token);
-                UserLoginStore.setRefreshToken(refreshToken.refreshToken);
-                return refreshToken;
-            }));
+  };
 }

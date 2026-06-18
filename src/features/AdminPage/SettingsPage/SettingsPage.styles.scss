@@ -1,0 +1,30 @@
+@use "@sass/variables/_variables.colors.scss" as c;
+
+.settings-page {
+    width: 100%;
+    padding: 24px;
+    background: #fff;
+    border-radius: 8px;
+
+    .settings-page-header {
+        margin-bottom: 24px;
+        border-bottom: 1px solid #f0f0f0;
+        padding-bottom: 16px;
+    }
+
+    .settings-form {
+        max-width: 400px;
+        margin-top: 20px;
+    }
+
+    .settings-tabs {
+        .ant-tabs-tab-active {
+            .ant-tabs-tab-btn {
+                color: c.$dark-red-color;
+            }
+        }
+        .ant-tabs-ink-bar {
+            background: c.$dark-red-color;
+        }
+    }
+}

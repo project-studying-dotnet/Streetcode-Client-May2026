@@ -1,0 +1,43 @@
+@use "@assets/sass/variables/_variables.colors.scss" as c;
+@use "@assets/sass/variables/_variables.fonts.scss" as ft;
+@use "@assets/sass/_utils.functions.scss" as f;
+@use "@assets/sass/mixins/_utils.mixins.scss" as mut;
+
+.templates-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 0 32px;
+
+    .templates-title {
+        margin: 0;
+        @include mut.with-font($font-weight: 600);
+    }
+
+    .streetcode-custom-button {
+        @include mut.sized(212px, 48px);
+        border-radius: f.pxToRem(8px);
+        border: 0.025rem solid c.$dark-red-color;
+        color: c.$pure-white-color;
+        @include mut.with-font(ft.$roboto-font, $font-size: 20px, $font-weight: 500);
+
+
+        >span {
+            @include mut.with-font($font-size: 20px, $font-weight: 500);
+            color: c.$pure-white-color;
+        }
+
+        &:hover {
+            background-color: c.$dark-red-color;
+            transition: 0.5s;
+            border: none;
+        }
+
+        &:focus {
+            outline: none;
+            border: none;
+        }
+    }
+}

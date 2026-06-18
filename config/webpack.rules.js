@@ -34,7 +34,22 @@ module.exports = [
         use: [
             { loader: 'style-loader' },
             { loader: 'css-loader' },
-            { loader: 'sass-loader' },
+            {
+                loader: 'sass-loader',
+                options: {
+                    // Заглушаем deprecation-предупреждения Dart Sass, которые
+                    // флудят dev-сервер (по одному на каждый .scss-файл).
+                    sassOptions: {
+                        quietDeps: true, // тихо для зависимостей (node_modules, swiper)
+                        silenceDeprecations: [
+                            'legacy-js-api',
+                            'import',
+                            'global-builtin',
+                            'color-functions',
+                        ],
+                    },
+                },
+            },
         ],
     }
 ].filter(Boolean);

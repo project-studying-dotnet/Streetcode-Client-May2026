@@ -13,7 +13,7 @@ export default class TermStore {
     terms.forEach(this.setItem);
   };
 
-  private setItem = (term: Term) => {
+  private readonly setItem = (term: Term) => {
     this.TermMap.set(term.id, term);
   };
 
@@ -26,7 +26,7 @@ export default class TermStore {
       const terms = await termsApi.getAll();
       this.setInternalMap(terms);
     } catch (error: unknown) {
-      return null;
+      console.error(error);
     }
   };
 
@@ -50,8 +50,8 @@ export default class TermStore {
           ...response,
         };
 
-        this.setItem(mergedTerm as Term);
-        updatedData = mergedTerm as Term;
+        this.setItem(mergedTerm);
+        updatedData = mergedTerm;
       });
     });
 

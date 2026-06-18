@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import imagesApi from '@api/media/images.api';
 import Image, { ImageCreate } from '@models/media/image.model';
+import { arrayMove } from '@dnd-kit/sortable';
 
 export default class ImageStore {
     public ImageMap = new Map<number, Image>();
@@ -25,38 +26,47 @@ export default class ImageStore {
         return Array.from(this.ImageMap.values());
     }
 
-    static async getImageById(imageId:number):Promise<Image | undefined> {
-        let image:Image | undefined;
+    static async getImageById(imageId: number): Promise<Image | undefined> {
+        let image: Image | undefined;
         await imagesApi.getById(imageId)
             .then((im) => {
                 image = im;
             })
-            .catch((error) => {});
+            .catch((error) => { });
         return image;
     }
 
     public getImage = (id: number) => this.ImageMap.get(id);
 
+
     public fetchImage = async (id: number) => {
+        if (!id || id <= 0) return;
+
         try {
             const image = await imagesApi.getById(id);
-            this.setItem(image);
-        } catch (error: unknown) {}
+            runInAction(() => {
+                this.setItem(this.transformToImage(image));
+            });
+        } catch (error: unknown) { }
     };
 
     public fetchImageByStreetcodeId = async (streetcodeId: number) => {
         try {
             const image = await imagesApi.getByStreetcodeId(streetcodeId);
-            this.setInternalMap(image);
-        } catch (error: unknown) {}
+            runInAction(() => {
+                this.setInternalMap(image.map(this.transformToImage));
+            });
+        } catch (error: unknown) { }
     };
 
-    public createImage = async (image: ImageCreate) => {
+    public createImage = async (image: ImageCreate, localUrl?: string) => {
         try {
-            await imagesApi.create(image).then((resp) => {
-                this.setItem(resp);
+            const resp = await imagesApi.create(image);
+            runInAction(() => {
+                const newImage = { ...this.transformToImage(resp), url: localUrl ?? '' };
+                this.setItem(newImage);
             });
-        } catch (error: unknown) {}
+        } catch (error: unknown) { }
     };
 
     public updateImage = async (image: Image) => {
@@ -69,7 +79,7 @@ export default class ImageStore {
                 };
                 this.setItem(updatedImage as Image);
             });
-        } catch (error: unknown) {}
+        } catch (error: unknown) { }
     };
 
     public deleteImage = async (imageId: number) => {
@@ -78,6 +88,46 @@ export default class ImageStore {
             runInAction(() => {
                 this.ImageMap.delete(imageId);
             });
-        } catch (error: unknown) {}
+        } catch (error: unknown) { }
+    };
+
+    public fetchAll = async () => {
+        try {
+            const rawImages = await imagesApi.getAll();
+            runInAction(() => {
+                rawImages.forEach(img => this.setItem(this.transformToImage(img)));
+            });
+        } catch (error) {
+            console.error("Error loading images:", error);
+        }
+    };
+
+    public reorderImages = (oldIndex: number, newIndex: number) => {
+        runInAction(() => {
+            const arr = Array.from(this.ImageMap.values());
+            const moved = arrayMove(arr, oldIndex, newIndex);
+            this.ImageMap.clear();
+            moved.forEach(img => this.setItem(img));
+        });
+    };
+
+    public moveImageToTemplate = (imageId: number) => {
+        runInAction(() => this.ImageMap.delete(imageId));
+    };
+
+    public moveImageBackToGallery = (image: Image) => {
+        runInAction(() => this.setItem(image));
+    };
+
+    public addImageBackToGallery = (image: Image) => {
+        runInAction(() => this.setItem(image));
+    };
+
+    private readonly transformToImage = (image: Image): Image => {
+        return {
+            ...image,
+            url: image.url ?? `/static-files/${image.id}.png`,
+            isPublished: image.isPublished ?? false
+        };
     };
 }

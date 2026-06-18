@@ -1,4 +1,5 @@
 import './LoginPage.styles.scss';
+import { GoogleLogin } from '@react-oauth/google';
 
 import { useState } from 'react';
 import { Button, Checkbox, Form, Input, message, Modal } from 'antd';
@@ -61,7 +62,6 @@ const LoginPage = () => {
                     </Form.Item>
 
                     <div className="loginOptions">
-                        {/* Вызов открытия модалки через глобальный стор */}
                         <Button type="link" onClick={() => setModal('forgotPassword', undefined, true)}>
                             Забули пароль?
                         </Button>
@@ -71,6 +71,33 @@ const LoginPage = () => {
                     <Button className="loginSubmitBtn" htmlType="submit" loading={isLoading} block>
                         Увійти
                     </Button>
+
+                    <div className="loginDivider">
+                        <span className="dividerLine" />
+                        <span className="dividerText">або продовжити через</span>
+                        <span className="dividerLine" />
+                    </div>
+
+                    <GoogleLogin
+                        onSuccess={async (credentialResponse) => {
+                            try {
+                                setIsLoading(true);
+                                const response = await UserApi.googleLogin({
+                                    idToken: credentialResponse.credential as string
+                                });
+                                userLoginStore.setUserLoginResponce(response, userLoginStore.refreshToken);
+                                navigate(FRONTEND_ROUTES.ADMIN.BASE);
+                            } catch (e) {
+                                console.error('Google Auth Error:', e);
+                                message.error('Помилка авторизації через Google');
+                            } finally {
+                                setIsLoading(false);
+                            }
+                        }}
+                        onError={() => {
+                            message.error('Не вдалося увійти через Google');
+                        }}
+                    />
                 </Form>
 
                 <Modal 

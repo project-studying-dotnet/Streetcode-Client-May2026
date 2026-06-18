@@ -1,17 +1,27 @@
 import Agent from '@api/agent.api';
-import { ResetPasswordRequest,ForgotPasswordRequest } from '@models/user/user.model';
+import { 
+    ResetPasswordRequest, 
+    ForgotPasswordRequest, 
+    ChangePasswordDto,
+    RefreshTokenRequest, 
+    RefreshTokenResponce,
+    UserLoginRequest, 
+    UserLoginResponce,
+} from '@models/user/user.model';
 
 import { API_ROUTES } from '@/app/common/constants/api-routes.constants';
-import {
-    RefreshTokenRequest, RefreshTokenResponce,
-    UserLoginRequest, UserLoginResponce,
-} from '@/models/user/user.model';
 
 const UserApi = {
     login: (loginParams: UserLoginRequest) =>
         Agent.post<UserLoginResponce>(
             API_ROUTES.USERS.LOGIN,
             loginParams,
+        ),
+
+    googleLogin: (body: { idToken: string }) =>
+        Agent.post<UserLoginResponce>(
+            API_ROUTES.ADMIN_AUTHORIZATION.GOOGLE_LOGIN,
+            body,
         ),
 
     refreshToken: (token: RefreshTokenRequest) =>
@@ -31,6 +41,7 @@ const UserApi = {
             API_ROUTES.ADMIN_AUTHORIZATION.REFRESH_TOKEN,
             token,
         ),
+
     adminLogout: () =>
         Agent.post<void>(
             API_ROUTES.ADMIN_AUTHORIZATION.LOGOUT, {},
@@ -41,10 +52,15 @@ const UserApi = {
             API_ROUTES.ADMIN_AUTHORIZATION.FORGOT_PASSWORD,
             forgotParams,
         ),
+
     resetPassword: (resetParams: ResetPasswordRequest) =>
         Agent.post<void>(
             API_ROUTES.ADMIN_AUTHORIZATION.RESET_PASSWORD,
             resetParams,
         ),
+
+    changePassword: (data: ChangePasswordDto) =>
+        Agent.post<void>(API_ROUTES.ADMIN_AUTHORIZATION.CHANGE_PASSWORD, data),
 };
+
 export default UserApi;
