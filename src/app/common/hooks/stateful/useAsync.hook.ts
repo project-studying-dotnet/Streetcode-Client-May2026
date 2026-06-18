@@ -36,7 +36,7 @@ export const useAsync = (func: Function, deps: DependencyList = [], cb?: () => v
     const { execute, ...state } = useAsyncInternal(func, deps);
 
     useEffect(() => {
-        execute().then(cb);
+        execute().then(cb).catch(() => {});
     }, [cb, execute]);
 
     return state;
