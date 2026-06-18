@@ -224,6 +224,8 @@ export const API_ROUTES = {
     REFRESH_TOKEN: "auth/refresh-token",
     LOGOUT: "auth/logout",
     CHANGE_PASSWORD: "auth/change-password",
+    RESET_PASSWORD: "auth/reset-password",
+    FORGOT_PASSWORD: "auth/forgot-password",
   },
   COMMENTS: {
     GET_BY_STREETCODE_ID: "comment/getByStreetcodeId",

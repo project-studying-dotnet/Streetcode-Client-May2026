@@ -8,6 +8,7 @@ const FRONTEND_ROUTES = {
         DICTIONARY: '/admin-panel/dictionary',
         FOR_FANS: '/admin-panel/for-fans',
         LOGIN: '/admin-panel/login',
+        RESET_PASSWORD: '/admin-panel/reset-password',
         TEAM: '/admin-panel/team',
         ANALYTICS: '/admin-panel/analytics',
         NEWS: '/admin-panel/news',

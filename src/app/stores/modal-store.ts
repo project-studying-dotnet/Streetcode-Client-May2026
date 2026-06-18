@@ -45,6 +45,7 @@ interface ModalList {
   adminFacts: ModalState;
   adminChronology: ModalState;
   statistics: ModalState;
+  forgotPassword: ModalState;
   editImage: ModalState;
   deleteImage: ModalState;
   deleteImageTemplates: ModalState;
@@ -71,6 +72,7 @@ export default class ModalStore {
     adminFacts: { ...DefaultModalState },
     adminChronology: { ...DefaultModalState },
     statistics: { ...DefaultModalState },
+    forgotPassword: { ...DefaultModalState },
     editImage: { ...DefaultModalState },
     deleteImage: { ...DefaultModalState },
     deleteImageTemplates: { ...DefaultModalState },

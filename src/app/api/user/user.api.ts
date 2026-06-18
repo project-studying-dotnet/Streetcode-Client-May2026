@@ -1,11 +1,15 @@
 import Agent from '@api/agent.api';
-import ChangePasswordDto from '@models/user/user.model';
+import { 
+    ResetPasswordRequest, 
+    ForgotPasswordRequest, 
+    ChangePasswordDto,
+    RefreshTokenRequest, 
+    RefreshTokenResponce,
+    UserLoginRequest, 
+    UserLoginResponce,
+} from '@models/user/user.model';
 
 import { API_ROUTES } from '@/app/common/constants/api-routes.constants';
-import {
-    RefreshTokenRequest, RefreshTokenResponce,
-    UserLoginRequest, UserLoginResponce,
-} from '@/models/user/user.model';
 
 const UserApi = {
     login: (loginParams: UserLoginRequest) =>
@@ -43,7 +47,20 @@ const UserApi = {
             API_ROUTES.ADMIN_AUTHORIZATION.LOGOUT, {},
         ),
 
+    forgotPassword: (forgotParams: ForgotPasswordRequest) =>
+        Agent.post<void>(
+            API_ROUTES.ADMIN_AUTHORIZATION.FORGOT_PASSWORD,
+            forgotParams,
+        ),
+
+    resetPassword: (resetParams: ResetPasswordRequest) =>
+        Agent.post<void>(
+            API_ROUTES.ADMIN_AUTHORIZATION.RESET_PASSWORD,
+            resetParams,
+        ),
+
     changePassword: (data: ChangePasswordDto) =>
         Agent.post<void>(API_ROUTES.ADMIN_AUTHORIZATION.CHANGE_PASSWORD, data),
 };
+
 export default UserApi;

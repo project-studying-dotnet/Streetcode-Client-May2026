@@ -20,6 +20,7 @@ import Partners from "@/features/AdminPage/PartnersPage/Partners.component";
 import Streetcodes from "@/features/AdminPage/StreetcodesPage/Streetcodes.component";
 import TeamPage from "@/features/AdminPage/TeamPage/TeamPage.component";
 import VacanciesPage from "@/features/AdminPage/VacanciesPage/VacanciesPage.component";
+import ResetPasswordPage from "@/features/AdminPage/ResetPasswordPage/ResetPasswordPage.component";
 import SettingsPage from "@/features/AdminPage/SettingsPage/SettingsPage.component";
 import StreetcodeCatalog from "@/features/StreetcodeCatalogPage/StreetcodeCatalog.component";
 
@@ -39,6 +40,7 @@ const router = createBrowserRouter(
           <Route path="calendar" element={<CalendarPage />} />
           <Route path="news" element={<AdminNewsPage />} />
           <Route path="vacancies" element={<VacanciesPage />} />
+          <Route path="reset-password" element={<ResetPasswordPage />} />
           <Route path="settings" element={<SettingsPage />} />
 
           <Route path={FRONTEND_ROUTES.ADMIN.NEW_STREETCODE} element={<EditPge />} />
