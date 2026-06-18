@@ -1,0 +1,125 @@
+@use "@assets/sass/variables/_variables.colors.scss" as c;
+@use "@assets/sass/_utils.functions.scss" as *;
+
+.comment-delete-popconfirm {
+    .ant-popover-inner {
+        border-radius: pxToRem(8px);
+        padding: pxToRem(14px) pxToRem(16px);
+        box-shadow: 0 pxToRem(4px) pxToRem(20px) rgba(0, 0, 0, 0.12);
+    }
+
+    .ant-popconfirm-message-icon .anticon {
+        color: c.$accented-red-color;
+    }
+
+    .ant-popconfirm-message-title {
+        font-size: pxToRem(14px);
+        font-weight: 600;
+        color: c.$dark-text-color;
+    }
+
+    .ant-popconfirm-buttons {
+        margin-top: pxToRem(12px);
+
+        .ant-btn-default {
+            border-color: c.$text-light-gray-color;
+            color: c.$dark-gray-color;
+            border-radius: pxToRem(4px);
+
+            &:hover {
+                border-color: c.$accented-red-color;
+                color: c.$accented-red-color;
+            }
+        }
+
+        .ant-btn-primary {
+            background-color: c.$accented-red-color;
+            border-color: c.$accented-red-color;
+            border-radius: pxToRem(4px);
+            box-shadow: none;
+
+            &:hover {
+                background-color: c.$dark-red-color;
+                border-color: c.$dark-red-color;
+            }
+        }
+    }
+}
+
+.comment-item {
+    padding: pxToRem(12px) 0 !important;
+    align-items: flex-start !important;
+    flex-direction: column !important;
+
+    &-content {
+        display: flex;
+        width: 100%;
+        gap: pxToRem(10px);
+        margin-bottom: pxToRem(4px);
+    }
+
+    &-avatar {
+        flex-shrink: 0;
+    }
+
+    &-body {
+        flex: 1;
+        min-width: 0;
+    }
+
+    &-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: pxToRem(2px);
+    }
+
+    &-meta {
+        display: flex;
+        align-items: center;
+        gap: pxToRem(6px);
+    }
+
+    &-author {
+        font-size: pxToRem(14px);
+        color: c.$dark-text-color;
+        font-weight: 600;
+    }
+
+    &-date {
+        font-size: pxToRem(12px);
+        color: c.$normal-gray-color;
+    }
+
+    &-edited {
+        font-size: pxToRem(11px);
+        color: c.$darkish-gray-color;
+    }
+
+    &-text {
+        margin: 0 !important;
+        font-size: pxToRem(14px);
+        color: c.$dark-gray-color;
+        word-break: break-word;
+    }
+
+    &-actions {
+        margin-left: pxToRem(42px);
+        margin-top: pxToRem(4px);
+
+        .ant-btn-link {
+            padding: 0;
+            font-size: pxToRem(12px);
+            color: c.$normal-gray-color;
+            font-weight: 500;
+
+            &:hover {
+                color: c.$accented-red-color;
+            }
+
+            &.ant-btn-dangerous:hover {
+                color: c.$dark-red-color;
+            }
+        }
+    }
+}
