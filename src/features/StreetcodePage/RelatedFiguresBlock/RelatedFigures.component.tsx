@@ -33,18 +33,16 @@ const RelatedFiguresComponent = ({ setActiveTagId } : Props) => {
     };
 
     useAsync(
-        () => {
+        async () => {
             if (getStreetCodeId !== errorStreetCodeId) {
-                Promise.all([
-                    RelatedFigureApi.getByStreetcodeId(getStreetCodeId)
-                        .then((res) => {
-                            Promise.all(res.map((f, index) => ImagesApi.getById(f.imageId).then((img) => {
-                                res[index].image = img;
-                            }))).then(() => {
-                                relatedFiguresStore.setInternalRelatedFiguresMap = res;
-                                streecodePageLoaderContext.addBlockFetched();
-                            });
-                        })]);
+                const res = await RelatedFigureApi.getByStreetcodeId(getStreetCodeId);
+                await Promise.allSettled(
+                    res.map(async (f, index) => {
+                        res[index].image = await ImagesApi.getById(f.imageId);
+                    }),
+                );
+                relatedFiguresStore.setInternalRelatedFiguresMap = res;
+                streecodePageLoaderContext.addBlockFetched();
             }
         },
         [getStreetCodeId],

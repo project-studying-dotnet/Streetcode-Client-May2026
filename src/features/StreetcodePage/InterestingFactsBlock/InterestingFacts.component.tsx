@@ -19,21 +19,18 @@ const InterestingFactsComponent = () => {
     const [sliderArray, setSliderArray] = useState<Fact[]>([]);
     const facts = useRef<Fact[]>([]);
     useAsync(
-        () => {
+        async () => {
             if (getStreetCodeId !== errorStreetCodeId && getStreetCodeId > 0) {
-                factsStore.fetchFactsByStreetcodeId(getStreetCodeId).then(() => {
-                    const res = factsStore.getFactArray;
-                    Promise.all(res.map((f, index) => ImagesApi.getById(f.imageId).then((img) => {
-                        res[index].image = img;
-                    }))).then(() => {
-                        facts.current = res;
-                        streecodePageLoaderContext.addBlockFetched();
-                        setSliderArray(res.length === 3
-                            || res.length === 2
-                            ? res.concat(res)
-                            : res);
-                    });
-                });
+                await factsStore.fetchFactsByStreetcodeId(getStreetCodeId);
+                const res = factsStore.getFactArray;
+                await Promise.allSettled(
+                    res.map(async (f, index) => {
+                        res[index].image = await ImagesApi.getById(f.imageId);
+                    }),
+                );
+                facts.current = res;
+                streecodePageLoaderContext.addBlockFetched();
+                setSliderArray(res.length === 3 || res.length === 2 ? res.concat(res) : res);
             }
         },
         [getStreetCodeId],

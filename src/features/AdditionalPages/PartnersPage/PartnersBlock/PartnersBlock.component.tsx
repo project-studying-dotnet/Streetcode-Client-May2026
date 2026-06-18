@@ -12,16 +12,14 @@ const PartnersBlock = () => {
     const [partners, setPartners] = useState<Partner[]>([]);
 
     useAsync(
-        () => {
-            PartnersApi.getAll()
-                .then((res) => {
-                    Promise.all(res.map((p, index) => ImagesApi.getById(p.logoId)
-                        .then((img) => {
-                            res[index].logo = img;
-                        }))).then(() => {
-                        setPartners(res);
-                    });
-                });
+        async () => {
+            const res = await PartnersApi.getAll();
+            await Promise.all(
+                res.map(async (p, index) => {
+                    res[index].logo = await ImagesApi.getById(p.logoId);
+                }),
+            );
+            setPartners(res);
         },
     );
 
