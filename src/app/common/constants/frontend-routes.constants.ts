@@ -15,6 +15,7 @@ const FRONTEND_ROUTES = {
         EDITOR: '/admin-panel/editor',
         CALENDAR: '/admin-panel/calendar',
         VACANCIES: '/admin-panel/vacancies',
+        SETTINGS: '/admin-panel/settings',
     },
     ADMIN_RELATIVE: {
         PARTNERS: 'partners',
@@ -26,6 +27,7 @@ const FRONTEND_ROUTES = {
         CALENDAR: 'calendar',
         NEWS: 'news',
         VACANCIES: 'vacancies',
+        SETTINGS: 'settings',
     },
     OTHER_PAGES: {
         CATALOG: '/catalog',

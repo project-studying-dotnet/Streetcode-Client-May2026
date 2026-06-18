@@ -223,6 +223,7 @@ export const API_ROUTES = {
     GOOGLE_LOGIN: "auth/google-login",
     REFRESH_TOKEN: "auth/refresh-token",
     LOGOUT: "auth/logout",
+    CHANGE_PASSWORD: "auth/change-password",
   },
   COMMENTS: {
     GET_BY_STREETCODE_ID: "comment/getByStreetcodeId",

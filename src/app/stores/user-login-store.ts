@@ -1,21 +1,16 @@
 import { makeAutoObservable } from "mobx";
 import UserApi from "@api/user/user.api";
-
+import { ChangePasswordDto } from "@models/user/user.model";
 import { RefreshTokenResponce, UserLoginResponce } from "@/models/user/user.model";
 
 export default class UserLoginStore {
   private timeoutHandler: ReturnType<typeof setTimeout> | null = null;
-
   private static readonly tokenStorageName = "token";
-
   private static readonly dateStorageName = "expireAt";
-
   private static readonly refreshTokenStorageName = "refreshToken";
-
   private static readonly userIdStorageName = "userId";
 
   public userLoginResponce?: UserLoginResponce;
-
   private callback?: () => void;
 
   public constructor() {
@@ -38,20 +33,12 @@ export default class UserLoginStore {
     return localStorage.setItem(UserLoginStore.tokenStorageName, newToken);
   }
 
-  private static clearToken() {
-    localStorage.removeItem(UserLoginStore.tokenStorageName);
-  }
-
   private static getRefreshToken() {
     return localStorage.getItem(UserLoginStore.refreshTokenStorageName);
   }
 
   private static setRefreshToken(refreshToken: string) {
     localStorage.setItem(UserLoginStore.refreshTokenStorageName, refreshToken);
-  }
-
-  private static clearRefreshToken() {
-    localStorage.removeItem(UserLoginStore.refreshTokenStorageName);
   }
 
   public setCallback(func: () => void) {
@@ -73,7 +60,6 @@ export default class UserLoginStore {
     if (this.timeoutHandler) {
       clearTimeout(this.timeoutHandler);
     }
-
     UserLoginStore.clearUserData();
   }
 
@@ -122,4 +108,13 @@ export default class UserLoginStore {
       UserLoginStore.setRefreshToken(refreshToken.refreshToken);
       return refreshToken;
     });
+
+  public changePassword = async (data: ChangePasswordDto) => {
+    try {
+      await UserApi.changePassword(data);
+      return { success: true };
+    } catch (error) {
+      return { success: false, error };
+    }
+  };
 }
