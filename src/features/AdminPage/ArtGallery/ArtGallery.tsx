@@ -21,6 +21,8 @@ import { SavedTemplatesCarousel } from './components/Carousel/SavedTemplatesCaro
 
 import useMobx, { useModalContext } from '@/app/stores/root-store';
 
+import './ArtGallery.styles.scss';
+
 export const ArtGallery: React.FC = () => {
   const {
     addImage,
@@ -275,6 +277,7 @@ export const ArtGallery: React.FC = () => {
   // RENDER
   // -----------------------------
   return (
+    <div className="dnd-gallery-wrapper">
     <DndContext
       onDragStart={event =>
         setActiveId(String(event.active.id))
@@ -322,5 +325,6 @@ export const ArtGallery: React.FC = () => {
         </div>
       </Spin>
     </DndContext>
+    </div>
   );
 };
